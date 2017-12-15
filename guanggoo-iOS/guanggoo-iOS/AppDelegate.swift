@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var drawController:DrawerController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -26,12 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let centerNav = UINavigationController(rootViewController: ceneterViewController);
         let leftViewController = LeftViewController();
         let rightViewController = RightViewController();
-        let drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
+        drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
+        drawController?.maximumLeftDrawerWidth=230;
+        drawController?.maximumRightDrawerWidth = 100;
+        drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
+        drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
         
         self.window?.rootViewController = drawController;
-        
-        
-        
         
         return true
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F0368121FE3A95C00E3DB47 /* Media.xcassets */; };
 		2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */; };
 		2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */; };
 		2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F0368121FE3A95C00E3DB47 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		2FD3F93E1FDE25FA005DD1F1 /* guanggoo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "guanggoo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -42,6 +44,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F0368111FE3A95C00E3DB47 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2F0368121FE3A95C00E3DB47 /* Media.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		2FD3F9351FDE25FA005DD1F1 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +80,7 @@
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
 				2FD3F94D1FDE25FA005DD1F1 /* Info.plist */,
+				2F0368111FE3A95C00E3DB47 /* Resources */,
 			);
 			path = "guanggoo-iOS";
 			sourceTree = "<group>";
@@ -154,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */,
+				2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */,
 				2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
