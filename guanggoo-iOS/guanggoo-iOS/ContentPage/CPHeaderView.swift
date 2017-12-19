@@ -1,5 +1,5 @@
 //
-//  HomePageTableViewCell.swift
+//  CPHeaderView.swift
 //  guanggoo-iOS
 //
 //  Created by tdx on 2017/12/19.
@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import SnapKit
 
-class HomePageTableViewCell: UITableViewCell {
+class CPHeaderView: UIView {
+
     //creator imageView
     var _creatorImageView : UIImageView!;
     var creatorImageView : UIImageView {
@@ -62,23 +62,6 @@ class HomePageTableViewCell: UITableViewCell {
             return _nodeNameLabel;
         }
     }
-    //reply count
-    var _replyCountLabel : UILabel!;
-    var replyCountLabel :UILabel {
-        get {
-            guard _replyCountLabel == nil else {
-                return _replyCountLabel;
-            }
-            _replyCountLabel = UILabel.init();
-            _replyCountLabel.textColor = UIColor.white;
-            _replyCountLabel.backgroundColor = UIColor.lightGray;
-            _replyCountLabel.font = UIFont.systemFont(ofSize: 12);
-            _replyCountLabel.layer.cornerRadius = 5;
-            _replyCountLabel.clipsToBounds = true;
-            _replyCountLabel.textAlignment = NSTextAlignment.center;
-            return _replyCountLabel;
-        }
-    }
     //title
     var _titleLabel : UILabel!;
     var titleLabel :UILabel {
@@ -92,62 +75,52 @@ class HomePageTableViewCell: UITableViewCell {
             return _titleLabel;
         }
     }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier);
+    convenience init() {
+        self.init(frame: CGRect.zero)
         
-        self.contentView.addSubview(self.creatorImageView);
+        self.addSubview(self.creatorImageView);
         self.creatorImageView.snp.makeConstraints { (make) in
-            make.top.left.equalTo(self.contentView).offset(15);
+            make.top.left.equalTo(self).offset(15);
             make.width.height.equalTo(40);
         }
-        self.contentView.addSubview(self.creatorNameLabel);
+        self.addSubview(self.creatorNameLabel);
         self.creatorNameLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.creatorImageView.snp.right).offset(10);
-            make.top.equalTo(self.contentView).offset(15);
+            make.top.equalTo(self).offset(15);
             make.width.equalTo(100);
             make.height.equalTo(20);
         }
-        self.contentView.addSubview(self.replyDescriptionLabel);
+        self.addSubview(self.replyDescriptionLabel);
         self.replyDescriptionLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.creatorImageView.snp.right).offset(10);
             make.top.equalTo(self.creatorNameLabel.snp.bottom);
             make.width.equalTo(250);
             make.height.equalTo(20);
         }
-        self.contentView.addSubview(self.replyCountLabel);
-        self.replyCountLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-15);
-            make.width.equalTo(20);
-            make.height.equalTo(20);
-        }
-        self.contentView.addSubview(self.nodeNameLabel);
+        self.addSubview(self.nodeNameLabel);
         self.nodeNameLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.contentView).offset(15);
-            make.right.equalTo(self.contentView).offset(-55);
+            make.top.equalTo(self).offset(15);
+            make.right.equalTo(self).offset(-15);
             make.width.equalTo(100);
             make.height.equalTo(20);
         }
-        self.contentView.addSubview(self.titleLabel);
+        self.addSubview(self.titleLabel);
         self.titleLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(self.contentView).offset(15);
+            make.left.equalTo(self).offset(15);
             make.top.equalTo(self.replyDescriptionLabel.snp.bottom).offset(10);
-            make.right.equalTo(self.contentView).offset(-15);
+            make.right.equalTo(self).offset(-15);
             make.height.equalTo(20);
             //make.bottom.equalTo(self).offset(-10);
         }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func setTitleContent(_ title: String) -> Void {
@@ -163,29 +136,4 @@ class HomePageTableViewCell: UITableViewCell {
             })
         }
     }
-    
-    func setCount(_ count:Int ) -> Void {
-        self.replyCountLabel.text = String(count);
-        var width = 20;
-        if (count >= 0 && count < 9)
-        {
-        }
-        else if (count >= 10 && count < 99)
-        {
-            width = 25;
-        }
-        else
-        {
-            width = 30;
-        }
-        self.replyCountLabel.snp.updateConstraints({ (make) in
-            make.width.equalTo(width);
-        })
-        self.setNeedsUpdateConstraints();
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }

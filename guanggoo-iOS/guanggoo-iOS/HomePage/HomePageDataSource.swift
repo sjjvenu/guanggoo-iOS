@@ -15,12 +15,14 @@ struct GuangGuStruct {
     var titleLink = "";                             //内容链接
     var creatorImg = "";                            //创建者头像
     var creatorName = "";                           //创建者名称
+    var creatTime = "";                             //创建时间
     var creatorLink = "";                           //创建者链接
     var lastReplyName = "";                         //最后回复者名称
     var lastReplyLink = "";                         //最后回复者链接
     var replyDescription = "";                      //回复时间
     var node = "";                                  //所属节点
     var replyCount:Int = 0;                         //回复数
+    var contentHtml = "";                           //html内容
 }
 
 extension String {
@@ -43,6 +45,7 @@ class HomePageDataSource: NSObject {
     
     fileprivate var homePageString = "";
     var itemList = [GuangGuStruct]();
+    fileprivate var pageCount:Int = 0;
     
     required init(urlString: String) {
         super.init();
@@ -50,15 +53,20 @@ class HomePageDataSource: NSObject {
             return;
         }
         self.homePageString = urlString;
-        reloadData();
+        self.pageCount = 1;
+        reloadData {};
     }
-
-    func reloadData() -> Void {
-        guard let myURL = URL(string: homePageString) else {
-            print("Error: \(homePageString) doesn't seem to be a valid URL")
+    
+    func loadData(urlString:String,loadNew:Bool) -> Void {
+        guard let myURL = URL(string: urlString) else {
+            print("Error: \(urlString) doesn't seem to be a valid URL");
             return
         }
-        
+        if (loadNew)
+        {
+            self.itemList.removeAll();
+            self.pageCount = 1;
+        }
         do {
             let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
             
@@ -109,13 +117,24 @@ class HomePageDataSource: NSObject {
                 }
             }catch Exception.Error(let type, let message)
             {
-                print("Type:\(type) Error:\(message)")
+                print("Type:\(type) Error:\(message)");
             }catch{
-                print("error")
+                print("error");
             }
             
         } catch let error {
-            print("Error: \(error)")
+            print("Error: \(error)");
         }
+    }
+
+    func reloadData(completion: () -> Void) -> Void {
+        loadData(urlString: self.homePageString, loadNew: true);
+        completion();
+    }
+    
+    func loadOlder(completion: () -> Void) -> Void {
+        self.pageCount += 1;
+        loadData(urlString: self.homePageString + "?p=" + String(self.pageCount), loadNew: false);
+        completion();
     }
 }

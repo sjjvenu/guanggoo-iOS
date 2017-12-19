@@ -9,12 +9,31 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import MJRefresh
 
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
-    
+    //MARK: - init
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
     fileprivate let homePageData = HomePageDataSource.init(urlString: "http://www.guanggoo.com/");
-
+    fileprivate var _tableView: UITableView!;
+    fileprivate var tableView: UITableView {
+        get {
+            guard _tableView == nil else {
+                return _tableView;
+            }
+            
+            _tableView = UITableView.init();
+            _tableView.delegate = self;
+            _tableView.dataSource = self;
+            _tableView.backgroundColor = UIColor.white;
+            
+            _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
+            _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
+            
+            return _tableView;
+        }
+    }
+    //MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,28 +66,8 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton);
         leftButton.addTarget(self, action: #selector(CenterViewController.leftClick(sender:)), for: .touchUpInside);
     }
-
-    @objc func leftClick(sender: UIButton) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.drawController?.toggleLeftDrawerSide(animated: true, completion: nil);
-    }
     
-    fileprivate var _tableView: UITableView!;
-    fileprivate var tableView: UITableView {
-        get {
-            guard _tableView == nil else {
-                return _tableView;
-            }
-            
-            _tableView = UITableView.init();
-            _tableView.delegate = self;
-            _tableView.dataSource = self;
-            _tableView.backgroundColor = UIColor.white;
-            
-            return _tableView;
-        }
-    }
-    
+    //MARK: - UITableView Delegate DataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1;
     }
@@ -99,5 +98,33 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         cell?.setTitleContent(item.title);
         cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
         return cell!;
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = self.homePageData.itemList[indexPath.row];
+        let index = item.titleLink.index(of: "#");
+        let link = item.titleLink[item.titleLink.startIndex..<index!];
+        let vc = ContentPageViewController.init(urlString: "http://www.guanggoo.com"+link,model:item);
+        self.navigationController?.pushViewController(vc, animated: true);
+    }
+    
+    //MARK: - Event
+    @objc func leftClick(sender: UIButton) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.drawController?.toggleLeftDrawerSide(animated: true, completion: nil);
+    }
+    
+    @objc func reloadItemData() -> Void {
+        self.homePageData.reloadData {
+            self.tableView.mj_header.endRefreshing();
+            self.tableView.reloadData();
+        };
+    }
+    
+    @objc func nextPage() -> Void {
+        self.homePageData.loadOlder {
+            self.tableView.mj_footer.endRefreshing();
+            self.tableView.reloadData();
+        }
     }
 }

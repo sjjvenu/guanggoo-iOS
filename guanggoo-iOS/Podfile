@@ -9,6 +9,7 @@ def pods
     pod 'MJRefresh'
     pod "SwiftSoup"
     pod 'SDWebImage', '~> 4.0'
+    pod 'YYText'
 end
 
 target 'guanggoo-iOS' do
