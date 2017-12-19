@@ -8,10 +8,12 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
+    fileprivate let homePageData = HomePageDataSource.init(urlString: "http://www.guanggoo.com/");
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,8 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
         }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,11 +74,30 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20;
+        return self.homePageData.itemList.count;
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = self.homePageData.itemList[indexPath.row];
+        let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
+        let labelWidth = UIScreen.main.bounds.size.width - 30;
+        let lines = (Int)(titleWidth/labelWidth) + 1;
+        return CGFloat(85+20*lines);
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell();
-        return cell;
+        let identifier = "HOMEPAGECELL";
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HomePageTableViewCell;
+        if cell == nil {
+            cell = HomePageTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
+        }
+        let item = self.homePageData.itemList[indexPath.row];
+        cell?.creatorNameLabel.text = item.creatorName;
+        cell?.replyDescriptionLabel.text = item.replyDescription + "  " + item.lastReplyName;
+        cell?.setCount(item.replyCount);
+        cell?.nodeNameLabel.text = item.node;
+        cell?.setTitleContent(item.title);
+        cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+        return cell!;
     }
 }

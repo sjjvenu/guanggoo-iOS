@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F0368121FE3A95C00E3DB47 /* Media.xcassets */; };
+		2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */; };
+		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
 		2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */; };
 		2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */; };
 		2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */; };
@@ -19,6 +21,9 @@
 
 /* Begin PBXFileReference section */
 		2F0368121FE3A95C00E3DB47 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageTableViewCell.swift; sourceTree = "<group>"; };
+		2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
 		2FD3F93E1FDE25FA005DD1F1 /* guanggoo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "guanggoo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,6 +57,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		2F41E6941FE7DD7A00D8C4B4 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */,
+				2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */,
+				2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */,
+			);
+			path = HomePage;
+			sourceTree = "<group>";
+		};
 		2FD3F9351FDE25FA005DD1F1 = {
 			isa = PBXGroup;
 			children = (
@@ -73,9 +88,10 @@
 		2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2F41E6941FE7DD7A00D8C4B4 /* HomePage */,
+				2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */,
 				2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */,
 				2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */,
-				2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */,
 				2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */,
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
@@ -216,14 +232,18 @@
 				"${BUILT_PRODUCTS_DIR}/DrawerController/DrawerController.framework",
 				"${BUILT_PRODUCTS_DIR}/KVOController/KVOController.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DrawerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KVOController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -238,9 +258,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */,
+				2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */,
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
 				2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */,
 				2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */,
+				2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +397,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tdx.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/guanggoo-iOS/guanggoo-iOS-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -390,6 +413,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tdx.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/guanggoo-iOS/guanggoo-iOS-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
