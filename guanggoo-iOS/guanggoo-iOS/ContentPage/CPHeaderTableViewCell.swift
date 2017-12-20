@@ -13,7 +13,7 @@ import KVOController
 
 public typealias CPHeaderWebViewContentHeightChanged = (CGFloat) -> Void
 
-class CPHeaderTableViewCell: UITableViewCell {
+class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate{
     //content
     var contentHeight : CGFloat = 0
     
@@ -30,6 +30,7 @@ class CPHeaderTableViewCell: UITableViewCell {
             _contentWebView.backgroundColor = UIColor.clear
             _contentWebView.scrollView.isScrollEnabled = false
             _contentWebView.sizeToFit();
+            _contentWebView.navigationDelegate = self;
             return _contentWebView;
         }
     }
@@ -70,5 +71,11 @@ class CPHeaderTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let request = navigationAction.request;
+        print(request);
+        decisionHandler(.allow);
     }
 }

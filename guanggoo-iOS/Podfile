@@ -10,6 +10,7 @@ def pods
     pod "SwiftSoup"
     pod 'SDWebImage', '~> 4.0'
     pod 'YYText'
+    pod 'Alamofire', '~> 4.5'
 end
 
 target 'guanggoo-iOS' do

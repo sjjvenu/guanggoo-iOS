@@ -57,6 +57,7 @@ class ContentDataSource: NSObject {
             
             do{
                 let doc: Document = try SwiftSoup.parse(myHTMLString)
+                //parse header
                 let headerClasses = try doc.getElementsByClass("topic-detail container-box");
                 for object in headerClasses
                 {
@@ -69,12 +70,12 @@ class ContentDataSource: NSObject {
                     self._headerModel.creatTime = createTime;
                     break;
                 }
-                
+                //parse reply
                 let classes = try doc.getElementsByClass("reply-item");
                 for object in classes
                 {
                     let topicItemElement = try object.select("img");
-                    let topicItemImageSrc: String = try topicItemElement.attr("src")
+                    let topicItemImageSrc: String = try topicItemElement.attr("src");
                     
                     let contentElements = try object.getElementsByClass("content");
                     let contentHtml = try contentElements.html();

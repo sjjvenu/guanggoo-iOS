@@ -14,7 +14,7 @@ import MJRefresh
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     //MARK: - init
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
-    fileprivate let homePageData = HomePageDataSource.init(urlString: "http://www.guanggoo.com/");
+    fileprivate let homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
         get {
@@ -101,10 +101,21 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+//        let vc = LoginViewController.init(nibName: nil, bundle: nil);
+//        self.navigationController?.pushViewController(vc, animated: true);
+        
         let item = self.homePageData.itemList[indexPath.row];
-        let index = item.titleLink.index(of: "#");
-        let link = item.titleLink[item.titleLink.startIndex..<index!];
-        let vc = ContentPageViewController.init(urlString: "http://www.guanggoo.com"+link,model:item);
+        var titleLink = item.titleLink;
+        guard titleLink.count > 0 else {
+            return;
+        }
+        if titleLink[titleLink.startIndex] == "/" {
+            titleLink.removeFirst();
+        }
+        let index = titleLink.index(of: "#");
+        let link = titleLink[titleLink.startIndex..<index!];
+        let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
         self.navigationController?.pushViewController(vc, animated: true);
     }
     

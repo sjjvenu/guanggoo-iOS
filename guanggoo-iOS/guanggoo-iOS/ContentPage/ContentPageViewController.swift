@@ -122,7 +122,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             return 1;
         case 1:
-            return 50;
+            return 100;
         default:
             return 50;
         }
@@ -151,10 +151,14 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             return self.webViewContentCell!;
         case 1:
             let identifier = "CONTENTPAGECELL";
-            var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HomePageTableViewCell;
+            var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? CPCommentTableViewCell;
             if cell == nil {
-                cell = HomePageTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
+                cell = CPCommentTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
             }
+            let item = self.contentData?.itemList[indexPath.row];
+            cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
+            cell?.creatorNameLabel.text = item!.creatorName;
+            cell?.replyDescriptionLabel.text = item!.replyTime;
             return cell!;
         default:
             return UITableViewCell.init();
@@ -171,10 +175,34 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     }
     
     @objc func nextPage() -> Void {
+        if self.contentData?.itemList.count == 0 {
+            self.endRefreshingWithNoDataAtAll()
+            return;
+        }
+        if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel.replyCount)! {
+            self.endRefreshingWithNoMoreData()
+            return;
+        }
         self.contentData?.loadOlder {
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
         }
     }
 
+    /**
+     禁用上拉加载更多，并显示一个字符串提醒
+     */
+    func endRefreshingWithStateString(_ string:String){
+        self.tableView.mj_footer.endRefreshingWithNoMoreData()
+    }
+    
+    func endRefreshingWithNoDataAtAll() {
+        self.endRefreshingWithStateString("暂无评论")
+    }
+    
+    func endRefreshingWithNoMoreData() {
+        self.endRefreshingWithStateString("没有更多评论了")
+    }
+    
+    
 }

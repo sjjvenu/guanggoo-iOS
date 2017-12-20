@@ -14,6 +14,9 @@
 		2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */; };
 		2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568071FE909DC00169984 /* CPHeaderView.swift */; };
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
+		2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */; };
+		2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */; };
+		2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */; };
 		2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */; };
 		2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */; };
 		2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */; };
@@ -32,6 +35,9 @@
 		2F1568071FE909DC00169984 /* CPHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPHeaderView.swift; sourceTree = "<group>"; };
 		2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
+		2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuCommon.swift; sourceTree = "<group>"; };
+		2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPCommentTableViewCell.swift; sourceTree = "<group>"; };
 		2FD3F93E1FDE25FA005DD1F1 /* guanggoo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "guanggoo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -72,6 +78,7 @@
 				2F1568031FE8E7E700169984 /* ContentDataSource.swift */,
 				2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */,
 				2F1568071FE909DC00169984 /* CPHeaderView.swift */,
+				2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */,
 			);
 			path = ContentPage;
 			sourceTree = "<group>";
@@ -84,6 +91,22 @@
 				2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */,
 			);
 			path = HomePage;
+			sourceTree = "<group>";
+		};
+		2FC20BDB1FE9EDAE00381CDB /* AccountManager */ = {
+			isa = PBXGroup;
+			children = (
+				2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */,
+			);
+			path = AccountManager;
+			sourceTree = "<group>";
+		};
+		2FC20BDE1FE9EE4200381CDB /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		2FD3F9351FDE25FA005DD1F1 = {
@@ -107,6 +130,8 @@
 		2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2FC20BDE1FE9EE4200381CDB /* Common */,
+				2FC20BDB1FE9EDAE00381CDB /* AccountManager */,
 				2F1568001FE8DDB100169984 /* ContentPage */,
 				2F41E6941FE7DD7A00D8C4B4 /* HomePage */,
 				2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */,
@@ -249,6 +274,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DrawerController/DrawerController.framework",
 				"${BUILT_PRODUCTS_DIR}/KVOController/KVOController.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
@@ -259,6 +285,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DrawerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KVOController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
@@ -288,7 +315,10 @@
 				2F1568021FE8E71D00169984 /* ContentPageViewController.swift in Sources */,
 				2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */,
 				2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */,
+				2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */,
 				2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */,
+				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
+				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
