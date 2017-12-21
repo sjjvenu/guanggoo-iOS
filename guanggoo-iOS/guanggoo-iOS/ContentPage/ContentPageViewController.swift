@@ -15,7 +15,11 @@ let HTMLSTYLE = "<style>h1 {\n    font-weight: 500;\n    line-height: 140%;\n   
 let HTMLHEADER  = "<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\">"
 
 
-class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+protocol GuangGuVCDelegate :class {
+    func OnPushVC(msg:NSDictionary);
+}
+
+class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
     
     //MARK: - init
     var contentData: ContentDataSource?;
@@ -52,6 +56,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.title = "详细信息";
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
@@ -122,7 +127,8 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             return 1;
         case 1:
-            return 100;
+            let layout = self.contentData?.itemList[indexPath.row].textLayout!
+            return layout!.textBoundingRect.size.height + 60;
         default:
             return 50;
         }
@@ -135,15 +141,24 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 self.webViewContentCell = CPHeaderTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "WEBVIEWCELL");
             }
             let item = self.contentData?.headerModel;
+            self.webViewContentCell?.itemModel = item;
+            self.webViewContentCell?.vcDelegate = self;
             self.webViewContentCell?.contentWebView.loadHTMLString(HTMLHEADER + HTMLSTYLE  + (item?.contentHtml)! + "</html>", baseURL: nil);
             //webview加载的时候刷新cell的height显示内容
             if self.webViewContentCell?.contentHeightChanged == nil {
                 self.webViewContentCell?.contentHeightChanged = { [weak self] (height:CGFloat) -> Void  in
                     if let weakSelf = self {
-                        if weakSelf.tableView.visibleCells.contains((weakSelf.webViewContentCell!)) {
-                            weakSelf.tableView.beginUpdates();
-                            weakSelf.tableView.reloadRows(at: [indexPath], with: .none);
-                            weakSelf.tableView.endUpdates();
+                        if let cell = weakSelf.webViewContentCell, weakSelf.tableView.visibleCells.contains(cell) {
+                            if let height = weakSelf.webViewContentCell?.contentHeight, height > 1.5 * SCREEN_HEIGHT{
+                                UIView.animate(withDuration: 0, animations: { () -> Void in
+                                    weakSelf.tableView.beginUpdates()
+                                    weakSelf.tableView.endUpdates()
+                                })
+                            }
+                            else {
+                                weakSelf.tableView.beginUpdates()
+                                weakSelf.tableView.endUpdates()
+                            }
                         }
                     }
                 }
@@ -159,11 +174,31 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
             cell?.creatorNameLabel.text = item!.creatorName;
             cell?.replyDescriptionLabel.text = item!.replyTime;
+            cell?.itemModel = item;
+            cell?.vcDelegate = self;
+            if let layout = item?.textLayout {
+                cell?.contentLabel.textLayout = layout
+                if layout.attachments != nil {
+                    for attachment in layout.attachments! {
+                        if let image = attachment.content as? GuangGuAttachmentImage{
+                            image.delegate = cell!.self
+                        }
+                    }
+                }
+            }
+            
             return cell!;
         default:
             return UITableViewCell.init();
         }
         
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //wkwebview过长时防止页面显示不全（特别是多图），强制刷新
+        if let cell = self.webViewContentCell, self.tableView.visibleCells.contains(cell) {
+            self.webViewContentCell?.contentWebView.setNeedsLayout()
+        }
     }
     
     //MARK: - Event
@@ -204,5 +239,13 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.endRefreshingWithStateString("没有更多评论了")
     }
     
-    
+    func OnPushVC(msg: NSDictionary) {
+        if let msgtype = msg["MSGTYPE"] as? String {
+            if msgtype == "PhotoBrowser" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+        }
+    }
 }

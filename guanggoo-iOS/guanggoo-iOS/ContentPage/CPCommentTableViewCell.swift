@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import YYText
+import MWPhotoBrowser
 
-class CPCommentTableViewCell: UITableViewCell {
+class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapDelegate,MWPhotoBrowserDelegate{
     
+    weak var vcDelegate:GuangGuVCDelegate?
     //creator imageView
     var _creatorImageView : UIImageView!;
     var creatorImageView : UIImageView {
@@ -49,18 +52,21 @@ class CPCommentTableViewCell: UITableViewCell {
         }
     }
     //content
-    var _contentLabel : UILabel!;
-    var contentLabel :UILabel {
+    var _contentLabel : YYLabel!;
+    var contentLabel :YYLabel {
         get {
             guard _contentLabel == nil else {
                 return _contentLabel;
             }
-            _contentLabel = UILabel.init();
+            _contentLabel = YYLabel.init();
             _contentLabel.textColor = UIColor.black;
-            _contentLabel.font = UIFont.systemFont(ofSize: 12);
+            _contentLabel.font = UIFont.systemFont(ofSize: 14);
+            _contentLabel.numberOfLines = 0;
+            _contentLabel.displaysAsynchronously = true
             return _contentLabel;
         }
     }
+    var itemModel:GuangGuComent?
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
@@ -89,8 +95,8 @@ class CPCommentTableViewCell: UITableViewCell {
             make.left.equalTo(self.contentView).offset(15);
             make.top.equalTo(self.replyDescriptionLabel.snp.bottom).offset(10);
             make.right.equalTo(self.contentView).offset(-15);
-            make.height.equalTo(50);
-            //make.bottom.equalTo(self).offset(-10);
+            //make.height.equalTo(50);
+            make.bottom.equalTo(self).offset(-10);
         }
     }
     
@@ -98,4 +104,26 @@ class CPCommentTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: -GuangGuCommentAttachmentImageTapDelegate
+    func GuangGuCommentAttachmentImageSingleTap(_ imageView: GuangGuAttachmentImage) {
+        let broswer = MWPhotoBrowser.init(delegate: self);
+        broswer?.setCurrentPhotoIndex(UInt(imageView.index));
+        let msg = NSMutableDictionary.init();
+        msg["MSGTYPE"] = "PhotoBrowser";
+        msg["PARAM1"] = broswer;
+        self.vcDelegate?.OnPushVC(msg: msg);
+    }
+    
+    
+    //MARK: -MWPhotoBrowserDelegate
+    func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
+        return UInt(self.itemModel!.images.count)
+    }
+    
+    func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt) -> MWPhotoProtocol! {
+        if index < UInt(self.itemModel!.images.count) {
+            return MWPhoto.init(url: URL.init(string: self.itemModel!.images[Int(index)] as! String))
+        }
+        return nil;
+    }
 }

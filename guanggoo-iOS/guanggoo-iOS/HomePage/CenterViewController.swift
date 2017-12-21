@@ -38,6 +38,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.title = "全部";
         setNavBarItem();
         
         self.view.addSubview(self.tableView);

@@ -10,12 +10,16 @@ import UIKit
 import SnapKit
 import WebKit
 import KVOController
+import MWPhotoBrowser
 
 public typealias CPHeaderWebViewContentHeightChanged = (CGFloat) -> Void
 
-class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate{
+class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate,MWPhotoBrowserDelegate{
+    weak var vcDelegate:GuangGuVCDelegate?
     //content
     var contentHeight : CGFloat = 0
+    
+    var itemModel:GuangGuStruct?
     
     var contentHeightChanged : CPHeaderWebViewContentHeightChanged?
     
@@ -29,8 +33,12 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate{
             _contentWebView.isOpaque = false
             _contentWebView.backgroundColor = UIColor.clear
             _contentWebView.scrollView.isScrollEnabled = false
-            _contentWebView.sizeToFit();
             _contentWebView.navigationDelegate = self;
+//            if #available(iOS 11.0, *) {
+//                _contentWebView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
+//            } else {
+//                // Fallback on earlier versions
+//            };
             return _contentWebView;
         }
     }
@@ -58,13 +66,11 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate{
             [weak self] (observe, observer, change) -> Void in
             if let weakSelf = self {
                 let size = change["new"] as! NSValue
-                if weakSelf.contentHeight != size.cgSizeValue.height {
-                    weakSelf.contentHeight = size.cgSizeValue.height;
-                    weakSelf.contentHeightChanged?(weakSelf.contentHeight)
+                if weakSelf.contentHeight == size.cgSizeValue.height && weakSelf.contentHeight > 0 {
+                    return;
                 }
-                else {
-                    weakSelf.contentHeight = size.cgSizeValue.height;
-                }
+                weakSelf.contentHeight = size.cgSizeValue.height;
+                weakSelf.contentHeightChanged?(weakSelf.contentHeight)
             }
         }
     }
@@ -75,7 +81,29 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate{
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let request = navigationAction.request;
-        print(request);
+        if self.itemModel!.images.count > 0 {
+            let index = self.itemModel?.images.index(of: request.url?.absoluteString ?? "")
+            if  index! >= 0 && index! < self.itemModel!.images.count {
+                let broswer = MWPhotoBrowser.init(delegate: self);
+                broswer?.setCurrentPhotoIndex(UInt(index!));
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "PhotoBrowser";
+                msg["PARAM1"] = broswer;
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
+        }
         decisionHandler(.allow);
+    }
+    
+    //MARK: -MWPhotoBrowserDelegate
+    func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
+        return UInt(self.itemModel!.images.count)
+    }
+    
+    func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt) -> MWPhotoProtocol! {
+        if index < UInt(self.itemModel!.images.count) {
+            return MWPhoto.init(url: URL.init(string: self.itemModel!.images[Int(index)] as! String))
+        }
+        return nil;
     }
 }

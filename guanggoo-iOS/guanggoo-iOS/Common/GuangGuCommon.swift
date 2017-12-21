@@ -54,3 +54,14 @@ extension Data {
         }
     }
 }
+
+
+func dispatch_sync_safely_main_queue(_ block: ()->()) {
+    if Thread.isMainThread {
+        block()
+    } else {
+        DispatchQueue.main.sync {
+            block()
+        }
+    }
+}

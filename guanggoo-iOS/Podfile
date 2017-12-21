@@ -11,6 +11,9 @@ def pods
     pod 'SDWebImage', '~> 4.0'
     pod 'YYText'
     pod 'Alamofire', '~> 4.5'
+    pod 'Ji'
+    pod 'Kingfisher'
+    pod "MWPhotoBrowser", :podspec =>'https://raw.githubusercontent.com/moinku07/MWPhotoBrowser/master/MWPhotoBrowser.podspec'
 end
 
 target 'guanggoo-iOS' do

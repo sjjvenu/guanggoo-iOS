@@ -23,6 +23,7 @@ struct GuangGuStruct {
     var node = "";                                  //所属节点
     var replyCount:Int = 0;                         //回复数
     var contentHtml = "";                           //html内容
+    var images:NSMutableArray = NSMutableArray();   //html中的image链接
 }
 
 
