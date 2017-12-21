@@ -53,13 +53,13 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        appDelegate.drawController?.openDrawerGestureModeMask = .panningCenterView
-//    }
-//    override func viewWillDisappear(_ animated: Bool) {
-//        appDelegate.drawController?.openDrawerGestureModeMask = []
-//    }
+    //首页消失时去除右滑打开左边页面手势，出现时恢复手势操作
+    override func viewWillAppear(_ animated: Bool) {
+        appDelegate.drawController?.openDrawerGestureModeMask = .panningCenterView
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        appDelegate.drawController?.openDrawerGestureModeMask = []
+    }
     
     func setNavBarItem() -> Void {
         let leftButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
