@@ -34,11 +34,6 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate,MWPhotoBrowse
             _contentWebView.backgroundColor = UIColor.clear
             _contentWebView.scrollView.isScrollEnabled = false
             _contentWebView.navigationDelegate = self;
-//            if #available(iOS 11.0, *) {
-//                _contentWebView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
-//            } else {
-//                // Fallback on earlier versions
-//            };
             return _contentWebView;
         }
     }

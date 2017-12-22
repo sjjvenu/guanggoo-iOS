@@ -14,6 +14,8 @@
 		2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */; };
 		2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568071FE909DC00169984 /* CPHeaderView.swift */; };
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
+		2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */; };
+		2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */; };
 		2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */; };
 		2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */; };
 		2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */; };
@@ -36,6 +38,8 @@
 		2F1568071FE909DC00169984 /* CPHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPHeaderView.swift; sourceTree = "<group>"; };
 		2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
+		2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewTableViewCell.swift; sourceTree = "<group>"; };
+		2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommWebViewController.swift; sourceTree = "<group>"; };
 		2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuAccount.swift; sourceTree = "<group>"; };
 		2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuCommon.swift; sourceTree = "<group>"; };
@@ -95,6 +99,15 @@
 			path = HomePage;
 			sourceTree = "<group>";
 		};
+		2F65E2081FEC9C0F0053AF48 /* Left */ = {
+			isa = PBXGroup;
+			children = (
+				2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */,
+				2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */,
+			);
+			path = Left;
+			sourceTree = "<group>";
+		};
 		2FC20BDB1FE9EDAE00381CDB /* AccountManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */,
+				2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -133,13 +147,13 @@
 		2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2F65E2081FEC9C0F0053AF48 /* Left */,
 				2FC20BDE1FE9EE4200381CDB /* Common */,
 				2FC20BDB1FE9EDAE00381CDB /* AccountManager */,
 				2F1568001FE8DDB100169984 /* ContentPage */,
 				2F41E6941FE7DD7A00D8C4B4 /* HomePage */,
 				2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */,
 				2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */,
-				2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */,
 				2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */,
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
@@ -327,12 +341,14 @@
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
 				2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */,
 				2F1568021FE8E71D00169984 /* ContentPageViewController.swift in Sources */,
+				2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */,
 				2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */,
 				2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */,
 				2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */,
 				2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */,
 				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
+				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

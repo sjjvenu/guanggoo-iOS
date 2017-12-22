@@ -9,10 +9,13 @@
 import UIKit
 import SnapKit
 import Alamofire
+import MBProgressHUD
 
 public typealias LoginCompletion = (Bool) -> Void
 
 class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+    //MARK: - property
+    weak var vcDelegate:GuangGuVCDelegate?
     
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
@@ -62,6 +65,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
     }
     
     fileprivate var _completion:LoginCompletion?
+    //MARK: - function
     required init(completion:LoginCompletion? )
     {
         super.init(nibName: nil, bundle: nil);
@@ -76,10 +80,57 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.title = "登录";
+        let headerView = UIView.init();
+        var height = 20 + 44;
+        if UIScreen.main.bounds.height == 812 {
+            height = 44 + 44;
+        }
+        self.view.addSubview(headerView);
+        headerView.backgroundColor = UIColor.white;
+        headerView.snp.makeConstraints { (make) in
+            make.left.right.top.equalTo(self.view);
+            make.height.equalTo(height);
+        }
+        
+        let backButton = UIButton.init();
+        backButton.setImage(UIImage.init(named: "ic_menu_back"), for: .normal);
+        backButton.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 10, 20);
+        backButton.addTarget(self, action: #selector(backClick(sender:)), for: UIControlEvents.touchUpInside);
+        headerView.addSubview(backButton);
+        backButton.snp.makeConstraints { (make) in
+            make.left.equalTo(headerView).offset(20);
+            make.bottom.equalTo(headerView);
+            make.width.height.equalTo(40);
+        }
+        
+        let titleLabel = UILabel.init();
+        titleLabel.textColor = UIColor.black;
+        titleLabel.text = "登录";
+        titleLabel.textAlignment = .center;
+        headerView.addSubview(titleLabel);
+        titleLabel.snp.makeConstraints { (make) in
+            make.centerX.equalTo(headerView);
+            make.bottom.equalTo(headerView);
+            make.width.equalTo(200);
+            make.height.equalTo(40);
+        }
+        
+        let registerButton = UIButton.init();
+        registerButton.setTitle("注册", for: .normal);
+        registerButton.setTitleColor(UIColor.blue, for: .normal);
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16);
+        registerButton.addTarget(self, action: #selector(registerClick(sender:)), for: UIControlEvents.touchUpInside);
+        headerView.addSubview(registerButton);
+        registerButton.snp.makeConstraints { (make) in
+            make.right.equalTo(headerView).offset(-20);
+            make.bottom.equalTo(headerView);
+            make.width.height.equalTo(40);
+        }
+        
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
+            make.top.equalTo(headerView.snp.bottom)
+            make.left.right.bottom.equalTo(self.view);
         }
     }
 
@@ -171,7 +222,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 loginButton.snp.makeConstraints({ (make) in
                     make.left.equalTo(cell!.contentView).offset(20);
                     make.right.equalTo(cell!.contentView).offset(-20);
-                    make.centerY.equalTo(cell!.contentView);
+                    make.bottom.equalTo(cell!.contentView);
                     make.height.equalTo(35);
                 })
                 break;
@@ -182,31 +233,59 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
         return cell!;
     }
 
-    
+    //MARK: - event
     @objc func loginClick(sender: UIButton) -> Void {
+        let email = self.userNameTextField.text;
+        if !email!.isValidEmail() {
+            let alert = UIAlertController.init(title: "提示", message: "请输入正确的email", preferredStyle: UIAlertControllerStyle.alert);
+            let actionOK = UIAlertAction.init(title: "确定", style: UIAlertActionStyle.cancel, handler: nil);
+            alert.addAction(actionOK);
+            self.present(alert, animated: true, completion: nil);
+        }
+        let password = self.passwordTextField.text
+        if password?.count == 0 {
+            let alert = UIAlertController.init(title: "提示", message: "请输入密码", preferredStyle: UIAlertControllerStyle.alert);
+            let actionOK = UIAlertAction.init(title: "确定", style: UIAlertActionStyle.cancel, handler: nil);
+            alert.addAction(actionOK);
+            self.present(alert, animated: true, completion: nil);
+        }
+        let uuid = UUID().uuidString.replacingOccurrences(of: "-", with: "");
         let para = [
-            "email": "3228656859@qq.com",
-            "password": "qinken547",
-            "_xsrf": "b45fa8c3f6854a3aa4444a5a036b9650"
+            "email": email!,
+            "password": password!,
+            "_xsrf": uuid
         ]
         
         var dict = [String:String]();
-        //为安全，此处使用https
-        //dict["Referer"] = "http://www.guanggoo.com/login"
         dict["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
         dict["Content-Type"] = "application/x-www-form-urlencoded"
-        dict["cookie"] = "_xsrf=b45fa8c3f6854a3aa4444a5a036b9650"
+        dict["cookie"] = "_xsrf=" + uuid;
+        
+        MBProgressHUD.showAdded(to: self.view, animated: true);
         //登录
         Alamofire.request(GUANGGUSITE+"login", method: .post, parameters: para, headers: dict).responseString { (response) in
+            MBProgressHUD.hide(for: self.view, animated: true);
             switch(response.result) {
             case .success( _):
                 if let cookies = HTTPCookieStorage.shared.cookies
                 {
                     for object in cookies {
                         if object.name == "user" {
-                            print("loginSuccess");
-                            break;
+                            print("login success");
+                            if let completion = self._completion {
+                                self.dismiss(animated: true, completion: nil);
+                                completion(true);
+                            }
+                            return;
                         }
+                    }
+                    print("login failed");
+                    if let completion = self._completion {
+                        let alert = UIAlertController.init(title: "提示", message: "登录失败，请重试!", preferredStyle: UIAlertControllerStyle.alert);
+                        let actionOK = UIAlertAction.init(title: "确定", style: UIAlertActionStyle.cancel, handler: nil);
+                        alert.addAction(actionOK);
+                        self.present(alert, animated: true, completion: nil);
+                        completion(false);
                     }
                 }
                 break;
@@ -216,14 +295,44 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                     switch(httpStatusCode) {
                     case 400:
                         message = "Username or password not provided."
+                        print(message);
+                        break;
                     case 401:
                         message = "Incorrect password for user '\(self.userNameTextField.text!)'."
+                        print(message);
+                        break;
                     default:
                         print(error);
                     }
-                } else {
+                }
+                else
+                {
+                }
+                print("login failed");
+                if let completion = self._completion {
+                    let alert = UIAlertController.init(title: "提示", message: "登录失败，请稍后再试!", preferredStyle: UIAlertControllerStyle.alert);
+                    let actionOK = UIAlertAction.init(title: "确定", style: UIAlertActionStyle.cancel, handler: nil);
+                    alert.addAction(actionOK);
+                    self.present(alert, animated: true, completion: nil);
+                    completion(false);
                 }
             }
+        }
+    }
+    
+    @objc func backClick(sender: UIButton) -> Void {
+        self.dismiss(animated: true, completion: nil);
+    }
+    
+    @objc func registerClick(sender: UIButton) -> Void {
+        let vc = CommWebViewController.init(url: URL.init(string: "http://www.guanggoo.com/register"));
+        vc.title = "注册"
+        let msg = NSMutableDictionary.init();
+        msg["MSGTYPE"] = "PresentViewController";
+        msg["PARAM1"] = vc;
+        if let delegate = self.vcDelegate {
+            self.dismiss(animated: true, completion: nil);
+            delegate.OnPushVC(msg: msg);
         }
     }
 }

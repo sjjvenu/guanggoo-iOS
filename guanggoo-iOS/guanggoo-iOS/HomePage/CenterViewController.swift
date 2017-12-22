@@ -11,7 +11,7 @@ import SnapKit
 import SDWebImage
 import MJRefresh
 
-class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
     //MARK: - init
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
     fileprivate let homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
@@ -64,8 +64,15 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     func setNavBarItem() -> Void {
         let leftButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         leftButton.setImage(UIImage.init(named: "ic_menu_36pt"), for: .normal);
+        leftButton.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 10, 20);
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton);
         leftButton.addTarget(self, action: #selector(CenterViewController.leftClick(sender:)), for: .touchUpInside);
+        
+        let rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
+        rightButton.setImage(UIImage.init(named: "ic_more_horiz_36pt"), for: .normal);
+        rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15);
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton);
+        rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
     }
     
     //MARK: - UITableView Delegate DataSource
@@ -118,12 +125,26 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             self.navigationController?.pushViewController(vc, animated: true);
         }
         else {
-            let vc = LoginViewController.init(completion: { (loginSuccess) in
-                if loginSuccess {
-                    
+            let vc = LoginViewController.init(completion: { [weak self] (loginSuccess) in
+                if let weakSelf = self, loginSuccess {
+                    let item = weakSelf.homePageData.itemList[indexPath.row];
+                    var titleLink = item.titleLink;
+                    guard titleLink.count > 0 else {
+                        return;
+                    }
+                    if titleLink[titleLink.startIndex] == "/" {
+                        titleLink.removeFirst();
+                    }
+                    let index = titleLink.index(of: "#");
+                    let link = titleLink[titleLink.startIndex..<index!];
+                    let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                    weakSelf.navigationController?.pushViewController(vc, animated: true);
+                    weakSelf.homePageData.reloadData(completion: {weakSelf.tableView.reloadData()});
                 }
             })
-            self.navigationController?.pushViewController(vc, animated: true);
+            vc.vcDelegate = self;
+            //self.navigationController?.pushViewController(vc, animated: true);
+            self.present(vc, animated: true, completion: nil);
         }
         
     }
@@ -132,6 +153,11 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     @objc func leftClick(sender: UIButton) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.drawController?.toggleLeftDrawerSide(animated: true, completion: nil);
+    }
+    
+    @objc func rightClick(sender: UIButton) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.drawController?.toggleRightDrawerSide(animated: true, completion: nil);
     }
     
     @objc func reloadItemData() -> Void {
@@ -145,6 +171,24 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.homePageData.loadOlder {
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
+        }
+    }
+    
+    func OnPushVC(msg: NSDictionary) {
+        if let msgtype = msg["MSGTYPE"] as? String {
+            if msgtype == "LoginViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "PresentViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "reloadData" {
+                self.homePageData.reloadData(completion: {self.tableView.reloadData()});
+            }
         }
     }
 }

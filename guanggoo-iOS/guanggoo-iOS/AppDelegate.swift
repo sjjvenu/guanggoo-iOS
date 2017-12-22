@@ -26,9 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let ceneterViewController = CenterViewController();
         let centerNav = UINavigationController(rootViewController: ceneterViewController);
         let leftViewController = LeftViewController();
+        leftViewController.vcDelegate = ceneterViewController;
         let rightViewController = RightViewController();
         drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
-        drawController?.maximumLeftDrawerWidth=230;
+        drawController?.maximumLeftDrawerWidth = UIScreen.main.bounds.size.width*3/4;
         drawController?.maximumRightDrawerWidth = 100;
         drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
         drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
