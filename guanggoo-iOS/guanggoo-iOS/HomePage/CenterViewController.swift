@@ -103,21 +103,29 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-//        let vc = LoginViewController.init(nibName: nil, bundle: nil);
-//        self.navigationController?.pushViewController(vc, animated: true);
+        if GuangGuAccount.shareInstance.isLogin() {
+            let item = self.homePageData.itemList[indexPath.row];
+            var titleLink = item.titleLink;
+            guard titleLink.count > 0 else {
+                return;
+            }
+            if titleLink[titleLink.startIndex] == "/" {
+                titleLink.removeFirst();
+            }
+            let index = titleLink.index(of: "#");
+            let link = titleLink[titleLink.startIndex..<index!];
+            let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+            self.navigationController?.pushViewController(vc, animated: true);
+        }
+        else {
+            let vc = LoginViewController.init(completion: { (loginSuccess) in
+                if loginSuccess {
+                    
+                }
+            })
+            self.navigationController?.pushViewController(vc, animated: true);
+        }
         
-        let item = self.homePageData.itemList[indexPath.row];
-        var titleLink = item.titleLink;
-        guard titleLink.count > 0 else {
-            return;
-        }
-        if titleLink[titleLink.startIndex] == "/" {
-            titleLink.removeFirst();
-        }
-        let index = titleLink.index(of: "#");
-        let link = titleLink[titleLink.startIndex..<index!];
-        let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-        self.navigationController?.pushViewController(vc, animated: true);
     }
     
     //MARK: - Event

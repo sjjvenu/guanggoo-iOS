@@ -12,6 +12,7 @@ import MWPhotoBrowser
 
 class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapDelegate,MWPhotoBrowserDelegate{
     
+    //MARK: - property
     weak var vcDelegate:GuangGuVCDelegate?
     //creator imageView
     var _creatorImageView : UIImageView!;
@@ -68,6 +69,7 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
     }
     var itemModel:GuangGuComent?
 
+    //MARK: - function
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier);
         
@@ -104,7 +106,7 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: -GuangGuCommentAttachmentImageTapDelegate
+    //MARK: - GuangGuCommentAttachmentImageTapDelegate
     func GuangGuCommentAttachmentImageSingleTap(_ imageView: GuangGuAttachmentImage) {
         let broswer = MWPhotoBrowser.init(delegate: self);
         broswer?.setCurrentPhotoIndex(UInt(imageView.index));
@@ -115,7 +117,7 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
     }
     
     
-    //MARK: -MWPhotoBrowserDelegate
+    //MARK: - MWPhotoBrowserDelegate
     func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
         return UInt(self.itemModel!.images.count)
     }

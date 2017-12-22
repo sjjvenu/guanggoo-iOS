@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftSoup
+import Ji
 
 
 struct GuangGuStruct {
@@ -58,7 +59,7 @@ class HomePageDataSource: NSObject {
             let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
             
             do{
-                let doc: Document = try SwiftSoup.parse(myHTMLString)
+                let doc: Document = try SwiftSoup.parse(myHTMLString);
                 let classes = try doc.getElementsByClass("topic-item");
                 for object in classes
                 {
@@ -101,6 +102,22 @@ class HomePageDataSource: NSObject {
                     item.replyCount = (countText as NSString).integerValue;
                     item.replyDescription = lastTouchedText;
                     itemList.append(item);
+                }
+                
+                
+                let jiDoc = Ji(htmlString: myHTMLString);
+                let rootNode = jiDoc?.rootNode;
+                let nodes = rootNode?.xPath("//div[@class='usercard container-box hidden-xs']");
+                if let count = nodes?.count,count > 0
+                {
+                    for commentNode in nodes!
+                    {
+                        var user = GuangGuUser();
+                        user.userImage = (commentNode.xPath("./div/a/img").first?["src"])!;
+                        user.userName = (commentNode.xPath("div/div[@class='username']").first?.content)!;
+                        GuangGuAccount.shareInstance.user = user;
+                        break;
+                    }
                 }
             }catch Exception.Error(let type, let message)
             {

@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import Alamofire
 
+public typealias LoginCompletion = (Bool) -> Void
+
 class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     
     fileprivate var _tableView: UITableView!;
@@ -58,11 +60,23 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             return _passwordTextField;
         }
     }
-
+    
+    fileprivate var _completion:LoginCompletion?
+    required init(completion:LoginCompletion? )
+    {
+        super.init(nibName: nil, bundle: nil);
+        _completion = completion;
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.title = "登录";
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
@@ -188,7 +202,12 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             case .success( _):
                 if let cookies = HTTPCookieStorage.shared.cookies
                 {
-                    print(cookies);
+                    for object in cookies {
+                        if object.name == "user" {
+                            print("loginSuccess");
+                            break;
+                        }
+                    }
                 }
                 break;
             case .failure(let error):
