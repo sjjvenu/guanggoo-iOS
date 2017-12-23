@@ -10,9 +10,11 @@ import UIKit
 import WebKit
 import SnapKit
 
-class CommWebViewController: UIViewController {
+class CommWebViewController: UIViewController ,WKNavigationDelegate{
     
     //MARK: - property
+    weak var vcDelegate:GuangGuVCDelegate?
+    
     fileprivate var _webView: WKWebView!
     fileprivate var webView: WKWebView {
         get {
@@ -21,6 +23,7 @@ class CommWebViewController: UIViewController {
             }
             _webView = WKWebView.init();
             _webView.backgroundColor = UIColor.clear
+            _webView.navigationDelegate = self;
             return _webView;
         }
     }
@@ -57,14 +60,37 @@ class CommWebViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    // MARK: - WKNavigationDelegate
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if let urlString = navigationAction.request.url?.absoluteString {
+            if urlString == GUANGGUSITE {
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "GotoHomePage";
+                    delegate.OnPushVC(msg: msg);
+                    decisionHandler(.cancel);
+                    return;
+                }
+            }
+            else if urlString == GUANGGUSITE+"login" {
+                if let nav = self.navigationController {
+                    nav.popToRootViewController(animated: false);
+                }
+                let vc = LoginViewController.init(completion: { (loginSuccess) in
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "reloadData";
+                        self.dismiss(animated: true, completion: nil);
+                        delegate.OnPushVC(msg: msg);
+                    }
+                });
+                vc.vcDelegate = self.vcDelegate;
+                self.present(vc, animated: true, completion: nil);
+            }
+        }
+        
+        decisionHandler(.allow);
     }
-    */
 
 }

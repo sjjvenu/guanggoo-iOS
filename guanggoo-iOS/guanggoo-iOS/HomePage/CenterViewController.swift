@@ -189,6 +189,10 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             else if msgtype == "reloadData" {
                 self.homePageData.reloadData(completion: {self.tableView.reloadData()});
             }
+            else if msgtype == "GotoHomePage" {
+                self.navigationController?.popToRootViewController(animated: true);
+                self.homePageData.reloadData(completion: {self.tableView.reloadData()});
+            }
         }
     }
 }

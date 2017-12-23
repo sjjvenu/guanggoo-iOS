@@ -327,6 +327,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
     @objc func registerClick(sender: UIButton) -> Void {
         let vc = CommWebViewController.init(url: URL.init(string: "http://www.guanggoo.com/register"));
         vc.title = "注册"
+        vc.vcDelegate = self.vcDelegate;
         let msg = NSMutableDictionary.init();
         msg["MSGTYPE"] = "PresentViewController";
         msg["PARAM1"] = vc;

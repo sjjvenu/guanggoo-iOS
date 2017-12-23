@@ -26,7 +26,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
             _tableView.delegate = self;
             _tableView.dataSource = self;
             _tableView.backgroundColor = UIColor.clear;
-            _tableView.allowsSelection = false;
+            _tableView.allowsSelection = true;
             _tableView.separatorStyle = .none;
             
             return _tableView;
@@ -111,7 +111,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3;
+        return 6;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -150,9 +150,28 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
                 cell!.accessoryType = .disclosureIndicator;
                 break;
             case 2:
+                cell!.textLabel?.text = "我的消息";
+                cell!.textLabel?.textColor = UIColor.white;
+                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
+                break;
+            case 3:
                 cell!.textLabel?.text = "我的收藏";
                 cell!.textLabel?.textColor = UIColor.white;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
+                break;
+            case 4:
+                cell!.textLabel?.text = "我的主题";
+                cell!.textLabel?.textColor = UIColor.white;
+                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
+                break;
+            case 5:
+                cell!.textLabel?.text = "我的回复";
+                cell!.textLabel?.textColor = UIColor.white;
+                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
                 break;
             default:
                 break;
@@ -162,6 +181,9 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         return cell!;
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        pushLoginViewController();
+    }
     
     //MARK: - event
     @objc func userImageClick(sender:UIButton) -> Void {
@@ -172,9 +194,9 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         if !GuangGuAccount.shareInstance.isLogin() {
             appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
             let vc = LoginViewController.init(completion: { (loginSuccess) in
-                let msg = NSMutableDictionary.init();
-                msg["MSGTYPE"] = "reloadData";
                 if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "reloadData";
                     self.dismiss(animated: true, completion: nil);
                     delegate.OnPushVC(msg: msg);
                 }
