@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let leftViewController = LeftViewController();
         leftViewController.vcDelegate = ceneterViewController;
         let rightViewController = RightViewController();
+        rightViewController.vcDelegate = ceneterViewController;
         drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
         drawController?.maximumLeftDrawerWidth = UIScreen.main.bounds.size.width*3/4;
         drawController?.maximumRightDrawerWidth = 100;

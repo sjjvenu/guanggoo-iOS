@@ -128,8 +128,10 @@ class ContentDataSource: NSObject {
     }
     
     func loadOlder(completion: () -> Void) -> Void {
+        var urlString = self.contentPageString;
+        urlString = urlString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p="+String(self.pageCount+1))
         self.pageCount += 1;
-        loadData(urlString: self.contentPageString + "?p=" + String(self.pageCount), loadNew: false);
+        loadData(urlString: urlString, loadNew: false);
         completion();
     }
     

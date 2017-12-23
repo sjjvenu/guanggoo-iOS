@@ -77,11 +77,11 @@ class CommWebViewController: UIViewController ,WKNavigationDelegate{
                 if let nav = self.navigationController {
                     nav.popToRootViewController(animated: false);
                 }
-                let vc = LoginViewController.init(completion: { (loginSuccess) in
-                    if let delegate = self.vcDelegate {
+                let vc = LoginViewController.init(completion: { [weak self](loginSuccess) in
+                    if let delegate = self?.vcDelegate {
                         let msg = NSMutableDictionary.init();
                         msg["MSGTYPE"] = "reloadData";
-                        self.dismiss(animated: true, completion: nil);
+                        self?.dismiss(animated: true, completion: nil);
                         delegate.OnPushVC(msg: msg);
                     }
                 });

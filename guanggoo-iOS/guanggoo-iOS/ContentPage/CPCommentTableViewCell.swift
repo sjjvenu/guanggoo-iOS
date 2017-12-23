@@ -67,6 +67,22 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             return _contentLabel;
         }
     }
+    
+    //reply description
+    var _floorLabel : UILabel!;
+    var floorLabel :UILabel {
+        get {
+            guard _floorLabel == nil else {
+                return _floorLabel;
+            }
+            _floorLabel = UILabel.init();
+            _floorLabel.textColor = UIColor.black;
+            _floorLabel.font = UIFont.systemFont(ofSize: 12);
+            _floorLabel.textAlignment = .right;
+            return _floorLabel;
+        }
+    }
+    
     var itemModel:GuangGuComent?
 
     //MARK: - function
@@ -90,6 +106,13 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             make.left.equalTo(self.creatorImageView.snp.right).offset(10);
             make.top.equalTo(self.creatorNameLabel.snp.bottom);
             make.width.equalTo(250);
+            make.height.equalTo(20);
+        }
+        self.contentView.addSubview(self.floorLabel);
+        self.floorLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.contentView).offset(15);
+            make.right.equalTo(self.contentView).offset(-15);
+            make.width.equalTo(100);
             make.height.equalTo(20);
         }
         self.contentView.addSubview(self.contentLabel);

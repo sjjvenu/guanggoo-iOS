@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import SDWebImage
 import MJRefresh
+import MBProgressHUD
 
 let HTMLSTYLE = "<style>h1 {\n    font-weight: 500;\n    line-height: 140%;\n    margin: 5px 0px 15px 0px;\n    padding: 0px;\n}\n\nh2 {\n    font-weight: 500;\n    line-height: 100%;\n    margin: 20px 0px 20px 0px;\n    padding: 0px 0px 8px 0px;\n    border-bottom: 1px solid #e2e2e2;\n}\n\nh3 {\n    font-weight: 500;\n    line-height: 100%;\n    margin: 5px 0px 20px 0px;\n    padding: 0px;\n}\n\nhr {\n    border: none;\n    height: 1px;\n    margin-bottom: 1em;\n}\n\npre {\n    letter-spacing: 0.015em;\n    line-height: 120%;\n    padding: 0.5em;\n    margin: 0px;\n    white-space: pre;\n    overflow-x: auto;\n    overflow-y: auto;\n}\n\npre a {\n    color: inherit;\n    text-decoration: underline;\n}\n\ncode {\n    padding: 1px 2px 1px 2px;\n    border-radius: 2px;\n}\n\n\nul {\n    list-style: square;\n    margin: 1em 0px 1em 1em;\n    padding: 0px;\n}\n\nul li, ol li {\n    padding: 0px;\n    margin: 0px;\n}\n\nol {\n    margin: 1em 0px 0em 2em;\n    padding: 0px;\n}\n\na:link, a:visited, a:active {\n    text-decoration: none;\n    word-break: break-all;\n}\n\nimg {\n    max-width: 100%;\n}\n.imgly {\n    max-width: 100%;\n}\n/* *******************************    ******************************* */\nbody {\n    font-family: \'Helvetica\', monospace;\n    -webkit-text-size-adjust: none;\n    line-height: 1.75;\n    word-wrap: break-word;\n    max-height: 20em;\n    padding: 5px;\n}\n.subtle {\n    padding: 5px;\n}\n/* font-size */\nh1 {\n    font-size: 18.0px; /* Default 18 */\n}\n\nh2 {\n    font-size: 18.0px; /* Default 18 */\n}\n\nh3 {\n    font-size: 16.0px; /* Default 16 */\n}\n\npre {\n    font-size: 13.0px; /* Default 13 */\n}\n\nbody {\n    font-size: 14.0px; /* Default 14 */\n}\n.subtle {\n    font-size : 12.0px; /* Default 12 */\n}\n.subtle .fade {\n    font-size : 10.0px; /* Default 10 */\n}/* color */\n\na:link, a:visited, a:active {\n    color: #778087;\n}\nbody {\n    color: #000;\n    background-color:#FFF;\n}\n.subtle {\n/*    background-color: #F1F2F4;*/\n}\n.subtle .fade {\n    color:#ADADAD;\n}</style></head>"
 let HTMLHEADER  = "<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\">"
@@ -23,7 +24,11 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     
     //MARK: - init
     var contentData: ContentDataSource?;
+    
+    fileprivate var urlString:String!;
+    fileprivate var itemModel:GuangGuStruct!
     fileprivate var webViewContentCell:CPHeaderTableViewCell? = nil;
+    
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
         get {
@@ -38,6 +43,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
+            _tableView.mj_footer.isAutomaticallyHidden = true;
             
             return _tableView;
         }
@@ -45,7 +51,9 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     
     required init(urlString : String,model:GuangGuStruct) {
         super.init(nibName: nil, bundle: nil);
-        self.contentData = ContentDataSource.init(urlString: urlString,model: model);
+        
+        self.urlString = urlString;
+        self.itemModel = model;
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,11 +69,29 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
         }
+        self.tableView.mj_footer.isAutomaticallyHidden = true;
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated);
+        if self.contentData == nil {
+            MBProgressHUD.showAdded(to: self.view, animated: true);
+            DispatchQueue.global(qos: .background).async {
+                self.contentData = ContentDataSource.init(urlString: self.urlString,model: self.itemModel);
+                DispatchQueue.main.async {
+                    self.tableView.reloadData();
+                    if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel.replyCount)! {
+                        self.endRefreshingWithNoMoreData()
+                    }
+                    MBProgressHUD.hide(for: self.view, animated: true);
+                }
+            }
+        }
     }
     
 
@@ -76,11 +102,17 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard self.contentData != nil else {
+            return 0;
+        }
         switch section {
         case 0:
             return 1;
         case 1:
-            return (self.contentData?.itemList.count)!;
+            if let count = self.contentData?.itemList.count, count > 0 {
+                return count;
+            }
+            return 0;
         default:
             return 0;
         }
@@ -89,11 +121,16 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0:
-            let item = self.contentData?.headerModel
-            let titleWidth = item?.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
-            let labelWidth = UIScreen.main.bounds.size.width - 30;
-            let lines = (Int)(titleWidth!/labelWidth) + 1;
-            return CGFloat(85+20*lines);
+            if let item = self.contentData?.headerModel {
+                let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
+                let labelWidth = UIScreen.main.bounds.size.width - 30;
+                let lines = (Int)(titleWidth/labelWidth) + 1;
+                return CGFloat(85+20*lines);
+            }
+            else
+            {
+                return 85+20;
+            }
         case 1:
             return 0;
         default:
@@ -104,14 +141,18 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch section {
         case 0:
-            let headeView = CPHeaderView.init();
-            let item = self.contentData?.headerModel;
-            headeView.creatorNameLabel.text = item?.creatorName;
-            headeView.replyDescriptionLabel.text = (item?.creatTime)!;
-            headeView.nodeNameLabel.text = item?.node;
-            headeView.setTitleContent((item?.title)!);
-            headeView.creatorImageView.sd_setImage(with: URL.init(string: (item?.creatorImg)!), completed: nil);
-            return headeView;
+            if let item = self.contentData?.headerModel {
+                let headeView = CPHeaderView.init();
+                headeView.creatorNameLabel.text = item.creatorName;
+                headeView.replyDescriptionLabel.text = item.creatTime;
+                headeView.nodeNameLabel.text = item.node;
+                headeView.setTitleContent(item.title);
+                headeView.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+                return headeView;
+            }
+            else {
+                return nil;
+            }
         case 1:
             return nil;
         default:
@@ -140,24 +181,25 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             if self.webViewContentCell == nil {
                 self.webViewContentCell = CPHeaderTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: "WEBVIEWCELL");
             }
-            let item = self.contentData?.headerModel;
-            self.webViewContentCell?.itemModel = item;
-            self.webViewContentCell?.vcDelegate = self;
-            self.webViewContentCell?.contentWebView.loadHTMLString(HTMLHEADER + HTMLSTYLE  + (item?.contentHtml)! + "</html>", baseURL: nil);
-            //webview加载的时候刷新cell的height显示内容
-            if self.webViewContentCell?.contentHeightChanged == nil {
-                self.webViewContentCell?.contentHeightChanged = { [weak self] (height:CGFloat) -> Void  in
-                    if let weakSelf = self {
-                        if let cell = weakSelf.webViewContentCell, weakSelf.tableView.visibleCells.contains(cell) {
-                            if let height = weakSelf.webViewContentCell?.contentHeight, height > 1.5 * SCREEN_HEIGHT{
-                                UIView.animate(withDuration: 0, animations: { () -> Void in
+            if let item = self.contentData?.headerModel {
+                self.webViewContentCell?.itemModel = item;
+                self.webViewContentCell?.vcDelegate = self;
+                self.webViewContentCell?.contentWebView.loadHTMLString(HTMLHEADER + HTMLSTYLE  + item.contentHtml + "</html>", baseURL: nil);
+                //webview加载的时候刷新cell的height显示内容
+                if self.webViewContentCell?.contentHeightChanged == nil {
+                    self.webViewContentCell?.contentHeightChanged = { [weak self] (height:CGFloat) -> Void  in
+                        if let weakSelf = self {
+                            if let cell = weakSelf.webViewContentCell, weakSelf.tableView.visibleCells.contains(cell) {
+                                if let height = weakSelf.webViewContentCell?.contentHeight, height > 1.5 * SCREEN_HEIGHT{
+                                    UIView.animate(withDuration: 0, animations: { () -> Void in
+                                        weakSelf.tableView.beginUpdates()
+                                        weakSelf.tableView.endUpdates()
+                                    })
+                                }
+                                else {
                                     weakSelf.tableView.beginUpdates()
                                     weakSelf.tableView.endUpdates()
-                                })
-                            }
-                            else {
-                                weakSelf.tableView.beginUpdates()
-                                weakSelf.tableView.endUpdates()
+                                }
                             }
                         }
                     }
@@ -174,6 +216,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
             cell?.creatorNameLabel.text = item!.creatorName;
             cell?.replyDescriptionLabel.text = item!.replyTime;
+            cell?.floorLabel.text = String(indexPath.row+1)+"楼";
             cell?.itemModel = item;
             cell?.vcDelegate = self;
             if let layout = item?.textLayout {

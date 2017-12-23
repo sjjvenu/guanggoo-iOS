@@ -31,9 +31,10 @@ struct GuangGuStruct {
 
 class HomePageDataSource: NSObject {
     
-    fileprivate var homePageString = "";
+    var homePageString = "";
     var itemList = [GuangGuStruct]();
-    fileprivate var pageCount:Int = 0;
+    var pageCount:Int = 0;
+    var maxCount:Int = 1;
     
     required init(urlString: String) {
         super.init();
@@ -54,6 +55,7 @@ class HomePageDataSource: NSObject {
         {
             self.itemList.removeAll();
             self.pageCount = 1;
+            self.maxCount = 1;
         }
         do {
             let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
@@ -104,19 +106,30 @@ class HomePageDataSource: NSObject {
                     itemList.append(item);
                 }
                 
+                let userClasses = try doc.getElementsByClass("usercard");
+                for object in userClasses {
+                    let userNameElement = try object.getElementsByClass("username");
+                    let userNameText = try userNameElement.text();
+                    
+                    let userImgElement = try object.select("a").select("img");
+                    let userImgText = try userImgElement.attr("src");
+                    
+                    var user = GuangGuUser();
+                    user.userImage = userImgText;
+                    user.userName = userNameText;
+                    GuangGuAccount.shareInstance.user = user;
+                    break;
+                }
                 
-                let jiDoc = Ji(htmlString: myHTMLString);
-                let rootNode = jiDoc?.rootNode;
-                let nodes = rootNode?.xPath("//div[@class='usercard container-box hidden-xs']");
-                if let count = nodes?.count,count > 0
-                {
-                    for commentNode in nodes!
-                    {
-                        var user = GuangGuUser();
-                        user.userImage = (commentNode.xPath("./div/a/img").first?["src"])!;
-                        user.userName = (commentNode.xPath("div/div[@class='username']").first?.content)!;
-                        GuangGuAccount.shareInstance.user = user;
-                        break;
+                let pageElements = try doc.getElementsByClass("pagination");
+                for object in pageElements {
+                    let elements = try object.select("li");
+                    if elements.array().count > 1 {
+                        let maxPageElement = elements.array()[elements.array().count-2];
+                        let maxPageText = try maxPageElement.select("a").text();
+                        if let count = Int(maxPageText),count > 0 {
+                            self.maxCount = count;
+                        }
                     }
                 }
             }catch Exception.Error(let type, let message)

@@ -20,6 +20,7 @@
 		2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */; };
 		2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */; };
 		2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */; };
+		2FC657131FEE244A0001DADC /* NodesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC657121FEE244A0001DADC /* NodesDataSource.swift */; };
 		2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */; };
 		2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */; };
 		2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */; };
@@ -44,6 +45,7 @@
 		2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuCommon.swift; sourceTree = "<group>"; };
 		2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPCommentTableViewCell.swift; sourceTree = "<group>"; };
+		2FC657121FEE244A0001DADC /* NodesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesDataSource.swift; sourceTree = "<group>"; };
 		2FD3F93E1FDE25FA005DD1F1 /* guanggoo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "guanggoo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -126,6 +128,15 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		2FC657111FEE21B20001DADC /* Right */ = {
+			isa = PBXGroup;
+			children = (
+				2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */,
+				2FC657121FEE244A0001DADC /* NodesDataSource.swift */,
+			);
+			path = Right;
+			sourceTree = "<group>";
+		};
 		2FD3F9351FDE25FA005DD1F1 = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +158,7 @@
 		2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				2FC657111FEE21B20001DADC /* Right */,
 				2F65E2081FEC9C0F0053AF48 /* Left */,
 				2FC20BDE1FE9EE4200381CDB /* Common */,
 				2FC20BDB1FE9EDAE00381CDB /* AccountManager */,
@@ -154,7 +166,6 @@
 				2F41E6941FE7DD7A00D8C4B4 /* HomePage */,
 				2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */,
 				2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */,
-				2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */,
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
 				2FD3F94D1FDE25FA005DD1F1 /* Info.plist */,
@@ -333,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FC657131FEE244A0001DADC /* NodesDataSource.swift in Sources */,
 				2F1568041FE8E7E700169984 /* ContentDataSource.swift in Sources */,
 				2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */,
 				2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */,

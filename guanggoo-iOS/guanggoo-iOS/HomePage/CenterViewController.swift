@@ -10,11 +10,21 @@ import UIKit
 import SnapKit
 import SDWebImage
 import MJRefresh
+import MBProgressHUD
 
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
     //MARK: - init
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
-    fileprivate let homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
+    fileprivate var homePageData:HomePageDataSource?
+//    fileprivate var homePageData:HomePageDataSource? {
+//        get {
+//            guard _homePageData == nil else {
+//                return _homePageData;
+//            }
+//            _homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
+//            return _homePageData;
+//        }
+//    }
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
         get {
@@ -29,6 +39,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
+            _tableView.mj_footer.isAutomaticallyHidden = true;
             
             return _tableView;
         }
@@ -45,8 +56,6 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
         }
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,6 +68,21 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     override func viewWillDisappear(_ animated: Bool) {
         appDelegate.drawController?.openDrawerGestureModeMask = []
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated);
+        
+        if self.homePageData == nil {
+            MBProgressHUD.showAdded(to: self.view, animated: true);
+            DispatchQueue.global(qos: .background).async {
+                self.homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
+                DispatchQueue.main.async {
+                    self.tableView.reloadData();
+                    MBProgressHUD.hide(for: self.view, animated: true);
+                }
+            }
+        }
     }
     
     func setNavBarItem() -> Void {
@@ -81,15 +105,20 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.homePageData.itemList.count;
+        if let count = self.homePageData?.itemList.count,count > 0 {
+            return count;
+        }
+        return 0;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let item = self.homePageData.itemList[indexPath.row];
-        let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
-        let labelWidth = UIScreen.main.bounds.size.width - 30;
-        let lines = (Int)(titleWidth/labelWidth) + 1;
-        return CGFloat(85+20*lines);
+        if let item = self.homePageData?.itemList[indexPath.row] {
+            let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
+            let labelWidth = UIScreen.main.bounds.size.width - 30;
+            let lines = (Int)(titleWidth/labelWidth) + 1;
+            return CGFloat(85+20*lines);
+        }
+        return 0;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -98,48 +127,51 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         if cell == nil {
             cell = HomePageTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
         }
-        let item = self.homePageData.itemList[indexPath.row];
-        cell?.creatorNameLabel.text = item.creatorName;
-        cell?.replyDescriptionLabel.text = item.replyDescription + "  " + item.lastReplyName;
-        cell?.setCount(item.replyCount);
-        cell?.nodeNameLabel.text = item.node;
-        cell?.setTitleContent(item.title);
-        cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+        if let item = self.homePageData?.itemList[indexPath.row] {
+            cell?.creatorNameLabel.text = item.creatorName;
+            cell?.replyDescriptionLabel.text = item.replyDescription + "  " + item.lastReplyName;
+            cell?.setCount(item.replyCount);
+            cell?.nodeNameLabel.text = item.node;
+            cell?.setTitleContent(item.title);
+            cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+        }
         return cell!;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if GuangGuAccount.shareInstance.isLogin() {
-            let item = self.homePageData.itemList[indexPath.row];
-            var titleLink = item.titleLink;
-            guard titleLink.count > 0 else {
-                return;
+            if let item = self.homePageData?.itemList[indexPath.row] {
+                var titleLink = item.titleLink;
+                guard titleLink.count > 0 else {
+                    return;
+                }
+                if titleLink[titleLink.startIndex] == "/" {
+                    titleLink.removeFirst();
+                }
+                let index = titleLink.index(of: "#");
+                let link = titleLink[titleLink.startIndex..<index!]+"?p=1";
+                let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                self.navigationController?.pushViewController(vc, animated: true);
             }
-            if titleLink[titleLink.startIndex] == "/" {
-                titleLink.removeFirst();
-            }
-            let index = titleLink.index(of: "#");
-            let link = titleLink[titleLink.startIndex..<index!];
-            let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-            self.navigationController?.pushViewController(vc, animated: true);
         }
         else {
             let vc = LoginViewController.init(completion: { [weak self] (loginSuccess) in
                 if let weakSelf = self, loginSuccess {
-                    let item = weakSelf.homePageData.itemList[indexPath.row];
-                    var titleLink = item.titleLink;
-                    guard titleLink.count > 0 else {
-                        return;
+                    if let item = weakSelf.homePageData?.itemList[indexPath.row] {
+                        var titleLink = item.titleLink;
+                        guard titleLink.count > 0 else {
+                            return;
+                        }
+                        if titleLink[titleLink.startIndex] == "/" {
+                            titleLink.removeFirst();
+                        }
+                        let index = titleLink.index(of: "#");
+                        let link = titleLink[titleLink.startIndex..<index!];
+                        let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                        weakSelf.navigationController?.pushViewController(vc, animated: true);
+                        weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
                     }
-                    if titleLink[titleLink.startIndex] == "/" {
-                        titleLink.removeFirst();
-                    }
-                    let index = titleLink.index(of: "#");
-                    let link = titleLink[titleLink.startIndex..<index!];
-                    let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                    weakSelf.navigationController?.pushViewController(vc, animated: true);
-                    weakSelf.homePageData.reloadData(completion: {weakSelf.tableView.reloadData()});
                 }
             })
             vc.vcDelegate = self;
@@ -147,6 +179,21 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             self.present(vc, animated: true, completion: nil);
         }
         
+    }
+    
+    /**
+     禁用上拉加载更多，并显示一个字符串提醒
+     */
+    func endRefreshingWithStateString(_ string:String){
+        self.tableView.mj_footer.endRefreshingWithNoMoreData()
+    }
+    
+    func endRefreshingWithNoDataAtAll() {
+        self.endRefreshingWithStateString("暂无内容")
+    }
+    
+    func endRefreshingWithNoMoreData() {
+        self.endRefreshingWithStateString("没有内容了")
     }
     
     //MARK: - Event
@@ -161,14 +208,24 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     @objc func reloadItemData() -> Void {
-        self.homePageData.reloadData {
+        self.homePageData?.reloadData {
             self.tableView.mj_header.endRefreshing();
+            self.tableView.mj_footer.resetNoMoreData();
             self.tableView.reloadData();
         };
     }
     
     @objc func nextPage() -> Void {
-        self.homePageData.loadOlder {
+        if self.homePageData?.itemList.count == 0 {
+            self.endRefreshingWithNoDataAtAll()
+            return;
+        }
+        if let pageCount = self.homePageData?.pageCount,let maxCount = self.homePageData?.maxCount ,pageCount >= maxCount
+        {
+            self.endRefreshingWithNoMoreData()
+            return;
+        }
+        self.homePageData?.loadOlder {
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
         }
@@ -187,11 +244,41 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                 }
             }
             else if msgtype == "reloadData" {
-                self.homePageData.reloadData(completion: {self.tableView.reloadData()});
+                self.homePageData?.reloadData(completion: {self.tableView.reloadData()});
             }
             else if msgtype == "GotoHomePage" {
                 self.navigationController?.popToRootViewController(animated: true);
-                self.homePageData.reloadData(completion: {self.tableView.reloadData()});
+                self.homePageData?.reloadData(completion: {self.tableView.reloadData()});
+            }
+            else if msgtype == "changeNode" {
+                if let item = msg["PARAM1"] as? GuangGuNode {
+                    var nodeString = item.link;
+                    //除去全部节点
+                    if nodeString.count > 0 {
+                        if nodeString[nodeString.startIndex] == "/" {
+                            nodeString.removeFirst();
+                        }
+                    }
+                    if GuangGuAccount.shareInstance.isLogin() {
+                        self.homePageData?.homePageString = GUANGGUSITE + nodeString;
+                        self.title = item.name;
+                        self.tableView.mj_header.beginRefreshing();
+                        //self.homePageData.reloadData(completion: {self.tableView.reloadData()});
+                    }
+                    else
+                    {
+                        let vc = LoginViewController.init(completion: { [weak self] (loginSuccess) in
+                            if let weakSelf = self, loginSuccess {
+                                weakSelf.homePageData?.homePageString = GUANGGUSITE + nodeString;
+                                weakSelf.title = item.name;
+                                weakSelf.tableView.mj_header.beginRefreshing();
+                                //weakSelf.homePageData.reloadData(completion: {weakSelf.tableView.reloadData()});
+                            }
+                        })
+                        vc.vcDelegate = self;
+                        self.present(vc, animated: true, completion: nil);
+                    }
+                }
             }
         }
     }

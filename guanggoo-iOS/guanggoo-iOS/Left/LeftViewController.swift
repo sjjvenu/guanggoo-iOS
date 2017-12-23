@@ -193,11 +193,11 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
     func pushLoginViewController() -> Void {
         if !GuangGuAccount.shareInstance.isLogin() {
             appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
-            let vc = LoginViewController.init(completion: { (loginSuccess) in
-                if let delegate = self.vcDelegate {
+            let vc = LoginViewController.init(completion: { [weak self](loginSuccess) in
+                if let delegate = self?.vcDelegate {
                     let msg = NSMutableDictionary.init();
                     msg["MSGTYPE"] = "reloadData";
-                    self.dismiss(animated: true, completion: nil);
+                    self?.dismiss(animated: true, completion: nil);
                     delegate.OnPushVC(msg: msg);
                 }
             });
