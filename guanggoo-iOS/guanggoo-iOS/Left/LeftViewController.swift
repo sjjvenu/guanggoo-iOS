@@ -59,16 +59,16 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
                 return _userName;
             }
             _userName = UIButton.init();
-            _userImage.backgroundColor = UIColor.clear;
+            _userName.backgroundColor = UIColor.clear;
             if GuangGuAccount.shareInstance.isLogin() {
                 _userName.setTitle(GuangGuAccount.shareInstance.user!.userName, for: .normal);
             }
             else {
                 _userName.setTitle("尚未登录", for: .normal);
             }
-            _userImage.setTitleColor(UIColor.black, for: .normal);
+            _userName.setTitleColor(UIColor.black, for: .normal);
             _userName.titleLabel?.font = UIFont.systemFont(ofSize: 14);
-            _userImage.addTarget(self, action: #selector(LeftViewController.userImageClick(sender:)), for: UIControlEvents.touchUpInside);
+            _userName.addTarget(self, action: #selector(LeftViewController.userImageClick(sender:)), for: UIControlEvents.touchUpInside);
             return _userName;
         }
     }
@@ -183,6 +183,31 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         pushLoginViewController();
+        appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
+        switch indexPath.row {
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            let vc = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
+            vc.vcDelegate = self.vcDelegate;
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "PushViewController";
+                msg["PARAM1"] = vc;
+                delegate.OnPushVC(msg: msg);
+            }
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        default:
+            break;
+        }
     }
     
     //MARK: - event
@@ -194,11 +219,13 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         if !GuangGuAccount.shareInstance.isLogin() {
             appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
             let vc = LoginViewController.init(completion: { [weak self](loginSuccess) in
-                if let delegate = self?.vcDelegate {
-                    let msg = NSMutableDictionary.init();
-                    msg["MSGTYPE"] = "reloadData";
-                    self?.dismiss(animated: true, completion: nil);
-                    delegate.OnPushVC(msg: msg);
+                if loginSuccess {
+                    if let delegate = self?.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "reloadData";
+                        self?.dismiss(animated: true, completion: nil);
+                        delegate.OnPushVC(msg: msg);
+                    }
                 }
             });
             vc.vcDelegate = self.vcDelegate;

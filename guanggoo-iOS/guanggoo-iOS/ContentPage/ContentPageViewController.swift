@@ -49,7 +49,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         }
     }
     
-    required init(urlString : String,model:GuangGuStruct) {
+    required init(urlString : String,model:GuangGuStruct?) {
         super.init(nibName: nil, bundle: nil);
         
         self.urlString = urlString;
@@ -64,7 +64,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.title = "详细信息";
+        self.title = "主题详情";
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
@@ -82,10 +82,10 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         if self.contentData == nil {
             MBProgressHUD.showAdded(to: self.view, animated: true);
             DispatchQueue.global(qos: .background).async {
-                self.contentData = ContentDataSource.init(urlString: self.urlString,model: self.itemModel);
+                self.contentData = ContentDataSource.init(urlString: self.urlString,model: self.itemModel,delegate: self);
                 DispatchQueue.main.async {
                     self.tableView.reloadData();
-                    if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel.replyCount)! {
+                    if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel?.replyCount)! {
                         self.endRefreshingWithNoMoreData()
                     }
                     MBProgressHUD.hide(for: self.view, animated: true);
@@ -142,13 +142,16 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         switch section {
         case 0:
             if let item = self.contentData?.headerModel {
-                let headeView = CPHeaderView.init();
-                headeView.creatorNameLabel.text = item.creatorName;
-                headeView.replyDescriptionLabel.text = item.creatTime;
-                headeView.nodeNameLabel.text = item.node;
-                headeView.setTitleContent(item.title);
-                headeView.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
-                return headeView;
+                let headerView = CPHeaderView.init();
+                headerView.creatorNameLabel.text = item.creatorName;
+                headerView.replyDescriptionLabel.text = item.creatTime;
+                headerView.nodeNameLabel.text = item.node;
+                headerView.setTitleContent(item.title);
+                headerView.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+                headerView.creatorImageView.isUserInteractionEnabled = true;
+                let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.headUserNameClick(ges:)));
+                headerView.creatorImageView.addGestureRecognizer(singleTap);
+                return headerView;
             }
             else {
                 return nil;
@@ -214,6 +217,10 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             let item = self.contentData?.itemList[indexPath.row];
             cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
+            cell?.creatorImageView.isUserInteractionEnabled = true;
+            let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.commentUserNameClick(ges:)));
+            cell?.creatorImageView.addGestureRecognizer(singleTap);
+            cell?.creatorImageView.tag = indexPath.row;
             cell?.creatorNameLabel.text = item!.creatorName;
             cell?.replyDescriptionLabel.text = item!.replyTime;
             cell?.floorLabel.text = String(indexPath.row+1)+"楼";
@@ -257,13 +264,34 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             self.endRefreshingWithNoDataAtAll()
             return;
         }
-        if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel.replyCount)! {
+        if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel?.replyCount)! {
             self.endRefreshingWithNoMoreData()
             return;
         }
         self.contentData?.loadOlder {
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
+        }
+    }
+    
+    @objc func headUserNameClick(ges:UIGestureRecognizer) -> Void {
+        var userLink = self.contentData?.headerModel!.creatorLink;
+        if userLink![userLink!.startIndex] == "/" {
+            userLink?.removeFirst();
+        }
+        let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink!);
+        self.navigationController?.pushViewController(vc, animated: true);
+    }
+    
+    @objc func commentUserNameClick(ges:UITapGestureRecognizer) -> Void {
+        if let tag = ges.view?.tag,tag >= 0 && tag < self.contentData!.itemList.count {
+            let item = self.contentData?.itemList[tag];
+            var userLink = item?.creatorLink;
+            if userLink![userLink!.startIndex] == "/" {
+                userLink?.removeFirst();
+            }
+            let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink!);
+            self.navigationController?.pushViewController(vc, animated: true);
         }
     }
 
@@ -286,6 +314,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         if let msgtype = msg["MSGTYPE"] as? String {
             if msgtype == "PhotoBrowser" {
                 if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "UserInfoViewController" {
+                if case let urlString as String = msg["PARAM1"] {
+                    let vc = UserInfoViewController.init(urlString: GUANGGUSITE + urlString);
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }

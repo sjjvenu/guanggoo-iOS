@@ -233,12 +233,28 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     
     func OnPushVC(msg: NSDictionary) {
         if let msgtype = msg["MSGTYPE"] as? String {
-            if msgtype == "LoginViewController" {
+            if msgtype == "PhotoBrowser" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "LoginViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }
             else if msgtype == "PresentViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "UserInfoViewController" {
+                if case let urlString as String = msg["PARAM1"] {
+                    let vc = UserInfoViewController.init(urlString: GUANGGUSITE + urlString);
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "PushViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);
                 }

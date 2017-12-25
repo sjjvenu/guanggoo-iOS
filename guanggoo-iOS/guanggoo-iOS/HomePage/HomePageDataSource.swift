@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftSoup
-import Ji
 
 
 struct GuangGuStruct {
@@ -105,7 +104,7 @@ class HomePageDataSource: NSObject {
                     item.replyDescription = lastTouchedText;
                     itemList.append(item);
                 }
-                
+                //解析用户信息时，只能用SwiftSoup,Ji查到usercard会找不到
                 let userClasses = try doc.getElementsByClass("usercard");
                 for object in userClasses {
                     let userNameElement = try object.getElementsByClass("username");
@@ -120,7 +119,7 @@ class HomePageDataSource: NSObject {
                     GuangGuAccount.shareInstance.user = user;
                     break;
                 }
-                
+                //页数
                 let pageElements = try doc.getElementsByClass("pagination");
                 for object in pageElements {
                     let elements = try object.select("li");

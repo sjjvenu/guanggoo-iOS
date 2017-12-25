@@ -105,7 +105,7 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
         self.replyDescriptionLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.creatorImageView.snp.right).offset(10);
             make.top.equalTo(self.creatorNameLabel.snp.bottom);
-            make.width.equalTo(250);
+            make.right.equalTo(self.contentView).offset(-20);
             make.height.equalTo(20);
         }
         self.contentView.addSubview(self.floorLabel);

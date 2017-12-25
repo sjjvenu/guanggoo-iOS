@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F0368121FE3A95C00E3DB47 /* Media.xcassets */; };
+		2F044F3D1FF08B3A0036C47D /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */; };
+		2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */; };
+		2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */; };
 		2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */; };
 		2F1568021FE8E71D00169984 /* ContentPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568011FE8E71D00169984 /* ContentPageViewController.swift */; };
 		2F1568041FE8E7E700169984 /* ContentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568031FE8E7E700169984 /* ContentDataSource.swift */; };
@@ -32,6 +35,9 @@
 
 /* Begin PBXFileReference section */
 		2F0368121FE3A95C00E3DB47 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDataSource.swift; sourceTree = "<group>"; };
+		2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageTableViewCell.swift; sourceTree = "<group>"; };
 		2F1568011FE8E71D00169984 /* ContentPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentPageViewController.swift; sourceTree = "<group>"; };
 		2F1568031FE8E7E700169984 /* ContentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDataSource.swift; sourceTree = "<group>"; };
@@ -106,6 +112,9 @@
 			children = (
 				2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */,
 				2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */,
+				2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */,
+				2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */,
+				2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */,
 			);
 			path = Left;
 			sourceTree = "<group>";
@@ -358,7 +367,10 @@
 				2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */,
 				2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */,
 				2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */,
+				2F044F3D1FF08B3A0036C47D /* NotificationViewController.swift in Sources */,
 				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
+				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
+				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
 			);
