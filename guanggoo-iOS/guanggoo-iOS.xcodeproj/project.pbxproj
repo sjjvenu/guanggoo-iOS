@@ -18,6 +18,9 @@
 		2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568071FE909DC00169984 /* CPHeaderView.swift */; };
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
 		2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */; };
+		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
+		2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */; };
+		2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */; };
 		2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */; };
 		2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */; };
 		2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */; };
@@ -46,6 +49,9 @@
 		2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
 		2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewTableViewCell.swift; sourceTree = "<group>"; };
+		2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
+		2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentDataSource.swift; sourceTree = "<group>"; };
+		2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
 		2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommWebViewController.swift; sourceTree = "<group>"; };
 		2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuAccount.swift; sourceTree = "<group>"; };
 		2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +121,9 @@
 				2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */,
 				2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */,
 				2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */,
+				2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */,
+				2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */,
+				2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */,
 			);
 			path = Left;
 			sourceTree = "<group>";
@@ -323,6 +332,7 @@
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -339,6 +349,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,6 +371,7 @@
 				2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */,
 				2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */,
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
+				2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */,
 				2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */,
 				2F1568021FE8E71D00169984 /* ContentPageViewController.swift in Sources */,
 				2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */,
@@ -372,7 +384,9 @@
 				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
+				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
+				2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,8 @@ import SnapKit
 import SDWebImage
 import MJRefresh
 import MBProgressHUD
+import Alamofire
+import Toast_Swift
 
 let HTMLSTYLE = "<style>h1 {\n    font-weight: 500;\n    line-height: 140%;\n    margin: 5px 0px 15px 0px;\n    padding: 0px;\n}\n\nh2 {\n    font-weight: 500;\n    line-height: 100%;\n    margin: 20px 0px 20px 0px;\n    padding: 0px 0px 8px 0px;\n    border-bottom: 1px solid #e2e2e2;\n}\n\nh3 {\n    font-weight: 500;\n    line-height: 100%;\n    margin: 5px 0px 20px 0px;\n    padding: 0px;\n}\n\nhr {\n    border: none;\n    height: 1px;\n    margin-bottom: 1em;\n}\n\npre {\n    letter-spacing: 0.015em;\n    line-height: 120%;\n    padding: 0.5em;\n    margin: 0px;\n    white-space: pre;\n    overflow-x: auto;\n    overflow-y: auto;\n}\n\npre a {\n    color: inherit;\n    text-decoration: underline;\n}\n\ncode {\n    padding: 1px 2px 1px 2px;\n    border-radius: 2px;\n}\n\n\nul {\n    list-style: square;\n    margin: 1em 0px 1em 1em;\n    padding: 0px;\n}\n\nul li, ol li {\n    padding: 0px;\n    margin: 0px;\n}\n\nol {\n    margin: 1em 0px 0em 2em;\n    padding: 0px;\n}\n\na:link, a:visited, a:active {\n    text-decoration: none;\n    word-break: break-all;\n}\n\nimg {\n    max-width: 100%;\n}\n.imgly {\n    max-width: 100%;\n}\n/* *******************************    ******************************* */\nbody {\n    font-family: \'Helvetica\', monospace;\n    -webkit-text-size-adjust: none;\n    line-height: 1.75;\n    word-wrap: break-word;\n    max-height: 20em;\n    padding: 5px;\n}\n.subtle {\n    padding: 5px;\n}\n/* font-size */\nh1 {\n    font-size: 18.0px; /* Default 18 */\n}\n\nh2 {\n    font-size: 18.0px; /* Default 18 */\n}\n\nh3 {\n    font-size: 16.0px; /* Default 16 */\n}\n\npre {\n    font-size: 13.0px; /* Default 13 */\n}\n\nbody {\n    font-size: 14.0px; /* Default 14 */\n}\n.subtle {\n    font-size : 12.0px; /* Default 12 */\n}\n.subtle .fade {\n    font-size : 10.0px; /* Default 10 */\n}/* color */\n\na:link, a:visited, a:active {\n    color: #778087;\n}\nbody {\n    color: #000;\n    background-color:#FFF;\n}\n.subtle {\n/*    background-color: #F1F2F4;*/\n}\n.subtle .fade {\n    color:#ADADAD;\n}</style></head>"
 let HTMLHEADER  = "<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\">"
@@ -28,6 +30,20 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     fileprivate var urlString:String!;
     fileprivate var itemModel:GuangGuStruct!
     fileprivate var webViewContentCell:CPHeaderTableViewCell? = nil;
+    
+    fileprivate var _rightButton:UIButton!
+    fileprivate var rightButton:UIButton {
+        get {
+            guard _rightButton == nil else {
+                return _rightButton;
+            }
+            _rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
+            _rightButton.setImage(UIImage.init(named: "ic_unfavorite"), for: .normal);
+            _rightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 5, -15);
+            _rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
+            return _rightButton;
+        }
+    }
     
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
@@ -70,6 +86,9 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             make.edges.equalTo(self.view);
         }
         self.tableView.mj_footer.isAutomaticallyHidden = true;
+        
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightButton);
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,6 +106,9 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     self.tableView.reloadData();
                     if (self.contentData?.itemList.count)! >= (self.contentData?.headerModel?.replyCount)! {
                         self.endRefreshingWithNoMoreData()
+                    }
+                    if (self.contentData?.headerModel?.isFavorite)! {
+                        self.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
                     }
                     MBProgressHUD.hide(for: self.view, animated: true);
                 }
@@ -280,6 +302,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             userLink?.removeFirst();
         }
         let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink!);
+        vc.vcDelegate = self;
         self.navigationController?.pushViewController(vc, animated: true);
     }
     
@@ -291,7 +314,49 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 userLink?.removeFirst();
             }
             let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink!);
+            vc.vcDelegate = self;
             self.navigationController?.pushViewController(vc, animated: true);
+        }
+    }
+    
+    @objc func rightClick(sender: UIButton) {
+        if let model = self.contentData?.headerModel {
+            var requestURL = model.favoriteURL;
+            if requestURL[requestURL.startIndex] == "/" {
+                requestURL.removeFirst();
+            }
+            Alamofire.request(GUANGGUSITE + requestURL).responseJSON { [weak self](response) in
+                switch(response.result) {
+                case .success(let JSON):
+                    print("Success with JSON: \(JSON)")
+                    let responseDic = JSON as! NSDictionary
+                    if let success = responseDic["success"] as? Bool{
+                        if success {
+                            if model.isFavorite {
+                                self?.view.makeToast("取消收藏成功!")
+                                self?.contentData?.headerModel?.isFavorite = false;
+                                self?.contentData?.headerModel?.favoriteURL = model.favoriteURL.replacingOccurrences(of: "unfavorite", with: "favorite");
+                                self?.rightButton.setImage(UIImage.init(named: "ic_unfavorite"), for: .normal);
+                            }
+                            else {
+                                self?.view.makeToast("收藏成功!")
+                                self?.contentData?.headerModel?.isFavorite = true;
+                                self?.contentData?.headerModel?.favoriteURL = model.favoriteURL.replacingOccurrences(of: "favorite", with: "unfavorite");
+                                self?.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
+                            }
+                        }
+                        else {
+                            if let error = responseDic["message"] as? String{
+                                self?.view.makeToast(error)
+                            }
+                        }
+                    }
+                    break;
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    break;
+                }
+            }
         }
     }
 
@@ -320,6 +385,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             else if msgtype == "UserInfoViewController" {
                 if case let urlString as String = msg["PARAM1"] {
                     let vc = UserInfoViewController.init(urlString: GUANGGUSITE + urlString);
+                    vc.vcDelegate = self;
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "CenterViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }

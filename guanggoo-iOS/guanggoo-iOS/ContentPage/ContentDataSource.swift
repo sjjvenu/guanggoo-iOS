@@ -49,6 +49,10 @@ class ContentDataSource: NSObject {
         reloadData {};
     }
     
+    deinit {
+        self.vcDelegate = nil;
+    }
+    
     func loadData(urlString:String,loadNew:Bool) -> Void {
         guard let myURL = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL");
@@ -97,6 +101,17 @@ class ContentDataSource: NSObject {
                     let createTimeElements = try object.getElementsByClass("created-time");
                     let createTime = try createTimeElements.text();
                     self.headerModel?.creatTime = createTime;
+                    
+                    let favoriteTimeElements = try object.getElementsByClass("J_topicFavorite");
+                    let dataType = try favoriteTimeElements.attr("data-type");
+                    let favoriteURL = try favoriteTimeElements.attr("href");
+                    self.headerModel?.favoriteURL = favoriteURL;
+                    if dataType == "favorite" {
+                        self.headerModel?.isFavorite = false;
+                    }
+                    else {
+                        self.headerModel?.isFavorite = true;
+                    }
                     break;
                 }
                 let jiDoc = Ji(htmlString: myHTMLString);
@@ -115,7 +130,7 @@ class ContentDataSource: NSObject {
                         
                         let commentAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "")
                         let contentNodes = commentNode.xPath("div[@class='main']/span[@class='content']/node()")
-                        ContentDataSource.preformAttributedString(commentAttributedString, nodes: contentNodes,item,delegate: self.vcDelegate)
+                        self.preformAttributedString(commentAttributedString, nodes: contentNodes,item)
                         item.textAttributedString = commentAttributedString;
                         let textContainer = YYTextContainer(size: CGSize(width: SCREEN_WIDTH - 30, height: 9999))
                         item.textLayout = YYTextLayout(container: textContainer, text: commentAttributedString)
@@ -147,7 +162,7 @@ class ContentDataSource: NSObject {
         completion();
     }
     
-    class func preformAttributedString(_ commentAttributedString:NSMutableAttributedString,nodes:[JiNode],_ model:GuangGuComent,delegate:GuangGuVCDelegate?) {
+    func preformAttributedString(_ commentAttributedString:NSMutableAttributedString,nodes:[JiNode],_ model:GuangGuComent) {
         for element in nodes {
             if element.name == "text" , var content = element.content{//普通文本
                 content = content.replacingOccurrences(of: "\t", with: "")
@@ -173,7 +188,7 @@ class ContentDataSource: NSObject {
                 //递归处理所有子节点,主要是处理下 a标签下包含的img标签
                 let subNodes = element.xPath("./node()")
                 if subNodes.first?.name != "text" && subNodes.count > 0 {
-                    self.preformAttributedString(commentAttributedString, nodes: subNodes,model,delegate: delegate)
+                    self.preformAttributedString(commentAttributedString, nodes: subNodes,model)
                 }
                 if content.count > 0 {
                     let attr = NSMutableAttributedString(string: content ,attributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 14)])
@@ -181,18 +196,16 @@ class ContentDataSource: NSObject {
                                              color: UIColor.lightGray,
                                              backgroundColor: UIColor(white: 0.95, alpha: 1),
                                              userInfo: ["url":url],
-                                             tapAction: { (view, text, range, rect) -> Void in
+                                             tapAction: { [weak self](view, text, range, rect) -> Void in
                                                 if let highlight = text.yy_attribute(YYTextHighlightAttributeName, at: UInt(range.location)) ,let url = (highlight as AnyObject).userInfo["url"] as? String  {
                                                     var userLink = url;
                                                     if userLink[userLink.startIndex] == "/" {
                                                         userLink.removeFirst();
                                                     }
-                                                    if let vcDelegate = delegate {
-                                                        let msg = NSMutableDictionary.init();
-                                                        msg["MSGTYPE"] = "UserInfoViewController";
-                                                        msg["PARAM1"] = userLink;
-                                                        vcDelegate.OnPushVC(msg: msg);
-                                                    }
+                                                    let msg = NSMutableDictionary.init();
+                                                    msg["MSGTYPE"] = "UserInfoViewController";
+                                                    msg["PARAM1"] = userLink;
+                                                    self?.vcDelegate?.OnPushVC(msg: msg);
                                                 }
                                                 
                     }, longPressAction: nil)
@@ -204,14 +217,14 @@ class ContentDataSource: NSObject {
                 let subElement = element.xPath("a/node()")
                 if subElement.first?.name != "text" && subElement.count > 0 {
                     //img隐藏在<p><a>下
-                    self.preformAttributedString(commentAttributedString, nodes: subElement,model,delegate: delegate);
+                    self.preformAttributedString(commentAttributedString, nodes: subElement,model);
                 }
                 else
                 {
                     let subImgElement = element.xPath("node()")
                     if subImgElement.first?.name != "text" && subImgElement.count > 0 {
                         //img隐藏在<p><a>下
-                        self.preformAttributedString(commentAttributedString, nodes: subImgElement,model,delegate: delegate);
+                        self.preformAttributedString(commentAttributedString, nodes: subImgElement,model);
                     }
                     else {
                         commentAttributedString.append(NSMutableAttributedString(string: content,attributes:[NSAttributedStringKey.font:UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor:UIColor.black]))

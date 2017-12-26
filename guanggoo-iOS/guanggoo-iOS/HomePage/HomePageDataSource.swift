@@ -23,6 +23,8 @@ struct GuangGuStruct {
     var node = "";                                  //所属节点
     var replyCount:Int = 0;                         //回复数
     var contentHtml = "";                           //html内容
+    var isFavorite = false;                         //是否收藏
+    var favoriteURL = "";                           //收藏操作
     var images:NSMutableArray = NSMutableArray();   //html中的image链接
 }
 
@@ -104,20 +106,35 @@ class HomePageDataSource: NSObject {
                     item.replyDescription = lastTouchedText;
                     itemList.append(item);
                 }
-                //解析用户信息时，只能用SwiftSoup,Ji查到usercard会找不到
-                let userClasses = try doc.getElementsByClass("usercard");
-                for object in userClasses {
-                    let userNameElement = try object.getElementsByClass("username");
-                    let userNameText = try userNameElement.text();
-                    
-                    let userImgElement = try object.select("a").select("img");
-                    let userImgText = try userImgElement.attr("src");
-                    
-                    var user = GuangGuUser();
-                    user.userImage = userImgText;
-                    user.userName = userNameText;
-                    GuangGuAccount.shareInstance.user = user;
-                    break;
+                if urlString.contains("www.guanggoo.com/u/") {
+                    //用户主题，不需要初始化左侧边栏
+                }
+                else {
+                    //解析用户信息时，只能用SwiftSoup,Ji查到usercard会找不到
+                    let userClasses = try doc.getElementsByClass("usercard");
+                    for object in userClasses {
+                        let userNameElement = try object.getElementsByClass("username");
+                        let userNameText = try userNameElement.text();
+                        
+                        let uiHeaderElements = try object.getElementsByClass("ui-header");
+                        let userImgElement = try uiHeaderElements.select("a").select("img");
+                        let userImgText = try userImgElement.attr("src");
+                        
+                        let userLinkElement = try uiHeaderElements.select("a");
+                        let userLinkText = try userLinkElement.attr("href");
+                        
+                        var user = GuangGuUser();
+                        user.userImage = userImgText;
+                        user.userName = userNameText;
+                        user.userLink = userLinkText;
+                        GuangGuAccount.shareInstance.user = user;
+                        break;
+                    }
+                    if userClasses.array().count == 0 {
+                        GuangGuAccount.shareInstance.user?.userImage = "";
+                        GuangGuAccount.shareInstance.user?.userLink = "";
+                        GuangGuAccount.shareInstance.user?.userName = "";
+                    }
                 }
                 //页数
                 let pageElements = try doc.getElementsByClass("pagination");

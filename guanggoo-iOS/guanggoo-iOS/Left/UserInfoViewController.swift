@@ -49,6 +49,7 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
     }
     
     fileprivate var userNameText:String?
+    fileprivate var userLinkText:String?
     fileprivate var _userNameLabel: UILabel!
     fileprivate var userNameLabel: UILabel {
         get {
@@ -124,25 +125,27 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         
-        MBProgressHUD.showAdded(to: self.view, animated: true);
-        DispatchQueue.global(qos: .background).async {
-            self.loadData(urlString: self.mURLString);
-            DispatchQueue.main.async {
-                if let count = self.userNameText?.count,count > 0 {
-                    self.userNameLabel.text = self.userNameText;
-                    self.title = self.userNameText;
+        if self.userNameText == nil {
+            MBProgressHUD.showAdded(to: self.view, animated: true);
+            DispatchQueue.global(qos: .background).async {
+                self.loadData(urlString: self.mURLString);
+                DispatchQueue.main.async {
+                    if let count = self.userNameText?.count,count > 0 {
+                        self.userNameLabel.text = self.userNameText;
+                        self.title = self.userNameText;
+                    }
+                    if let count = self.userImageURL?.count,count > 0 {
+                        self.userImageView.sd_setImage(with: URL.init(string: self.userImageURL!), completed: nil);
+                    }
+                    if let count = self.numberString?.count,count > 0 {
+                        self.numberLabel.text = self.numberString;
+                    }
+                    if let count = self.createTimeString?.count,count > 0 {
+                        self.createTimeLabel.text = self.createTimeString;
+                    }
+                    self.tableView.reloadData();
+                    MBProgressHUD.hide(for: self.view, animated: true);
                 }
-                if let count = self.userImageURL?.count,count > 0 {
-                    self.userImageView.sd_setImage(with: URL.init(string: self.userImageURL!), completed: nil);
-                }
-                if let count = self.numberString?.count,count > 0 {
-                    self.numberLabel.text = self.numberString;
-                }
-                if let count = self.createTimeString?.count,count > 0 {
-                    self.createTimeLabel.text = self.createTimeString;
-                }
-                self.tableView.reloadData();
-                MBProgressHUD.hide(for: self.view, animated: true);
             }
         }
     }
@@ -167,6 +170,10 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                     let uiHeaderElements = try object.getElementsByClass("ui-header");
                     let imageText = try uiHeaderElements.select("a").select("img").attr("src");
                     self.userImageURL = imageText;
+                    
+                    let userLinkElement = try uiHeaderElements.select("a");
+                    let userLinkText = try userLinkElement.attr("href");
+                    self.userLinkText = userLinkText;
                     
                     let numberElement = try object.getElementsByClass("number");
                     let numberText = try numberElement.text();
@@ -249,19 +256,34 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
             cell = UITableViewCell.init(style: .default, reuseIdentifier: identifier);
             switch indexPath.row {
             case 0:
-                cell!.textLabel?.text = "他的主题";
+                if let userName = self.userNameText {
+                    cell!.textLabel?.text = userName + "的主题";
+                }
+                else {
+                    cell!.textLabel?.text = "他的主题";
+                }
                 cell!.textLabel?.textColor = UIColor.black;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
                 break;
             case 1:
-                cell!.textLabel?.text = "他的回复";
+                if let userName = self.userNameText {
+                    cell!.textLabel?.text = userName + "的回复";
+                }
+                else {
+                    cell!.textLabel?.text = "他的回复";
+                }
                 cell!.textLabel?.textColor = UIColor.black;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
                 break;
             case 2:
-                cell!.textLabel?.text = "他的收藏";
+                if let userName = self.userNameText {
+                    cell!.textLabel?.text = userName + "的收藏";
+                }
+                else {
+                    cell!.textLabel?.text = "他的收藏";
+                }
                 cell!.textLabel?.textColor = UIColor.black;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
@@ -271,16 +293,58 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
             }
         }
         cell!.backgroundColor = UIColor.clear;
+        cell!.selectionStyle = .none;
         return cell!;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
+            if var userLink = self.userLinkText,let userName = self.userNameText {
+                if userLink[userLink.startIndex] == "/" {
+                    userLink.removeFirst();
+                }
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "CenterViewController";
+                    let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/topics");
+                    vc.title = userName + "的主题";
+                    msg["PARAM1"] = vc;
+                    delegate.OnPushVC(msg: msg);
+                }
+            }
             break;
         case 1:
+            if var userLink = self.userLinkText,let userName = self.userNameText {
+                if userLink[userLink.startIndex] == "/" {
+                    userLink.removeFirst();
+                }
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "CenterViewController";
+                    let vc = UserCommentViewController.init(urlString: GUANGGUSITE + userLink + "/replies");
+                    vc.title = userName + "的回复";
+                    vc.vcDelegate = self.vcDelegate;
+                    msg["PARAM1"] = vc;
+                    delegate.OnPushVC(msg: msg);
+                }
+            }
             break;
         case 2:
+            if var userLink = self.userLinkText,let userName = self.userNameText {
+                if userLink[userLink.startIndex] == "/" {
+                    userLink.removeFirst();
+                }
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "CenterViewController";
+                    let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/favorites");
+                    vc.needRefreshInAppear = true;
+                    vc.title = userName + "的收藏";
+                    msg["PARAM1"] = vc;
+                    delegate.OnPushVC(msg: msg);
+                }
+            }
             break;
         default:
             break;

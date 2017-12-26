@@ -11,6 +11,7 @@ import UIKit
 struct GuangGuUser {
     var userName = "";
     var userImage = "";
+    var userLink = "";
 }
 
 class GuangGuAccount: NSObject {

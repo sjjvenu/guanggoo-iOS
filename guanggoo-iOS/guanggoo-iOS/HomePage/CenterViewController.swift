@@ -15,16 +15,10 @@ import MBProgressHUD
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
     //MARK: - init
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
-    fileprivate var homePageData:HomePageDataSource?
-//    fileprivate var homePageData:HomePageDataSource? {
-//        get {
-//            guard _homePageData == nil else {
-//                return _homePageData;
-//            }
-//            _homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
-//            return _homePageData;
-//        }
-//    }
+    fileprivate var homePageData:HomePageDataSource?;
+    fileprivate var mURLString:String?;
+    var needRefreshInAppear:Bool = false;
+    
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
         get {
@@ -45,12 +39,28 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         }
     }
     //MARK: - UIViewController
+    required init(urlString:String?) {
+        super.init(nibName: nil, bundle: nil);
+        guard let count = urlString?.count,count > 0 else {
+            return;
+        }
+        self.mURLString = urlString;
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.title = "全部";
-        setNavBarItem();
+        if (self.mURLString?.contains("www.guanggoo.com/u/"))! {
+            //用户主题，不需要初始化左侧边栏
+        }
+        else {
+            setNavBarItem();
+        }
         
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
@@ -73,12 +83,15 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated);
         
-        if self.homePageData == nil {
+        if self.homePageData == nil || needRefreshInAppear {
             MBProgressHUD.showAdded(to: self.view, animated: true);
             DispatchQueue.global(qos: .background).async {
-                self.homePageData = HomePageDataSource.init(urlString: GUANGGUSITE);
+                self.homePageData = HomePageDataSource.init(urlString: self.mURLString!);
                 DispatchQueue.main.async {
                     self.tableView.reloadData();
+                    if (self.homePageData?.pageCount)! >= (self.homePageData?.maxCount)! {
+                        self.endRefreshingWithNoMoreData()
+                    }
                     MBProgressHUD.hide(for: self.view, animated: true);
                 }
             }
@@ -105,37 +118,62 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = self.homePageData?.itemList.count,count > 0 {
-            return count;
+        if let count = self.homePageData?.itemList.count {
+            if count > 0 {
+                return count;
+            }
+            else {
+                return 1;
+            }
         }
         return 0;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let item = self.homePageData?.itemList[indexPath.row] {
-            let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
-            let labelWidth = UIScreen.main.bounds.size.width - 30;
-            let lines = (Int)(titleWidth/labelWidth) + 1;
-            return CGFloat(85+20*lines);
+        if let count = self.homePageData?.itemList.count {
+            if count > 0 {
+                if let item = self.homePageData?.itemList[indexPath.row] {
+                    let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
+                    let labelWidth = UIScreen.main.bounds.size.width - 30;
+                    let lines = (Int)(titleWidth/labelWidth) + 1;
+                    return CGFloat(85+20*lines);
+                }
+            }
+            else {
+                return 0;
+            }
         }
         return 0;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "HOMEPAGECELL";
-        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HomePageTableViewCell;
-        if cell == nil {
-            cell = HomePageTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
+        if let count = self.homePageData?.itemList.count {
+            if count > 0 {
+                let identifier = "HOMEPAGECELL";
+                var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HomePageTableViewCell;
+                if cell == nil {
+                    cell = HomePageTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
+                }
+                if let item = self.homePageData?.itemList[indexPath.row] {
+                    cell?.creatorNameLabel.text = item.creatorName;
+                    cell?.replyDescriptionLabel.text = item.replyDescription + "  " + item.lastReplyName;
+                    cell?.setCount(item.replyCount);
+                    cell?.nodeNameLabel.text = item.node;
+                    cell?.setTitleContent(item.title);
+                    cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+                }
+                return cell!;
+            }
+            else {
+                let identifier = "NOCELL";
+                var cell = tableView.dequeueReusableCell(withIdentifier: identifier);
+                if cell == nil {
+                    cell = UITableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
+                }
+                return cell!;
+            }
         }
-        if let item = self.homePageData?.itemList[indexPath.row] {
-            cell?.creatorNameLabel.text = item.creatorName;
-            cell?.replyDescriptionLabel.text = item.replyDescription + "  " + item.lastReplyName;
-            cell?.setCount(item.replyCount);
-            cell?.nodeNameLabel.text = item.node;
-            cell?.setTitleContent(item.title);
-            cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
-        }
-        return cell!;
+        return UITableViewCell.init();
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -149,10 +187,16 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                 if titleLink[titleLink.startIndex] == "/" {
                     titleLink.removeFirst();
                 }
-                let index = titleLink.index(of: "#");
-                let link = titleLink[titleLink.startIndex..<index!]+"?p=1";
-                let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                self.navigationController?.pushViewController(vc, animated: true);
+                if let index = titleLink.index(of: "#") {
+                    let link = titleLink[titleLink.startIndex..<index]+"?p=1";
+                    let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+                else {
+                    let link = titleLink+"?p=1";
+                    let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
             }
         }
         else {
@@ -166,11 +210,18 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         if titleLink[titleLink.startIndex] == "/" {
                             titleLink.removeFirst();
                         }
-                        let index = titleLink.index(of: "#");
-                        let link = titleLink[titleLink.startIndex..<index!];
-                        let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                        weakSelf.navigationController?.pushViewController(vc, animated: true);
-                        weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
+                        if let index = titleLink.index(of: "#") {
+                            let link = titleLink[titleLink.startIndex..<index];
+                            let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                            weakSelf.navigationController?.pushViewController(vc, animated: true);
+                            weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
+                        }
+                        else {
+                            let link = titleLink;
+                            let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
+                            weakSelf.navigationController?.pushViewController(vc, animated: true);
+                            weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
+                        }
                     }
                 }
             })
@@ -251,10 +302,16 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             else if msgtype == "UserInfoViewController" {
                 if case let urlString as String = msg["PARAM1"] {
                     let vc = UserInfoViewController.init(urlString: GUANGGUSITE + urlString);
+                    vc.vcDelegate = self;
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }
             else if msgtype == "PushViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "CenterViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);
                 }

@@ -23,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.frame = UIScreen.main.bounds;
         self.window?.makeKeyAndVisible();
         
-        let ceneterViewController = CenterViewController();
+        let ceneterViewController = CenterViewController.init(urlString: GUANGGUSITE);
+        ceneterViewController.title = "全部";
         let centerNav = UINavigationController(rootViewController: ceneterViewController);
         let leftViewController = LeftViewController();
         leftViewController.vcDelegate = ceneterViewController;

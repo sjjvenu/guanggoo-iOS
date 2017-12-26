@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import SDWebImage
+import Alamofire
 
 class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     //MARK: - property
@@ -25,7 +26,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
             _tableView = UITableView.init(frame: CGRect.zero, style: .grouped);
             _tableView.delegate = self;
             _tableView.dataSource = self;
-            _tableView.backgroundColor = UIColor.clear;
+            _tableView.backgroundColor = UIColor.lightGray;
             _tableView.allowsSelection = true;
             _tableView.separatorStyle = .none;
             
@@ -66,27 +67,51 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
             else {
                 _userName.setTitle("尚未登录", for: .normal);
             }
-            _userName.setTitleColor(UIColor.black, for: .normal);
+            _userName.setTitleColor(UIColor.white, for: .normal);
             _userName.titleLabel?.font = UIFont.systemFont(ofSize: 14);
             _userName.addTarget(self, action: #selector(LeftViewController.userImageClick(sender:)), for: UIControlEvents.touchUpInside);
             return _userName;
         }
     }
+    
+    fileprivate var _loginButton: UIButton!
+    fileprivate var loginButton: UIButton {
+        get {
+            guard _loginButton == nil else {
+                return _loginButton;
+            }
+            _loginButton = UIButton.init();
+            _loginButton.backgroundColor = UIColor.clear;
+            _loginButton.setTitleColor(UIColor.white, for: .normal);
+            _loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16);
+            _loginButton.addTarget(self, action: #selector(LeftViewController.loginClick(sender:)), for: UIControlEvents.touchUpInside);
+            return _loginButton;
+        }
+    }
+
 
     //MARK: - function
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let backgroundImage = UIImageView.init(image: UIImage.init(named: "left_backgroundImage"));
-        self.view.addSubview(backgroundImage);
-        backgroundImage.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
-        }
+//        let backgroundImage = UIImageView.init(image: UIImage.init(named: "left_backgroundImage"));
+//        self.view.addSubview(backgroundImage);
+//        backgroundImage.snp.makeConstraints { (make) in
+//            make.edges.equalTo(self.view);
+//        }
         
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view);
+        }
+        
+        self.view.addSubview(self.loginButton);
+        self.loginButton.snp.makeConstraints { (make) in
+            make.bottom.equalTo(self.view).offset(-40);
+            make.right.equalTo(self.view).offset(-20);
+            make.width.equalTo(40);
+            make.height.equalTo(25);
         }
     }
 
@@ -101,6 +126,12 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         if GuangGuAccount.shareInstance.isLogin(), GuangGuAccount.shareInstance.user!.userImage.count > 0{
             self.userImage.sd_setBackgroundImage(with: URL.init(string: GuangGuAccount.shareInstance.user!.userImage), for: .normal, completed: nil);
             self.userName.setTitle(GuangGuAccount.shareInstance.user!.userName, for: .normal);
+            self.loginButton.setTitle("退出", for: .normal);
+        }
+        else {
+            self.userImage.setBackgroundImage(UIImage.init(named: "default_head_photo"), for: .normal)
+            self.userName.setTitle("尚未登录", for: .normal);
+            self.loginButton.setTitle("登录", for: .normal);
         }
     }
     
@@ -156,19 +187,19 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
                 cell!.accessoryType = .disclosureIndicator;
                 break;
             case 3:
-                cell!.textLabel?.text = "我的收藏";
-                cell!.textLabel?.textColor = UIColor.white;
-                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
-                cell!.accessoryType = .disclosureIndicator;
-                break;
-            case 4:
                 cell!.textLabel?.text = "我的主题";
                 cell!.textLabel?.textColor = UIColor.white;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
                 break;
-            case 5:
+            case 4:
                 cell!.textLabel?.text = "我的回复";
+                cell!.textLabel?.textColor = UIColor.white;
+                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
+                break;
+            case 5:
+                cell!.textLabel?.text = "我的收藏";
                 cell!.textLabel?.textColor = UIColor.white;
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
@@ -178,41 +209,139 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
             }
         }
         cell!.backgroundColor = UIColor.clear;
+        cell!.selectionStyle = .none;
         return cell!;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pushLoginViewController();
-        appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
-        switch indexPath.row {
-        case 0:
-            break;
-        case 1:
-            break;
-        case 2:
-            let vc = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
-            vc.vcDelegate = self.vcDelegate;
-            if let delegate = self.vcDelegate {
-                let msg = NSMutableDictionary.init();
-                msg["MSGTYPE"] = "PushViewController";
-                msg["PARAM1"] = vc;
-                delegate.OnPushVC(msg: msg);
+        if indexPath.row == 0 {
+            return;
+        }
+        if GuangGuAccount.shareInstance.isLogin() {
+            appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
+            switch indexPath.row {
+            case 0:
+                break;
+            case 1:
+                if var userLink = GuangGuAccount.shareInstance.user?.userLink {
+                    if userLink[userLink.startIndex] == "/" {
+                        userLink.removeFirst();
+                    }
+                    if let delegate = self.vcDelegate {
+                        let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink);
+                        vc.vcDelegate = self.vcDelegate;
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "PushViewController";
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
+                }
+                break;
+            case 2:
+                let vc = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
+                vc.vcDelegate = self.vcDelegate;
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "PushViewController";
+                    msg["PARAM1"] = vc;
+                    delegate.OnPushVC(msg: msg);
+                }
+                break;
+            case 3:
+                if var userLink = GuangGuAccount.shareInstance.user?.userLink {
+                    if userLink[userLink.startIndex] == "/" {
+                        userLink.removeFirst();
+                    }
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "PushViewController";
+                        let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/topics");
+                        vc.title = GuangGuAccount.shareInstance.user!.userName + "的主题";
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
+                }
+                break;
+            case 4:
+                if var userLink = GuangGuAccount.shareInstance.user?.userLink {
+                    if userLink[userLink.startIndex] == "/" {
+                        userLink.removeFirst();
+                    }
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "PushViewController";
+                        let vc = UserCommentViewController.init(urlString: GUANGGUSITE + userLink + "/replies")
+                        vc.title = GuangGuAccount.shareInstance.user!.userName + "的回复";
+                        vc.vcDelegate = self.vcDelegate;
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
+                }
+                break;
+            case 5:
+                if var userLink = GuangGuAccount.shareInstance.user?.userLink {
+                    if userLink[userLink.startIndex] == "/" {
+                        userLink.removeFirst();
+                    }
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "PushViewController";
+                        let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/favorites");
+                        vc.needRefreshInAppear = true;
+                        vc.title = GuangGuAccount.shareInstance.user!.userName + "的收藏";
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-        default:
-            break;
+        }
+        else
+        {
+            pushLoginViewController();
         }
     }
     
     //MARK: - event
     @objc func userImageClick(sender:UIButton) -> Void {
-        pushLoginViewController();
+        if GuangGuAccount.shareInstance.isLogin() {
+            appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
+            if var userLink = GuangGuAccount.shareInstance.user?.userLink {
+                if userLink[userLink.startIndex] == "/" {
+                    userLink.removeFirst();
+                }
+                if let delegate = self.vcDelegate {
+                    let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink);
+                    vc.vcDelegate = self.vcDelegate;
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "PushViewController";
+                    msg["PARAM1"] = vc;
+                    delegate.OnPushVC(msg: msg);
+                }
+            }
+        }
+        else {
+            pushLoginViewController();
+        }
+    }
+    
+    @objc func loginClick(sender:UIButton) -> Void {
+        if !GuangGuAccount.shareInstance.isLogin() {
+            pushLoginViewController();
+        }
+        else
+        {
+            Alamofire.request(GUANGGUSITE + "logout").responseString { (response) in
+                self.appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
+                if let delegate = self.vcDelegate {
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "reloadData";
+                    delegate.OnPushVC(msg: msg);
+                }
+            }
+        }
     }
     
     func pushLoginViewController() -> Void {

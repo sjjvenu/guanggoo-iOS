@@ -1,8 +1,8 @@
 //
-//  NotificationDataSource.swift
+//  UserCommentDataSource.swift
 //  guanggoo-iOS
 //
-//  Created by tdx on 2017/12/25.
+//  Created by tdx on 2017/12/26.
 //  Copyright © 2017年 tdx. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ import SwiftSoup
 import Ji
 import YYText
 
-class NotificationDataSource: NSObject {
+class UserCommentDataSource: NSObject {
     weak var vcDelegate:GuangGuVCDelegate?
     fileprivate var mURLString = "";
     var itemList = [GuangGuComent]();
@@ -46,17 +46,14 @@ class NotificationDataSource: NSObject {
             do{
                 let jiDoc = Ji(htmlString: myHTMLString);
                 let rootNode = jiDoc?.rootNode;
-                let nodes = rootNode?.xPath("//div[@class='notification-item']");
+                let nodes = rootNode?.xPath("//div[@class='reply-item']");
                 if nodes!.count > 0
                 {
                     for commentNode in nodes!
                     {
                         var item = GuangGuComent();
-                        item.creatorImg = (commentNode.xPath("a/img").first?["src"])!;
-                        item.creatorName = (commentNode.xPath("div/span/a").first?.content)!;
-                        item.creatorLink = (commentNode.xPath("a").first?["href"])!;
-                        item.replyTime = (commentNode.xPath("div/span/a[2]").first?.content)!;
-                        item.replyLink = (commentNode.xPath("div/span/a[2]").first?["href"])!;
+                        item.replyTime = (commentNode.xPath("div/span/a").first?.content)!;
+                        item.replyLink = (commentNode.xPath("div/span/a").first?["href"])!;
                         
                         let commentAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "")
                         let contentNodes = commentNode.xPath("div[@class='main']/div[@class='content']/node()")
@@ -108,6 +105,7 @@ class NotificationDataSource: NSObject {
         for element in nodes {
             if element.name == "text" , var content = element.content{//普通文本
                 content = content.replacingOccurrences(of: "\t", with: "")
+                content = content.replacingOccurrences(of: "                            ", with: "")
                 //content = content.replacingOccurrences(of: "\n\n", with: "\n")
                 commentAttributedString.append(NSMutableAttributedString(string: content,attributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 14) , NSAttributedStringKey.foregroundColor:UIColor.black]))
                 commentAttributedString.yy_lineSpacing = 5
