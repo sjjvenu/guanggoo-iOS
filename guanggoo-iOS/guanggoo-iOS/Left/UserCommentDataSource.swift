@@ -138,14 +138,23 @@ class UserCommentDataSource: NSObject {
                                              userInfo: ["url":url],
                                              tapAction: { [weak self](view, text, range, rect) -> Void in
                                                 if let highlight = text.yy_attribute(YYTextHighlightAttributeName, at: UInt(range.location)) ,let url = (highlight as AnyObject).userInfo["url"] as? String  {
-                                                    var userLink = url;
-                                                    if userLink[userLink.startIndex] == "/" {
-                                                        userLink.removeFirst();
+                                                    if url.contains("http") {
+                                                        let msg = NSMutableDictionary.init();
+                                                        msg["MSGTYPE"] = "PushViewController";
+                                                        let vc = CommWebViewController.init(url: URL.init(string: url));
+                                                        msg["PARAM1"] = vc;
+                                                        self?.vcDelegate?.OnPushVC(msg: msg);
                                                     }
-                                                    let msg = NSMutableDictionary.init();
-                                                    msg["MSGTYPE"] = "UserInfoViewController";
-                                                    msg["PARAM1"] = userLink;
-                                                    self?.vcDelegate?.OnPushVC(msg: msg);
+                                                    else if url.contains("/u/") {
+                                                        var userLink = url;
+                                                        if userLink[userLink.startIndex] == "/" {
+                                                            userLink.removeFirst();
+                                                        }
+                                                        let msg = NSMutableDictionary.init();
+                                                        msg["MSGTYPE"] = "UserInfoViewController";
+                                                        msg["PARAM1"] = userLink;
+                                                        self?.vcDelegate?.OnPushVC(msg: msg);
+                                                    }
                                                 }
                                                 
                         }, longPressAction: nil)

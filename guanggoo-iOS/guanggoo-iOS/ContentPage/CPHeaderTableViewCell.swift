@@ -86,6 +86,24 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate,MWPhotoBrowse
                 msg["PARAM1"] = broswer;
                 self.vcDelegate?.OnPushVC(msg: msg);
             }
+            else {
+                if let urlString = request.url?.absoluteString,urlString.contains("http"),urlString.contains("www.guanggoo.com") == false {
+                    let vc = CommWebViewController.init(url: request.url);
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "PushViewController";
+                    msg["PARAM1"] = vc;
+                    self.vcDelegate?.OnPushVC(msg: msg);
+                }
+            }
+        }
+        else {
+            if let urlString = request.url?.absoluteString,urlString.contains("http"),urlString.contains("www.guanggoo.com") == false {
+                let vc = CommWebViewController.init(url: request.url);
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "PushViewController";
+                msg["PARAM1"] = vc;
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
         }
         decisionHandler(.allow);
     }

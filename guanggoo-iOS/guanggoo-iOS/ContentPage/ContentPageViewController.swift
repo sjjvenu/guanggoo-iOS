@@ -39,7 +39,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             _rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
             _rightButton.setImage(UIImage.init(named: "ic_unfavorite"), for: .normal);
-            _rightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 5, -15);
+            _rightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 5, 0);
             _rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
             return _rightButton;
         }
@@ -65,6 +65,25 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         }
     }
     
+    fileprivate var footLeftButton = UIButton.init();
+    fileprivate var footRightButton = UIButton.init();
+    fileprivate var _footView : UIView!
+    fileprivate var footView : UIView {
+        get {
+            guard _footView == nil else {
+                return _footView;
+            }
+            _footView = UIView.init();
+            _footView.backgroundColor = UIColor.white;
+            
+            return _footView;
+        }
+    }
+    
+    fileprivate var atSomeoneView:DropdownView?
+    fileprivate var atSomeoneViewHeight = 30;
+    fileprivate var showAtSomeoneView = false;
+    
     required init(urlString : String,model:GuangGuStruct?) {
         super.init(nibName: nil, bundle: nil);
         
@@ -80,13 +99,53 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor.white;
         self.title = "主题详情";
+        let footViewHeight = 50;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
+            make.left.right.top.equalTo(self.view);
+            if #available(iOS 11, *) {
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin).offset(-footViewHeight);
+            } else {
+                make.bottom.equalTo(self.view).offset(-footViewHeight);
+            }
         }
-        self.tableView.mj_footer.isAutomaticallyHidden = true;
         
+        self.view.addSubview(self.footView);
+        self.footView.snp.makeConstraints { (make) in
+            make.left.right.equalTo(self.view);
+            make.top.equalTo(self.tableView.snp.bottom);
+            if #available(iOS 11, *) {
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin);
+            } else {
+                make.bottom.equalTo(self.view);
+            }
+        }
+        self.footLeftButton.setTitle("@", for: .normal);
+        self.footLeftButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
+        self.footLeftButton.titleLabel?.font = UIFont.systemFont(ofSize: 30);
+        self.footLeftButton.contentHorizontalAlignment = .left;
+        self.footLeftButton.addTarget(self, action: #selector(ContentPageViewController.AtSomeoneClick(sender:)), for: UIControlEvents.touchUpInside)
+        self.footView.addSubview(self.footLeftButton);
+        self.footLeftButton.snp.makeConstraints { (make) in
+            make.left.equalTo(self.footView).offset(15);
+            make.top.bottom.equalTo(self.footView);
+            make.width.equalTo(self.footLeftButton.snp.height);
+        }
+        
+        self.footView.addSubview(self.footRightButton);
+        self.footRightButton.addTarget(self, action: #selector(ContentPageViewController.ReplyClick(sender:)), for: UIControlEvents.touchUpInside)
+        self.footRightButton.setBackgroundImage(UIImage.init(named: "ic_reply"), for: .normal);
+        //self.footRightButton.setImage(UIImage.init(named: "ic_reply"), for: .normal);
+        //self.footRightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 5, 0);
+        self.footRightButton.snp.makeConstraints { (make) in
+            make.right.equalTo(self.footView).offset(-15);
+            make.centerY.equalTo(self.footView);
+            make.width.height.equalTo(30);
+        }
+        
+        self.tableView.mj_footer.isAutomaticallyHidden = true;
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightButton);
     }
@@ -110,6 +169,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     if (self.contentData?.headerModel?.isFavorite)! {
                         self.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
                     }
+                    self.reloadAtSomeoneView();
                     MBProgressHUD.hide(for: self.view, animated: true);
                 }
             }
@@ -278,6 +338,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.contentData?.reloadData {
             self.tableView.mj_header.endRefreshing();
             self.tableView.reloadData();
+            self.reloadAtSomeoneView();
         };
     }
     
@@ -293,6 +354,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.contentData?.loadOlder {
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
+            self.reloadAtSomeoneView();
         }
     }
     
@@ -359,6 +421,66 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
         }
     }
+    
+    @objc func AtSomeoneClick(sender: UIButton) {
+        if self.showAtSomeoneView {
+            self.atSomeoneView?.snp.updateConstraints({ (make) in
+                make.height.equalTo(0);
+            })
+        }
+        else {
+            self.atSomeoneView?.snp.updateConstraints({ (make) in
+                make.height.equalTo(self.atSomeoneViewHeight);
+            })
+        }
+        self.showAtSomeoneView = !self.showAtSomeoneView;
+        self.view.setNeedsLayout();
+    }
+    
+    @objc func ReplyClick(sender: UIButton) {
+        let vc = ReplyContentViewController.init(string: "", urlString: self.urlString) { [weak self](bSuccess) in
+            if bSuccess {
+                self?.tableView.mj_header.beginRefreshing();
+            }
+        };
+        self.navigationController?.pushViewController(vc, animated: true);
+    }
+    
+    func reloadAtSomeoneView() -> Void {
+        self.atSomeoneView?.removeFromSuperview();
+        self.atSomeoneView = nil;
+        let nameArray = Array(self.contentData!.nameList)
+        if nameArray.count > 0 {
+            self.atSomeoneView = DropdownView.init(array: nameArray, handle: { [weak self](tableView, indexPath) in
+                let name = nameArray[indexPath.row];
+                self?.showAtSomeoneView = false;
+                self?.atSomeoneView?.snp.updateConstraints({ (make) in
+                    make.height.equalTo(0);
+                })
+                
+                let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self?.urlString)!){ [weak self](bSuccess) in
+                    if bSuccess {
+                        self?.tableView.mj_header.beginRefreshing();
+                    }
+                };
+                self?.navigationController?.pushViewController(vc, animated: true);
+            })
+            if nameArray.count > 7 {
+                self.atSomeoneViewHeight = 200;
+            }
+            else {
+                self.atSomeoneViewHeight = 30 * nameArray.count;
+            }
+            self.showAtSomeoneView = false;
+            self.view.addSubview(self.atSomeoneView!);
+            self.atSomeoneView!.snp.makeConstraints({ (make) in
+                make.left.equalTo(self.view);
+                make.bottom.equalTo(self.footView.snp.top);
+                make.width.equalTo(100);
+                make.height.equalTo(0);
+            })
+        }
+    }
 
     /**
      禁用上拉加载更多，并显示一个字符串提醒
@@ -390,6 +512,11 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 }
             }
             else if msgtype == "CenterViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "PushViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);
                 }

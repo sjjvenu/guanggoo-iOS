@@ -16,6 +16,8 @@
 		2F1568041FE8E7E700169984 /* ContentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568031FE8E7E700169984 /* ContentDataSource.swift */; };
 		2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */; };
 		2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1568071FE909DC00169984 /* CPHeaderView.swift */; };
+		2F163DF21FF32FDE00805436 /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F163DF11FF32FDE00805436 /* DropdownView.swift */; };
+		2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F163DF31FF341E700805436 /* ReplyContentViewController.swift */; };
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
 		2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */; };
 		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
@@ -46,6 +48,8 @@
 		2F1568031FE8E7E700169984 /* ContentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDataSource.swift; sourceTree = "<group>"; };
 		2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		2F1568071FE909DC00169984 /* CPHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPHeaderView.swift; sourceTree = "<group>"; };
+		2F163DF11FF32FDE00805436 /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
+		2F163DF31FF341E700805436 /* ReplyContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyContentViewController.swift; sourceTree = "<group>"; };
 		2F41E6931FE7B27700D8C4B4 /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
 		2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewTableViewCell.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 				2F1568051FE905D600169984 /* CPHeaderTableViewCell.swift */,
 				2F1568071FE909DC00169984 /* CPHeaderView.swift */,
 				2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */,
+				2F163DF31FF341E700805436 /* ReplyContentViewController.swift */,
 			);
 			path = ContentPage;
 			sourceTree = "<group>";
@@ -142,6 +147,7 @@
 			children = (
 				2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */,
 				2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */,
+				2F163DF11FF32FDE00805436 /* DropdownView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -369,6 +375,7 @@
 				2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */,
 				2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */,
 				2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */,
+				2F163DF21FF32FDE00805436 /* DropdownView.swift in Sources */,
 				2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */,
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
 				2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */,
@@ -384,6 +391,7 @@
 				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
+				2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */,
 				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
 				2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftSoup
-
+import Alamofire
 
 struct GuangGuStruct {
     var title = "";                                 //回复内容
@@ -128,6 +128,9 @@ class HomePageDataSource: NSObject {
                         user.userName = userNameText;
                         user.userLink = userLinkText;
                         GuangGuAccount.shareInstance.user = user;
+                        if GuangGuAccount.shareInstance.cookie.count == 0 {
+                            self.fetchCookie(urlString: GUANGGUSITE);
+                        }
                         break;
                     }
                     if userClasses.array().count == 0 {
@@ -169,5 +172,25 @@ class HomePageDataSource: NSObject {
         self.pageCount += 1;
         loadData(urlString: self.homePageString + "?p=" + String(self.pageCount), loadNew: false);
         completion();
+    }
+    
+    func fetchCookie(urlString:String) -> Void {
+        Alamofire.request(urlString).responseString { (response) in
+            switch(response.result) {
+            case .success( _):
+                if let cookies = HTTPCookieStorage.shared.cookies
+                {
+                    for object in cookies {
+                        if object.name == "_xsrf" {
+                            GuangGuAccount.shareInstance.cookie = object.value;
+                            return;
+                        }
+                    }
+                }
+                break;
+            case .failure(_):
+                break;
+            }
+        }
     }
 }

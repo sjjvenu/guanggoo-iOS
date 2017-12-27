@@ -108,10 +108,14 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         
         self.view.addSubview(self.loginButton);
         self.loginButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.view).offset(-40);
             make.right.equalTo(self.view).offset(-20);
             make.width.equalTo(40);
             make.height.equalTo(25);
+            if #available(iOS 11, *) {
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin).offset(-40);
+            } else {
+                make.bottom.equalTo(self.view).offset(-40);
+            }
         }
     }
 
@@ -335,6 +339,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
         {
             Alamofire.request(GUANGGUSITE + "logout").responseString { (response) in
                 self.appDelegate.drawController?.closeDrawer(animated: false, completion: nil);
+                GuangGuAccount.shareInstance.cookie = "";
                 if let delegate = self.vcDelegate {
                     let msg = NSMutableDictionary.init();
                     msg["MSGTYPE"] = "reloadData";

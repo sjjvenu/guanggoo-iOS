@@ -53,9 +53,15 @@ class UserCommentViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view);
+            make.left.right.top.equalTo(self.view);
+            if #available(iOS 11, *) {
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin);
+            } else {
+                make.bottom.equalTo(self.view);
+            }
         }
         self.tableView.mj_footer.isAutomaticallyHidden = true;
     }

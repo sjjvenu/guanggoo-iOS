@@ -35,6 +35,7 @@ class ContentDataSource: NSObject {
     //read only property
     var headerModel :GuangGuStruct?
     var itemList = [GuangGuComent]();
+    var nameList = Set<String>();
     fileprivate var pageCount:Int = 0;
     
     required init(urlString: String,model:GuangGuStruct?,delegate:GuangGuVCDelegate?) {
@@ -62,6 +63,7 @@ class ContentDataSource: NSObject {
         {
             self.itemList.removeAll();
             self.pageCount = 1;
+            self.nameList.removeAll();
         }
         do {
             let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
@@ -87,6 +89,10 @@ class ContentDataSource: NSObject {
                     
                     let usernameElements = try object.getElementsByClass("username");
                     self.headerModel?.creatorName = try usernameElements.text();
+                    
+                    if let name = self.headerModel?.creatorName {
+                        self.nameList.insert(name);
+                    }
                     
                     let contentElements = try object.getElementsByClass("ui-content");
                     let contentHtml = try contentElements.html();
@@ -135,6 +141,7 @@ class ContentDataSource: NSObject {
                         let textContainer = YYTextContainer(size: CGSize(width: SCREEN_WIDTH - 30, height: 9999))
                         item.textLayout = YYTextLayout(container: textContainer, text: commentAttributedString)
                         self.itemList.append(item);
+                        self.nameList.insert(item.creatorName);
                     }
                 }
             }catch Exception.Error(let type, let message)
@@ -198,14 +205,23 @@ class ContentDataSource: NSObject {
                                              userInfo: ["url":url],
                                              tapAction: { [weak self](view, text, range, rect) -> Void in
                                                 if let highlight = text.yy_attribute(YYTextHighlightAttributeName, at: UInt(range.location)) ,let url = (highlight as AnyObject).userInfo["url"] as? String  {
-                                                    var userLink = url;
-                                                    if userLink[userLink.startIndex] == "/" {
-                                                        userLink.removeFirst();
+                                                    if url.contains("http") {
+                                                        let msg = NSMutableDictionary.init();
+                                                        msg["MSGTYPE"] = "PushViewController";
+                                                        let vc = CommWebViewController.init(url: URL.init(string: url));
+                                                        msg["PARAM1"] = vc;
+                                                        self?.vcDelegate?.OnPushVC(msg: msg);
                                                     }
-                                                    let msg = NSMutableDictionary.init();
-                                                    msg["MSGTYPE"] = "UserInfoViewController";
-                                                    msg["PARAM1"] = userLink;
-                                                    self?.vcDelegate?.OnPushVC(msg: msg);
+                                                    else if url.contains("/u/") {
+                                                        var userLink = url;
+                                                        if userLink[userLink.startIndex] == "/" {
+                                                            userLink.removeFirst();
+                                                        }
+                                                        let msg = NSMutableDictionary.init();
+                                                        msg["MSGTYPE"] = "UserInfoViewController";
+                                                        msg["PARAM1"] = userLink;
+                                                        self?.vcDelegate?.OnPushVC(msg: msg);
+                                                    }
                                                 }
                                                 
                     }, longPressAction: nil)

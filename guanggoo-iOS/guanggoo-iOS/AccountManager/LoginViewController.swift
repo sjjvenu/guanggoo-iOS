@@ -11,7 +11,7 @@ import SnapKit
 import Alamofire
 import MBProgressHUD
 
-public typealias LoginCompletion = (Bool) -> Void
+public typealias HandleCompletion = (Bool) -> Void
 
 class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     //MARK: - property
@@ -64,9 +64,9 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
         }
     }
     
-    fileprivate var _completion:LoginCompletion?
+    fileprivate var _completion:HandleCompletion?
     //MARK: - function
-    required init(completion:LoginCompletion? )
+    required init(completion:HandleCompletion? )
     {
         super.init(nibName: nil, bundle: nil);
         _completion = completion;
@@ -259,7 +259,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
         var dict = [String:String]();
         dict["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
         dict["Content-Type"] = "application/x-www-form-urlencoded"
-        dict["cookie"] = "_xsrf=" + uuid;
+        dict["Cookie"] = "_xsrf=" + uuid;
         
         MBProgressHUD.showAdded(to: self.view, animated: true);
         //登录
