@@ -38,6 +38,8 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             return _tableView;
         }
     }
+    
+    fileprivate var createTitleButton:UIButton?;
     //MARK: - UIViewController
     required init(urlString:String?) {
         super.init(nibName: nil, bundle: nil);
@@ -98,6 +100,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         self.endRefreshingWithNoMoreData()
                     }
                     MBProgressHUD.hide(for: self.view, animated: true);
+                    if GuangGuAccount.shareInstance.isLogin() && self.homePageData?.homePageString == GUANGGUSITE {
+                        self.view.makeToast(GuangGuAccount.shareInstance.notificationText, duration: 1.0, position: .center);
+                    }
                 }
             }
         }
@@ -110,10 +115,19 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton);
         leftButton.addTarget(self, action: #selector(CenterViewController.leftClick(sender:)), for: .touchUpInside);
         
-        let rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
+        let rightView = UIView.init(frame: CGRect(x: 0, y: 0, width: 80, height: 40));
+        self.createTitleButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
+        self.createTitleButton!.setImage(UIImage.init(named: "ic_create_title"), for: .normal);
+        self.createTitleButton!.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15);
+        self.createTitleButton?.addTarget(self, action: #selector(CenterViewController.createTitleClick(sender:)), for: UIControlEvents.touchUpInside);
+        rightView.addSubview(self.createTitleButton!);
+        self.createTitleButton?.isHidden = true;
+        
+        let rightButton = UIButton.init(frame: CGRect(x: 40, y: 0, width: 40, height: 40));
         rightButton.setImage(UIImage.init(named: "ic_more_horiz_36pt"), for: .normal);
         rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15);
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton);
+        rightView.addSubview(rightButton);
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightView);
         rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
     }
     
@@ -263,11 +277,33 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         appDelegate.drawController?.toggleRightDrawerSide(animated: true, completion: nil);
     }
     
+    @objc func createTitleClick(sender: UIButton) {
+        if GuangGuAccount.shareInstance.isLogin() {
+            if var link = self.homePageData?.createTitleLink {
+                if link[link.startIndex] == "/" {
+                    link.removeFirst();
+                }
+                let vc = CreateTitleViewController.init(urlString: GUANGGUSITE+link, completion: { [weak self](bSuccess) in
+                    if bSuccess {
+                        self?.tableView.mj_header.beginRefreshing();
+                    }
+                })
+                self.navigationController?.pushViewController(vc, animated: true);
+            }
+        }
+        else {
+            self.view.makeToast("请先登录");
+        }
+    }
+    
     @objc func reloadItemData() -> Void {
         self.homePageData?.reloadData {
             self.tableView.mj_header.endRefreshing();
             self.tableView.mj_footer.resetNoMoreData();
             self.tableView.reloadData();
+            if GuangGuAccount.shareInstance.isLogin() && self.homePageData?.homePageString == GUANGGUSITE {
+                self.view.makeToast(GuangGuAccount.shareInstance.notificationText, duration: 1.0, position: .center);
+            }
         };
     }
     
@@ -331,6 +367,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             else if msgtype == "changeNode" {
                 if let item = msg["PARAM1"] as? GuangGuNode {
                     var nodeString = item.link;
+                    self.createTitleButton?.isHidden = true;
                     //除去全部节点
                     if nodeString.count > 0 {
                         if nodeString[nodeString.startIndex] == "/" {
@@ -338,6 +375,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         }
                     }
                     if GuangGuAccount.shareInstance.isLogin() {
+                        if nodeString.count > 0 {
+                            self.createTitleButton?.isHidden = false;
+                        }
                         self.homePageData?.homePageString = GUANGGUSITE + nodeString;
                         self.title = item.name;
                         self.tableView.mj_header.beginRefreshing();
@@ -351,6 +391,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                                 weakSelf.title = item.name;
                                 weakSelf.tableView.mj_header.beginRefreshing();
                                 //weakSelf.homePageData.reloadData(completion: {weakSelf.tableView.reloadData()});
+                            }
+                            else {
+                                self?.createTitleButton?.isHidden = true;
                             }
                         })
                         vc.vcDelegate = self;

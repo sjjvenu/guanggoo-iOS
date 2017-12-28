@@ -321,6 +321,9 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
     }
     
     @objc func backClick(sender: UIButton) -> Void {
+        if let completion = self._completion {
+            completion(false);
+        }
         self.dismiss(animated: true, completion: nil);
     }
     

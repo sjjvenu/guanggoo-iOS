@@ -1,8 +1,8 @@
 //
-//  ReplyContentViewController.swift
+//  CreateTitleViewController.swift
 //  guanggoo-iOS
 //
-//  Created by tdx on 2017/12/27.
+//  Created by tdx on 2017/12/28.
 //  Copyright © 2017年 tdx. All rights reserved.
 //
 
@@ -12,11 +12,9 @@ import Toast_Swift
 import MBProgressHUD
 import Alamofire
 
-class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
+class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
     
-    fileprivate var initString:String = "";
-    fileprivate var commentURLString:String = "";
-    fileprivate var commentID = "";
+    fileprivate var commitURLString:String = "";
     fileprivate var _textView:YYTextView!
     fileprivate var textView:YYTextView {
         get {
@@ -33,59 +31,39 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             _textView.textParser = GGMentionedBindingParser()
             _textView.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
             _textView.keyboardDismissMode = .interactive
-            _textView.resignFirstResponder();
             _textView.layer.borderColor = UIColor.lightGray.cgColor;
             _textView.layer.cornerRadius = 5;
             _textView.layer.borderWidth = 0.5;
-            
-            let str = NSMutableAttributedString(string: self.initString)
-            str.yy_font = _textView.font
-            str.yy_color = _textView.textColor
-            
-            _textView.attributedText = str
-            
-            _textView.selectedRange = NSMakeRange(self.initString.count, 0);
+            //_textView.resignFirstResponder();
             
             return _textView;
         }
     }
     
+    fileprivate var _titleTextField:UITextField!
+    fileprivate var titleTextField:UITextField {
+        get {
+            guard _titleTextField == nil else {
+                return _titleTextField;
+            }
+            _titleTextField = UITextField.init();
+            _titleTextField.backgroundColor = UIColor.white;
+            _titleTextField.placeholder = "请输入标题";
+            _titleTextField.textColor = UIColor.black;
+            _titleTextField.layer.borderColor = UIColor.lightGray.cgColor;
+            _titleTextField.layer.cornerRadius = 5;
+            _titleTextField.layer.borderWidth = 0.5;
+            
+            return _titleTextField;
+        }
+    }
+    
     fileprivate var _completion:HandleCompletion?
-    required init(string:String,urlString:String,completion:HandleCompletion?)
+    required init(urlString:String,completion:HandleCompletion?)
     {
         super.init(nibName: nil, bundle: nil);
-        self.initString = string;
         
-        var commentLink = urlString;
-        let result1 = commentLink.range(of: "/t/",
-                                        options: NSString.CompareOptions.literal,
-                                        range: commentLink.startIndex..<commentLink.endIndex,
-                                        locale: nil)
-        if let rang = result1 {
-            let start = rang.upperBound;
-            commentLink = String(commentLink[start..<commentLink.endIndex]);
-        }
-        let result2 = commentLink.range(of: "?p",
-                                        options: NSString.CompareOptions.literal,
-                                        range: commentLink.startIndex..<commentLink.endIndex,
-                                        locale: nil)
-        if let rang = result2 {
-            let end = rang.lowerBound;
-            commentLink = String(commentLink[commentLink.startIndex..<end]);
-        }
-        self.commentID = commentLink;
-        
-        let result3 = urlString.range(of: "?p",
-                                      options: NSString.CompareOptions.literal,
-                                      range: urlString.startIndex..<urlString.endIndex,
-                                      locale: nil)
-        if let rang = result3 {
-            let end = rang.lowerBound;
-            self.commentURLString = String(urlString[urlString.startIndex..<end]);
-        }
-        else {
-            self.commentURLString = urlString;
-        }
+        self.commitURLString = urlString;
         
         self._completion = completion;
     }
@@ -96,8 +74,10 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor.white;
+        
         let leftButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         leftButton.setTitle("取消", for: .normal);
         leftButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
@@ -110,12 +90,19 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
         rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightButton);
         
-        self.view.backgroundColor = UIColor.white;
+        self.view.addSubview(self.titleTextField);
+        self.titleTextField.snp.makeConstraints { (make) in
+            make.left.equalTo(self.view).offset(10);
+            make.right.equalTo(self.view).offset(-10);
+            make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
+            make.height.equalTo(30);
+        }
+        
         self.view.addSubview(self.textView);
         self.textView.snp.makeConstraints { (make) in
             make.left.equalTo(self.view).offset(10);
             make.right.equalTo(self.view).offset(-10);
-            make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
+            make.top.equalTo(self.titleTextField.snp.bottom).offset(10);
             if #available(iOS 11, *) {
                 make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin).offset(-10);
             } else {
@@ -123,21 +110,22 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     func textViewDidChange(_ textView: YYTextView) {
-//        if textView.text.count == 0{
-//            textView.textColor = UIColor.lightGray;
-//        }
+        //        if textView.text.count == 0{
+        //            textView.textColor = UIColor.lightGray;
+        //        }
     }
     
     @objc func leftClick(sender: UIButton) -> Void {
+        let titleText = self.titleTextField.text;
         let text = self.textView.text;
-        if text != self.initString {
+        if let count = text?.count ,count > 0 ,let titleCount = titleText?.count,titleCount > 0{
             let alert = UIAlertController.init(title: "提示", message: "确定放弃修改并返回？", preferredStyle: .alert);
             let ok = UIAlertAction.init(title: "确定", style: .default, handler: { (alert) in
                 self.navigationController?.popViewController(animated: true);
@@ -152,6 +140,10 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     }
     
     @objc func rightClick(sender: UIButton) -> Void {
+        if self.titleTextField.text == nil || self.titleTextField.text!.count <= 0 {
+            self.view.makeToast("请输入标题", duration: 1.0, position: .center)
+            return;
+        }
         if self.textView.text == nil || self.textView.text.count <= 0 {
             self.view.makeToast("请输入内容", duration: 1.0, position: .center)
             return;
@@ -162,10 +154,10 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
         dict["Accept-Encoding"] = "gzip, deflate"
         dict["Content-Type"] = "application/x-www-form-urlencoded"
         
-    
+        
         let uuid = GuangGuAccount.shareInstance.cookie;
         let para = [
-            "tid": self.commentID,
+            "title": self.titleTextField.text!,
             "content": self.textView.text!,
             "_xsrf": uuid
         ]
@@ -180,60 +172,24 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
         
         MBProgressHUD.showAdded(to: self.view, animated: true);
         
-        //登录
-        Alamofire.request(self.commentURLString, method: .post, parameters: para, headers: dict).responseString { (response) in
+        Alamofire.request(self.commitURLString, method: HTTPMethod.post, parameters: para, headers: dict).responseString
+            { (response) in
             MBProgressHUD.hide(for: self.view, animated: true);
             switch(response.result) {
             case .success( _):
+                print(response);
                 if let completion = self._completion {
                     completion(true);
                 }
                 self.navigationController?.popViewController(animated: true);
                 break;
             case .failure(_):
-                self.view.makeToast("回复失败！")
+                self.view.makeToast("发布失败！")
                 if let completion = self._completion {
                     completion(false);
                 }
                 break;
             }
         }
-        
     }
-}
-
-
-class GGMentionedBindingParser: NSObject ,YYTextParser{
-    var regex:NSRegularExpression
-    override init() {
-        self.regex = try! NSRegularExpression(pattern: "@(\\S+)\\s", options: [.caseInsensitive])
-        super.init()
-    }
-    
-    func parseText(_ text: NSMutableAttributedString?, selectedRange: NSRangePointer?) -> Bool {
-        guard let text = text else {
-            return false;
-        }
-        self.regex.enumerateMatches(in: text.string, options: [.withoutAnchoringBounds], range: text.yy_rangeOfAll()) { (result, flags, stop) -> Void in
-            if let result = result {
-                let range = result.range
-                if range.location == NSNotFound || range.length < 1 {
-                    return ;
-                }
-                
-                if  text.attribute(NSAttributedStringKey(rawValue: YYTextBindingAttributeName), at: range.location, effectiveRange: nil) != nil  {
-                    return ;
-                }
-                
-                let bindlingRange = NSMakeRange(range.location, range.length-1)
-                let binding = YYTextBinding()
-                binding.deleteConfirm = true ;
-                text.yy_setTextBinding(binding, range: bindlingRange)
-                text.yy_setColor(UIColor.init(red: 0, green: 132.0/255.0, blue: 1, alpha: 1), range: bindlingRange)
-            }
-        }
-        return false;
-    }
-    
-    
 }

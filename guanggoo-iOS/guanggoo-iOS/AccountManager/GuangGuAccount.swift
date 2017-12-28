@@ -30,6 +30,7 @@ class GuangGuAccount: NSObject {
     }
     
     var cookie = "";
+    var notificationText = "";
     
     func isLogin() -> Bool {
         if let count = self.user?.userName.count,count > 0 {

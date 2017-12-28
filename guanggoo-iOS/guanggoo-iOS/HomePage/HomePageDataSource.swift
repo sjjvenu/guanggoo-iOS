@@ -36,6 +36,7 @@ class HomePageDataSource: NSObject {
     var itemList = [GuangGuStruct]();
     var pageCount:Int = 0;
     var maxCount:Int = 1;
+    var createTitleLink = "";
     
     required init(urlString: String) {
         super.init();
@@ -106,6 +107,14 @@ class HomePageDataSource: NSObject {
                     item.replyDescription = lastTouchedText;
                     itemList.append(item);
                 }
+                if urlString.contains("www.guanggoo.com/node/") {
+                    let userClasses = try doc.getElementsByClass("topics");
+                    for object in userClasses {
+                        let uiheaderElement = try object.getElementsByClass("ui-header");
+                        let createLinkText = try uiheaderElement.select("a").attr("href");
+                        self.createTitleLink = createLinkText;
+                    }
+                }
                 if urlString.contains("www.guanggoo.com/u/") {
                     //用户主题，不需要初始化左侧边栏
                 }
@@ -137,6 +146,15 @@ class HomePageDataSource: NSObject {
                         GuangGuAccount.shareInstance.user?.userImage = "";
                         GuangGuAccount.shareInstance.user?.userLink = "";
                         GuangGuAccount.shareInstance.user?.userName = "";
+                        GuangGuAccount.shareInstance.notificationText = "";
+                    }
+                }
+                //初始化首页时查看是否有未读消息
+                if GuangGuAccount.shareInstance.isLogin() {
+                    let notificationClasses = try doc.getElementsByClass("notification-indicator");
+                    let nofificationText = try notificationClasses.attr("title");
+                    if nofificationText.count > 0 {
+                        GuangGuAccount.shareInstance.notificationText = nofificationText;
                     }
                 }
                 //页数

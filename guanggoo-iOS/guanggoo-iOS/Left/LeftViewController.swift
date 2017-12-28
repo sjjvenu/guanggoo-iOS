@@ -127,7 +127,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
-        if GuangGuAccount.shareInstance.isLogin(), GuangGuAccount.shareInstance.user!.userImage.count > 0{
+        if GuangGuAccount.shareInstance.isLogin() && GuangGuAccount.shareInstance.user!.userImage.count > 0{
             self.userImage.sd_setBackgroundImage(with: URL.init(string: GuangGuAccount.shareInstance.user!.userImage), for: .normal, completed: nil);
             self.userName.setTitle(GuangGuAccount.shareInstance.user!.userName, for: .normal);
             self.loginButton.setTitle("退出", for: .normal);

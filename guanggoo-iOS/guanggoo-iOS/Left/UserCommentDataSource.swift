@@ -112,8 +112,16 @@ class UserCommentDataSource: NSObject {
             }
                 
                 
-            else if element.name == "img" ,let imageURL = element["src"]  {//图片
+            else if element.name == "img" ,var imageURL = element["src"]  {//图片
                 let image = GuangGuAttachmentImage()
+                if imageURL.contains("http") {
+                }
+                else {
+                    if imageURL[imageURL.startIndex] == "/" {
+                        imageURL.removeFirst();
+                    }
+                    imageURL = GUANGGUSITE + imageURL;
+                }
                 image.imageURL = imageURL
                 let imageAttributedString = NSMutableAttributedString.yy_attachmentString(withContent: image, contentMode: .scaleAspectFit , attachmentSize: CGSize(width: 80,height: 80), alignTo: UIFont.systemFont(ofSize: 14), alignment: .bottom)
                 

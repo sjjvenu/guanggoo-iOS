@@ -26,7 +26,7 @@ class DropdownView: UITableView ,UITableViewDelegate,UITableViewDataSource{
         self.delegate = self;
         self.dataSource = self;
         self.selectedHandle = handle;
-        self.backgroundColor = UIColor.lightGray;
+        self.backgroundColor = UIColor.white;
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,10 +53,10 @@ class DropdownView: UITableView ,UITableViewDelegate,UITableViewDataSource{
             cell = UITableViewCell.init(style: .default, reuseIdentifier: identifer);
         }
         cell?.textLabel?.text = self.data[indexPath.row];
-        cell?.textLabel?.textColor = UIColor.white;
+        cell?.textLabel?.textColor = UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1);
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 12);
         cell?.textLabel?.textAlignment = .center;
-        cell?.backgroundColor = UIColor.lightGray;
+        cell?.backgroundColor = UIColor.white;
         cell?.selectionStyle = .none;
         return cell!;
     }

@@ -123,6 +123,14 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             //make.height.equalTo(50);
             make.bottom.equalTo(self).offset(-10);
         }
+        
+        self.selectionStyle = .none;
+        //长按手势
+        self.contentView .addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self,
+                                         action: #selector(CPCommentTableViewCell.longPressHandle(_:))
+            )
+        )
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -150,5 +158,26 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             return MWPhoto.init(url: URL.init(string: self.itemModel!.images[Int(index)] as! String))
         }
         return nil;
+    }
+    
+    @objc func longPressHandle(_ longPress:UILongPressGestureRecognizer) -> Void {
+        let action = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet);
+        let copy = UIAlertAction.init(title: "复制", style: .default) { (action) in
+            UIPasteboard.general.string = self.itemModel?.textLayout?.text.string
+        }
+        let replySomeone = UIAlertAction.init(title: "回复", style: .default) { (action) in
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "AtSomeone";
+            msg["PARAM1"] = self.creatorNameLabel.text;
+            self.vcDelegate?.OnPushVC(msg: msg);
+        }
+        let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
+        action.addAction(replySomeone);
+        action.addAction(copy);
+        action.addAction(cancel);
+        let msg = NSMutableDictionary.init();
+        msg["MSGTYPE"] = "PresentViewController";
+        msg["PARAM1"] = action;
+        self.vcDelegate?.OnPushVC(msg: msg);
     }
 }

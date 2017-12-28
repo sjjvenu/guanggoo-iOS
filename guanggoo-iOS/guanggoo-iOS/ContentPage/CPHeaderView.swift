@@ -10,6 +10,8 @@ import UIKit
 
 class CPHeaderView: UIView {
 
+    weak var vcDelegate:GuangGuVCDelegate?
+    var titleLink = "";
     //creator imageView
     var _creatorImageView : UIImageView!;
     var creatorImageView : UIImageView {
@@ -117,6 +119,13 @@ class CPHeaderView: UIView {
             make.height.equalTo(20);
             //make.bottom.equalTo(self).offset(-10);
         }
+        
+        //长按手势
+        self.addGestureRecognizer(
+            UILongPressGestureRecognizer(target: self,
+                                         action: #selector(CPHeaderView.longPressHandle(_:))
+            )
+        )
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -135,5 +144,26 @@ class CPHeaderView: UIView {
                 make.height.equalTo(20*Int(lines))
             })
         }
+    }
+    
+    @objc func longPressHandle(_ longPress:UILongPressGestureRecognizer) -> Void {
+        let action = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet);
+        let copy = UIAlertAction.init(title: "复制链接", style: .default) { (action) in
+            UIPasteboard.general.string = self.titleLink
+        }
+        let replySomeone = UIAlertAction.init(title: "回复", style: .default) { (action) in
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "AtSomeone";
+            msg["PARAM1"] = self.creatorNameLabel.text;
+            self.vcDelegate?.OnPushVC(msg: msg);
+        }
+        let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
+        action.addAction(replySomeone);
+        action.addAction(copy);
+        action.addAction(cancel);
+        let msg = NSMutableDictionary.init();
+        msg["MSGTYPE"] = "PresentViewController";
+        msg["PARAM1"] = action;
+        self.vcDelegate?.OnPushVC(msg: msg);
     }
 }

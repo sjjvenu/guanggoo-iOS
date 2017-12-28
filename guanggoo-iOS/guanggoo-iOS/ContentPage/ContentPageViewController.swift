@@ -233,6 +233,8 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 headerView.creatorImageView.isUserInteractionEnabled = true;
                 let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.headUserNameClick(ges:)));
                 headerView.creatorImageView.addGestureRecognizer(singleTap);
+                headerView.titleLink = "http://www.guanggoo.com" + item.titleLink;
+                headerView.vcDelegate = self;
                 return headerView;
             }
             else {
@@ -337,6 +339,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     @objc func reloadItemData() -> Void {
         self.contentData?.reloadData {
             self.tableView.mj_header.endRefreshing();
+            self.tableView.mj_footer.resetNoMoreData();
             self.tableView.reloadData();
             self.reloadAtSomeoneView();
         };
@@ -518,6 +521,21 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             else if msgtype == "PushViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "PresentViewController" {
+                if let vc = msg["PARAM1"] as? UIViewController{
+                    self.navigationController?.present(vc, animated: true, completion: nil);
+                }
+            }
+            else if msgtype == "AtSomeone" {
+                if let name = msg["PARAM1"] as? String ,name.count > 0{
+                    let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self.urlString)!){ [weak self](bSuccess) in
+                        if bSuccess {
+                            self?.tableView.mj_header.beginRefreshing();
+                        }
+                    };
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }

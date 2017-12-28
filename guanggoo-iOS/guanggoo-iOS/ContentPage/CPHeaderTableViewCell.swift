@@ -75,34 +75,37 @@ class CPHeaderTableViewCell: UITableViewCell ,WKNavigationDelegate,MWPhotoBrowse
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let request = navigationAction.request;
-        if self.itemModel!.images.count > 0 {
-            let index = self.itemModel?.images.index(of: request.url?.absoluteString ?? "")
-            if  index! >= 0 && index! < self.itemModel!.images.count {
-                let broswer = MWPhotoBrowser.init(delegate: self);
-                broswer?.setCurrentPhotoIndex(UInt(index!));
-                let msg = NSMutableDictionary.init();
-                msg["MSGTYPE"] = "PhotoBrowser";
-                msg["PARAM1"] = broswer;
-                self.vcDelegate?.OnPushVC(msg: msg);
+        if navigationAction.navigationType == WKNavigationType.linkActivated {
+            let request = navigationAction.request;
+            if self.itemModel!.images.count > 0 {
+                let index = self.itemModel?.images.index(of: request.url?.absoluteString ?? "")
+                if  index! >= 0 && index! < self.itemModel!.images.count {
+                    let broswer = MWPhotoBrowser.init(delegate: self);
+                    broswer?.setCurrentPhotoIndex(UInt(index!));
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "PhotoBrowser";
+                    msg["PARAM1"] = broswer;
+                    self.vcDelegate?.OnPushVC(msg: msg);
+                }
+                else {
+                    if let urlString = request.url?.absoluteString,urlString.contains("http"),urlString.contains("www.guanggoo.com") == false {
+                        let vc = CommWebViewController.init(url: request.url);
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "PushViewController";
+                        msg["PARAM1"] = vc;
+                        self.vcDelegate?.OnPushVC(msg: msg);
+                    }
+                }
             }
             else {
                 if let urlString = request.url?.absoluteString,urlString.contains("http"),urlString.contains("www.guanggoo.com") == false {
+                    print(request);
                     let vc = CommWebViewController.init(url: request.url);
                     let msg = NSMutableDictionary.init();
                     msg["MSGTYPE"] = "PushViewController";
                     msg["PARAM1"] = vc;
                     self.vcDelegate?.OnPushVC(msg: msg);
                 }
-            }
-        }
-        else {
-            if let urlString = request.url?.absoluteString,urlString.contains("http"),urlString.contains("www.guanggoo.com") == false {
-                let vc = CommWebViewController.init(url: request.url);
-                let msg = NSMutableDictionary.init();
-                msg["MSGTYPE"] = "PushViewController";
-                msg["PARAM1"] = vc;
-                self.vcDelegate?.OnPushVC(msg: msg);
             }
         }
         decisionHandler(.allow);
