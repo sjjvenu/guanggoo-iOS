@@ -61,6 +61,10 @@ class RightViewController: UIViewController ,UITableViewDelegate,UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
+        if self.nodesData.itemList.count == 0 {
+            self.nodesData = NodesDataSource.init(urlString: GUANGGUSITE + "nodes")
+            self.tableView.reloadData();
+        }
     }
     
     //MARK: - UITableView Delegate DataSource
