@@ -45,7 +45,7 @@ class HomePageDataSource: NSObject {
         }
         self.homePageString = urlString;
         self.pageCount = 1;
-        reloadData {};
+        self.loadData(urlString: self.homePageString, loadNew: true);
     }
     
     func loadData(urlString:String,loadNew:Bool) -> Void {
@@ -181,15 +181,23 @@ class HomePageDataSource: NSObject {
         }
     }
 
-    func reloadData(completion: () -> Void) -> Void {
-        loadData(urlString: self.homePageString, loadNew: true);
-        completion();
+    func reloadData(completion: @escaping () -> Void) -> Void {
+        DispatchQueue.global(qos: .background).async {
+            self.loadData(urlString: self.homePageString, loadNew: true);
+            DispatchQueue.main.async {
+                completion();
+            }
+        }
     }
     
-    func loadOlder(completion: () -> Void) -> Void {
-        self.pageCount += 1;
-        loadData(urlString: self.homePageString + "?p=" + String(self.pageCount), loadNew: false);
-        completion();
+    func loadOlder(completion: @escaping () -> Void) -> Void {
+        DispatchQueue.global(qos: .background).async {
+            self.pageCount += 1;
+            self.loadData(urlString: self.homePageString + "?p=" + String(self.pageCount), loadNew: false);
+            DispatchQueue.main.async {
+                completion();
+            }
+        }
     }
     
     func fetchCookie(urlString:String) -> Void {

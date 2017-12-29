@@ -148,6 +148,8 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.tableView.mj_footer.isAutomaticallyHidden = true;
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightButton);
+        //解决mj下拉刷新出切出去，再切回来上拉头部没有回弹回去的问题
+        self.navigationController?.navigationBar.isTranslucent = false;
     }
 
     override func didReceiveMemoryWarning() {
@@ -255,8 +257,13 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             return 1;
         case 1:
-            let layout = self.contentData?.itemList[indexPath.row].textLayout!
-            return layout!.textBoundingRect.size.height + 60;
+            if let count = self.contentData?.itemList.count,indexPath.row < count {
+                let layout = self.contentData?.itemList[indexPath.row].textLayout!
+                return layout!.textBoundingRect.size.height + 60;
+            }
+            else {
+                return 60;
+            }
         default:
             return 50;
         }
@@ -299,23 +306,25 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             if cell == nil {
                 cell = CPCommentTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
             }
-            let item = self.contentData?.itemList[indexPath.row];
-            cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
-            cell?.creatorImageView.isUserInteractionEnabled = true;
-            let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.commentUserNameClick(ges:)));
-            cell?.creatorImageView.addGestureRecognizer(singleTap);
-            cell?.creatorImageView.tag = indexPath.row;
-            cell?.creatorNameLabel.text = item!.creatorName;
-            cell?.replyDescriptionLabel.text = item!.replyTime;
-            cell?.floorLabel.text = String(indexPath.row+1)+"楼";
-            cell?.itemModel = item;
-            cell?.vcDelegate = self;
-            if let layout = item?.textLayout {
-                cell?.contentLabel.textLayout = layout
-                if layout.attachments != nil {
-                    for attachment in layout.attachments! {
-                        if let image = attachment.content as? GuangGuAttachmentImage{
-                            image.delegate = cell!.self
+            if let count = self.contentData?.itemList.count,indexPath.row < count {
+                let item = self.contentData?.itemList[indexPath.row];
+                cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
+                cell?.creatorImageView.isUserInteractionEnabled = true;
+                let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.commentUserNameClick(ges:)));
+                cell?.creatorImageView.addGestureRecognizer(singleTap);
+                cell?.creatorImageView.tag = indexPath.row;
+                cell?.creatorNameLabel.text = item!.creatorName;
+                cell?.replyDescriptionLabel.text = item!.replyTime;
+                cell?.floorLabel.text = String(indexPath.row+1)+"楼";
+                cell?.itemModel = item;
+                cell?.vcDelegate = self;
+                if let layout = item?.textLayout {
+                    cell?.contentLabel.textLayout = layout
+                    if layout.attachments != nil {
+                        for attachment in layout.attachments! {
+                            if let image = attachment.content as? GuangGuAttachmentImage{
+                                image.ggCommentDelegate = cell!.self
+                            }
                         }
                     }
                 }

@@ -108,8 +108,11 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let layout = self.contentData?.itemList[indexPath.row].textLayout!
-        return layout!.textBoundingRect.size.height + 80;
+        if let count = self.contentData?.itemList.count,indexPath.row < count {
+            let layout = self.contentData?.itemList[indexPath.row].textLayout!
+            return layout!.textBoundingRect.size.height + 80;
+        }
+        return 80;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -118,19 +121,21 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         if cell == nil {
             cell = CPCommentTableViewCell.init(style: UITableViewCellStyle.default, reuseIdentifier: identifier);
         }
-        let item = self.contentData?.itemList[indexPath.row];
-        cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
-        cell?.creatorNameLabel.text = item!.creatorName;
-        cell?.replyDescriptionLabel.text = "主题:" + item!.replyTime;
-        cell?.replyDescriptionLabel.font = UIFont.systemFont(ofSize: 14);
-        cell?.itemModel = item;
-        cell?.vcDelegate = self.vcDelegate;
-        if let layout = item?.textLayout {
-            cell?.contentLabel.textLayout = layout
-            if layout.attachments != nil {
-                for attachment in layout.attachments! {
-                    if let image = attachment.content as? GuangGuAttachmentImage{
-                        image.delegate = cell!.self
+        if let count = self.contentData?.itemList.count,indexPath.row < count {
+            let item = self.contentData?.itemList[indexPath.row];
+            cell?.creatorImageView.sd_setImage(with: URL.init(string: item!.creatorImg), completed: nil);
+            cell?.creatorNameLabel.text = item!.creatorName;
+            cell?.replyDescriptionLabel.text = "主题:" + item!.replyTime;
+            cell?.replyDescriptionLabel.font = UIFont.systemFont(ofSize: 14);
+            cell?.itemModel = item;
+            cell?.vcDelegate = self.vcDelegate;
+            if let layout = item?.textLayout {
+                cell?.contentLabel.textLayout = layout
+                if layout.attachments != nil {
+                    for attachment in layout.attachments! {
+                        if let image = attachment.content as? GuangGuAttachmentImage{
+                            image.ggCommentDelegate = cell!.self
+                        }
                     }
                 }
             }
@@ -140,6 +145,10 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.mj_header.state == MJRefreshState.refreshing || tableView.mj_footer.state == MJRefreshState.refreshing {
+            self.view.makeToast("请等待刷新完成!", duration: 1.0, position: .center)
+            return;
+        }
         let item = self.contentData?.itemList[indexPath.row];
         var titleLink = item?.replyLink;
         guard let count = titleLink?.count,count > 0 else {

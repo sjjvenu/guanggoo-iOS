@@ -47,7 +47,7 @@ class ContentDataSource: NSObject {
         self.pageCount = 1;
         self.headerModel = model;
         self.vcDelegate = delegate;
-        reloadData {};
+        self.loadData(urlString: self.contentPageString, loadNew: true);
     }
     
     deinit {
@@ -156,17 +156,25 @@ class ContentDataSource: NSObject {
         }
     }
     
-    func reloadData(completion: () -> Void) -> Void {
-        loadData(urlString: self.contentPageString, loadNew: true);
-        completion();
+    func reloadData(completion: @escaping () -> Void) -> Void {
+        DispatchQueue.global(qos: .background).async {
+            self.loadData(urlString: self.contentPageString, loadNew: true);
+            DispatchQueue.main.async {
+                completion();
+            }
+        }
     }
     
-    func loadOlder(completion: () -> Void) -> Void {
-        var urlString = self.contentPageString;
-        urlString = urlString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p="+String(self.pageCount+1))
-        self.pageCount += 1;
-        loadData(urlString: urlString, loadNew: false);
-        completion();
+    func loadOlder(completion: @escaping () -> Void) -> Void {
+        DispatchQueue.global(qos: .background).async {
+            var urlString = self.contentPageString;
+            urlString = urlString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p="+String(self.pageCount+1))
+            self.pageCount += 1;
+            self.loadData(urlString: urlString, loadNew: false);
+            DispatchQueue.main.async {
+                completion();
+            }
+        }
     }
     
     func preformAttributedString(_ commentAttributedString:NSMutableAttributedString,nodes:[JiNode],_ model:GuangGuComent) {
@@ -267,7 +275,7 @@ class GuangGuAttachmentImage:AnimatedImageView {
     /// 图片地址
     var imageURL:String?
     
-    weak var delegate : GuangGuCommentAttachmentImageTapDelegate?
+    weak var ggCommentDelegate : GuangGuCommentAttachmentImageTapDelegate?
     
     init(){
         super.init(frame: CGRect(x: 0, y: 0, width: 80, height: 80));
@@ -308,6 +316,6 @@ class GuangGuAttachmentImage:AnimatedImageView {
         self.next?.touchesCancelled(touches, with: event)
     }
     func handleSingleTap(_ touch:UITouch){
-        self.delegate?.GuangGuCommentAttachmentImageSingleTap(self)
+        self.ggCommentDelegate?.GuangGuCommentAttachmentImageSingleTap(self)
     }
 }
