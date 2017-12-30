@@ -33,7 +33,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isAutomaticallyHidden = true;
+            _tableView.mj_footer.isHidden = true;
             
             return _tableView;
         }
@@ -97,6 +97,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             DispatchQueue.global(qos: .background).async {
                 self.homePageData = HomePageDataSource.init(urlString: self.mURLString!);
                 DispatchQueue.main.async {
+                    self.tableView.mj_footer.isHidden = false;
                     self.tableView.reloadData();
                     if (self.homePageData?.pageCount)! >= (self.homePageData?.maxCount)! {
                         self.endRefreshingWithNoMoreData()
@@ -302,6 +303,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     @objc func reloadItemData() -> Void {
+        self.tableView.mj_footer.isHidden = false;
         self.homePageData?.reloadData {
             self.tableView.mj_header.endRefreshing();
             self.tableView.mj_footer.resetNoMoreData();

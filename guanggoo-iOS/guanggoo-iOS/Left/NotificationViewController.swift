@@ -34,7 +34,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isAutomaticallyHidden = true;
+            _tableView.mj_footer.isHidden = true;
             
             return _tableView;
         }
@@ -65,7 +65,6 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
                 make.bottom.equalTo(self.view);
             }
         }
-        self.tableView.mj_footer.isAutomaticallyHidden = true;
     }
     
     override func didReceiveMemoryWarning() {
@@ -80,6 +79,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
             DispatchQueue.global(qos: .background).async {
                 self.contentData = NotificationDataSource.init(urlString: self.urlString,delegate: self.vcDelegate);
                 DispatchQueue.main.async {
+                    self.tableView.mj_footer.isHidden = false;
                     self.tableView.reloadData();
                     if (self.contentData?.pageCount)! >= (self.contentData?.maxCount)! {
                         self.endRefreshingWithNoMoreData()
@@ -164,6 +164,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     
     //MARK: - Event
     @objc func reloadItemData() -> Void {
+        self.tableView.mj_footer.isHidden = false;
         self.contentData?.reloadData {
             self.tableView.mj_header.endRefreshing();
             self.tableView.reloadData();

@@ -59,7 +59,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isAutomaticallyHidden = true;
+            _tableView.mj_footer.isHidden = true;
             
             return _tableView;
         }
@@ -145,8 +145,6 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             make.width.height.equalTo(30);
         }
         
-        self.tableView.mj_footer.isAutomaticallyHidden = true;
-        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightButton);
         //解决mj下拉刷新出切出去，再切回来上拉头部没有回弹回去的问题
         self.navigationController?.navigationBar.isTranslucent = false;
@@ -171,6 +169,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     if (self.contentData?.headerModel?.isFavorite)! {
                         self.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
                     }
+                    self.tableView.mj_footer.isHidden = false;
                     self.reloadAtSomeoneView();
                     MBProgressHUD.hide(for: self.view, animated: true);
                 }
@@ -346,6 +345,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     
     //MARK: - Event
     @objc func reloadItemData() -> Void {
+        self.tableView.mj_footer.isHidden = false;
         self.contentData?.reloadData {
             self.tableView.mj_header.endRefreshing();
             self.tableView.mj_footer.resetNoMoreData();
