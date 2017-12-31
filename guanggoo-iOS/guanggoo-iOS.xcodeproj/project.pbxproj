@@ -37,6 +37,7 @@
 		2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */; };
 		2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */; };
 		6A1619CDDC5448126528E603 /* Pods_guanggoo_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F225A1249737370F60AFF7C /* Pods_guanggoo_iOS.framework */; };
+		7A18F3581FF884D400E318B8 /* TextToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A18F3571FF884D400E318B8 /* TextToolView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
 		4A14F4A8071B86B5BB3B593F /* Pods-guanggoo-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-guanggoo-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		7A18F3571FF884D400E318B8 /* TextToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToolView.swift; sourceTree = "<group>"; };
 		833BA3C19FF256FD0D8B1727 /* Pods-guanggoo-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-guanggoo-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		8F225A1249737370F60AFF7C /* Pods_guanggoo_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_guanggoo_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -150,6 +152,7 @@
 				2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */,
 				2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */,
 				2F163DF11FF32FDE00805436 /* DropdownView.swift */,
+				7A18F3571FF884D400E318B8 /* TextToolView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */,
 				2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */,
 				2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */,
+				7A18F3581FF884D400E318B8 /* TextToolView.swift in Sources */,
 				2F163DF21FF32FDE00805436 /* DropdownView.swift in Sources */,
 				2F1567FC1FE89ABB00169984 /* HomePageTableViewCell.swift in Sources */,
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
@@ -526,15 +530,15 @@
 			baseConfigurationReference = 4A14F4A8071B86B5BB3B593F /* Pods-guanggoo-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;
 				INFOPLIST_FILE = "guanggoo-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "eac8d63d-7bac-4439-86df-4e10e2202950";
-				PROVISIONING_PROFILE_SPECIFIER = guanggoo_distribution;
+				PROVISIONING_PROFILE = "ff3380cd-d265-4e9f-b214-afb32098c849";
+				PROVISIONING_PROFILE_SPECIFIER = guanggoo_development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -546,15 +550,15 @@
 			baseConfigurationReference = 833BA3C19FF256FD0D8B1727 /* Pods-guanggoo-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;
 				INFOPLIST_FILE = "guanggoo-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "eac8d63d-7bac-4439-86df-4e10e2202950";
-				PROVISIONING_PROFILE_SPECIFIER = guanggoo_distribution;
+				PROVISIONING_PROFILE = "ff3380cd-d265-4e9f-b214-afb32098c849";
+				PROVISIONING_PROFILE_SPECIFIER = guanggoo_development;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

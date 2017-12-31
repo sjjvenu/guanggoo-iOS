@@ -17,6 +17,10 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     fileprivate var initString:String = "";
     fileprivate var commentURLString:String = "";
     fileprivate var commentID = "";
+    fileprivate var keyboardOffset:CGFloat = 0;
+    fileprivate var containerView = UIView.init();
+    fileprivate var toolView = TextToolView.init();
+    
     fileprivate var _textView:YYTextView!
     fileprivate var textView:YYTextView {
         get {
@@ -33,10 +37,11 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             _textView.textParser = GGMentionedBindingParser()
             _textView.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
             _textView.keyboardDismissMode = .interactive
-            _textView.resignFirstResponder();
             _textView.layer.borderColor = UIColor.lightGray.cgColor;
             _textView.layer.cornerRadius = 5;
             _textView.layer.borderWidth = 0.5;
+            _textView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 40, right: 0);
+            //_textView.becomeFirstResponder();
             
             let str = NSMutableAttributedString(string: self.initString)
             str.yy_font = _textView.font
@@ -111,8 +116,10 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightButton);
         
         self.view.backgroundColor = UIColor.white;
-        self.view.addSubview(self.textView);
-        self.textView.snp.makeConstraints { (make) in
+        self.view.window?.backgroundColor = UIColor.white;
+        
+        self.view.addSubview(self.containerView);
+        self.containerView.snp.makeConstraints { (make) in
             make.left.equalTo(self.view).offset(10);
             make.right.equalTo(self.view).offset(-10);
             make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
@@ -122,11 +129,32 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
                 make.bottom.equalTo(self.view).offset(-10);
             }
         }
+        
+        self.containerView.addSubview(self.textView);
+        self.textView.snp.makeConstraints { (make) in
+            make.edges.equalTo(self.containerView);
+        }
+        
+        self.toolView.backgroundColor = UIColor.clear;
+        self.textView.addSubview(self.toolView);
+        self.toolView.snp.makeConstraints { (make) in
+            make.left.right.equalTo(self.containerView);
+            make.bottom.equalTo(self.containerView).offset(-7);
+            make.height.equalTo(30);
+        }
+        
+        //add keyboard notification
+        NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func textViewDidChange(_ textView: YYTextView) {
@@ -136,6 +164,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     }
     
     @objc func leftClick(sender: UIButton) -> Void {
+        self.textView.resignFirstResponder();
         let text = self.textView.text;
         if text != self.initString {
             let alert = UIAlertController.init(title: "提示", message: "确定放弃修改并返回？", preferredStyle: .alert);
@@ -152,6 +181,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     }
     
     @objc func rightClick(sender: UIButton) -> Void {
+        self.textView.resignFirstResponder();
         if self.textView.text == nil || self.textView.text.count <= 0 {
             self.view.makeToast("请输入内容", duration: 1.0, position: .center)
             return;
@@ -199,6 +229,42 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             }
         }
         
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.textView.resignFirstResponder();
+    }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        //在真机上有自定义键盘，第一次打开键盘此消息会响应两次
+        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let keyboardFrame = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect{
+            UIView.animate(withDuration: duration, animations: {
+                if self.view.frame.origin.y < 0,self.keyboardOffset > 0 {
+                    self.view.frame.origin.y += self.keyboardOffset;
+                }
+                self.keyboardOffset = keyboardFrame.height;
+                self.view.frame.origin.y -= self.keyboardOffset;
+                self.containerView.snp.updateConstraints({ (make) in
+                    make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10+self.keyboardOffset);
+                })
+                self.view.layoutIfNeeded();
+                self.view.updateConstraintsIfNeeded();
+            })
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let _ = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect,self.view.frame.origin.y < 0 {
+            UIView.animate(withDuration: duration, animations: {
+                self.view.frame.origin.y += self.keyboardOffset
+                self.containerView.snp.updateConstraints({ (make) in
+                    make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
+                })
+                self.view.setNeedsLayout();
+                self.view.layoutIfNeeded();
+            })
+        }
     }
 }
 
