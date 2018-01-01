@@ -17,9 +17,11 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     fileprivate var initString:String = "";
     fileprivate var commentURLString:String = "";
     fileprivate var commentID = "";
+    fileprivate var nameList:[String]?;
     fileprivate var keyboardOffset:CGFloat = 0;
     fileprivate var containerView = UIView.init();
-    fileprivate var toolView = TextToolView.init();
+    fileprivate var toolView:TextToolView!;
+    fileprivate var originY:CGFloat = 0;                //记录初始view的y值，第三方键盘会影响view下移
     
     fileprivate var _textView:YYTextView!
     fileprivate var textView:YYTextView {
@@ -56,10 +58,11 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     }
     
     fileprivate var _completion:HandleCompletion?
-    required init(string:String,urlString:String,completion:HandleCompletion?)
+    required init(string:String,urlString:String,nameArray:[String]?,completion:HandleCompletion?)
     {
         super.init(nibName: nil, bundle: nil);
         self.initString = string;
+        self.nameList = nameArray;
         
         var commentLink = urlString;
         let result1 = commentLink.range(of: "/t/",
@@ -135,6 +138,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             make.edges.equalTo(self.containerView);
         }
         
+        self.toolView = TextToolView.init(nameArray: self.nameList, nav: self.navigationController);
         self.toolView.backgroundColor = UIColor.clear;
         self.textView.addSubview(self.toolView);
         self.toolView.snp.makeConstraints { (make) in
@@ -151,6 +155,11 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated);
+        self.originY = self.view.frame.origin.y;
     }
     
     deinit {
@@ -255,9 +264,9 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let _ = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect,self.view.frame.origin.y < 0 {
+        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let _ = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect {
             UIView.animate(withDuration: duration, animations: {
-                self.view.frame.origin.y += self.keyboardOffset
+                self.view.frame.origin.y = self.originY;
                 self.containerView.snp.updateConstraints({ (make) in
                     make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
                 })

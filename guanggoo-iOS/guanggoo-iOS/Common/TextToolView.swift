@@ -8,13 +8,38 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import MBProgressHUD
 
-class TextToolView: UIView {
+class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
     
     fileprivate var atSomeOneButton:UIButton!;
+    fileprivate var atSomeoneView:DropdownView?
+    fileprivate var atSomeoneViewHeight = 30;
+    fileprivate var showAtSomeoneView = false;
+    fileprivate var nameList = [String]();
+    fileprivate var navController:UINavigationController?;
+    
+    fileprivate var _imagePicker:UIImagePickerController!
+    fileprivate var imagePicker:UIImagePickerController {
+        get {
+            guard _imagePicker == nil else {
+                return _imagePicker;
+            }
+            _imagePicker = UIImagePickerController.init();
+            _imagePicker.delegate = self;
+            
+            return _imagePicker;
+        }
+    }
 
-    init() {
+    init(nameArray:[String]?,nav:UINavigationController?) {
         super.init(frame: CGRect.zero);
+        
+        self.navController = nav;
+        if let count = nameArray?.count,count > 0 {
+            self.nameList = nameArray!;
+        }
         
         let stackView = UIStackView.init();
         stackView.axis         = .horizontal
@@ -39,7 +64,7 @@ class TextToolView: UIView {
         
         let audioButton = UIButton.init();
         audioButton.setBackgroundImage(UIImage.init(named: "ic_audio"), for: .normal);
-        audioButton.addTarget(self, action: #selector(TextToolView.AtSomeoneClick(sender:)), for: UIControlEvents.touchUpInside)
+        audioButton.addTarget(self, action: #selector(TextToolView.AudioClick(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(audioButton);
         stackView.addArrangedSubview(audioButton);
         audioButton.snp.makeConstraints { (make) in
@@ -49,7 +74,7 @@ class TextToolView: UIView {
         
         let takePhotoButton = UIButton.init();
         takePhotoButton.setBackgroundImage(UIImage.init(named: "ic_takePhoto"), for: .normal);
-        takePhotoButton.addTarget(self, action: #selector(TextToolView.AtSomeoneClick(sender:)), for: UIControlEvents.touchUpInside)
+        takePhotoButton.addTarget(self, action: #selector(TextToolView.TakePhotoClick(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(takePhotoButton);
         stackView.addArrangedSubview(takePhotoButton);
         takePhotoButton.snp.makeConstraints { (make) in
@@ -59,7 +84,7 @@ class TextToolView: UIView {
         
         let photoButton = UIButton.init();
         photoButton.setBackgroundImage(UIImage.init(named: "ic_image"), for: .normal);
-        photoButton.addTarget(self, action: #selector(TextToolView.AtSomeoneClick(sender:)), for: UIControlEvents.touchUpInside)
+        photoButton.addTarget(self, action: #selector(TextToolView.UploadPhotoClick(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(photoButton);
         stackView.addArrangedSubview(photoButton);
         photoButton.snp.makeConstraints { (make) in
@@ -69,13 +94,16 @@ class TextToolView: UIView {
         
         let commitButton = UIButton.init();
         commitButton.setBackgroundImage(UIImage.init(named: "ic_submit"), for: .normal);
-        commitButton.addTarget(self, action: #selector(TextToolView.AtSomeoneClick(sender:)), for: UIControlEvents.touchUpInside)
+        commitButton.addTarget(self, action: #selector(TextToolView.SubmitClick(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(commitButton);
         stackView.addArrangedSubview(commitButton);
         commitButton.snp.makeConstraints { (make) in
             make.top.bottom.equalTo(stackView);
             make.width.equalTo(commitButton.snp.height);
         }
+        
+        self.isUserInteractionEnabled = true;
+        self.reloadAtSomeoneView();
         
         
     }
@@ -85,6 +113,117 @@ class TextToolView: UIView {
     }
     
     @objc func AtSomeoneClick(sender: UIButton) {
-        
+        if self.showAtSomeoneView {
+            self.atSomeoneView?.snp.updateConstraints({ (make) in
+                make.height.equalTo(0);
+            })
+        }
+        else {
+            self.atSomeoneView?.snp.updateConstraints({ (make) in
+                make.height.equalTo(self.atSomeoneViewHeight);
+            })
+        }
+        self.showAtSomeoneView = !self.showAtSomeoneView;
+        self.setNeedsLayout();
+    }
+    
+    @objc func AudioClick(sender: UIButton) {
+    }
+    
+    @objc func TakePhotoClick(sender: UIButton) {
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+        self.imagePicker.allowsEditing = false;
+        self.navController?.present(self.imagePicker, animated: true, completion: nil);
+    }
+    
+    @objc func UploadPhotoClick(sender: UIButton) {
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+        self.imagePicker.allowsEditing = false;
+        self.navController?.present(self.imagePicker, animated: true, completion: nil);
+    }
+    
+    @objc func SubmitClick(sender: UIButton) {
+    }
+    
+    //处理点击@某人时不响应的问题
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if (self.atSomeoneView?.bounds.contains(self.convert(point, to: self.atSomeoneView)))! {
+            return true;
+        }
+        return super.point(inside: point, with: event);
+    }
+    
+    func reloadAtSomeoneView() -> Void {
+        self.atSomeoneView?.removeFromSuperview();
+        self.atSomeoneView = nil;
+        let nameArray = Array(self.nameList)
+        if nameArray.count > 0 {
+            self.atSomeoneView = DropdownView.init(array: nameArray, handle: { [weak self](tableView, indexPath) in
+                let name = nameArray[indexPath.row];
+                self?.showAtSomeoneView = false;
+                self?.atSomeoneView?.snp.updateConstraints({ (make) in
+                    make.height.equalTo(0);
+                })
+            })
+            if nameArray.count > 7 {
+                self.atSomeoneViewHeight = 200;
+            }
+            else {
+                self.atSomeoneViewHeight = 30 * nameArray.count;
+            }
+            self.showAtSomeoneView = false;
+            self.addSubview(self.atSomeoneView!);
+            self.atSomeoneView!.snp.makeConstraints({ (make) in
+                make.left.equalTo(self);
+                make.bottom.equalTo(self.snp.top);
+                make.width.equalTo(100);
+                make.height.equalTo(0);
+            })
+        }
+    }
+    
+    //MARK: - UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if let data = UIImagePNGRepresentation(chosenImage) as NSData? {
+                Alamofire.upload(multipartFormData: { (multipartFormData) in
+                    multipartFormData.append(data as Data!, withName: "smfile", fileName: "1.png", mimeType: "image/jpeg")
+                }, to: "https://sm.ms/api/upload", encodingCompletion: { (result) in
+                    switch result {
+                    case .success(let upload, _, _):
+                        print(result)
+                        
+                        let hudProgress = MBProgressHUD.showAdded(to: self.superview!, animated: true);
+                        hudProgress.mode = MBProgressHUDMode.determinateHorizontalBar
+                        hudProgress.label.text = "正在上传";
+                        upload.uploadProgress(closure: { (progress) in
+                            hudProgress.progress = Float(progress.completedUnitCount);
+                        })
+                        
+                        upload.responseJSON { response in
+                            //print response.result
+                            if let json = response.result.value as? NSDictionary {
+                                if let data = json["data"] as? NSDictionary {
+                                    hudProgress.hide(animated: true);
+                                    if let url = data["url"] as? String {
+                                        let markDownURL = "[![1.png](" + url + ")](" + url + ")";
+                                    }
+                                }
+                            }
+                        }
+                        
+                    case .failure(let encodingError):
+                        print(encodingError);
+                    }
+                })
+                
+                
+            }
+        }
+        self.navController?.dismiss(animated: true, completion: nil);
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.navController?.dismiss(animated: true, completion: nil);
     }
 }

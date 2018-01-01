@@ -450,7 +450,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     }
     
     @objc func ReplyClick(sender: UIButton) {
-        let vc = ReplyContentViewController.init(string: "", urlString: self.urlString) { [weak self](bSuccess) in
+        let vc = ReplyContentViewController.init(string: "", urlString: self.urlString,nameArray:Array(self.contentData!.nameList)) { [weak self](bSuccess) in
             if bSuccess {
                 self?.tableView.mj_header.beginRefreshing();
             }
@@ -469,8 +469,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 self?.atSomeoneView?.snp.updateConstraints({ (make) in
                     make.height.equalTo(0);
                 })
-                
-                let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self?.urlString)!){ [weak self](bSuccess) in
+                let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self?.urlString)!,nameArray:nameArray){ [weak self](bSuccess) in
                     if bSuccess {
                         self?.tableView.mj_header.beginRefreshing();
                     }
@@ -540,7 +539,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             }
             else if msgtype == "AtSomeone" {
                 if let name = msg["PARAM1"] as? String ,name.count > 0{
-                    let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self.urlString)!){ [weak self](bSuccess) in
+                    let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
                         if bSuccess {
                             self?.tableView.mj_header.beginRefreshing();
                         }
