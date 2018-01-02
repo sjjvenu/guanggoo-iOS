@@ -38,6 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window?.rootViewController = drawController;
         
+        //初始化讯飞语音
+        IFlySpeechUtility.createUtility("appid=5a4b2f2f");
+        
         return true
     }
 

@@ -11,7 +11,7 @@ import SnapKit
 import Alamofire
 import MBProgressHUD
 
-class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,IFlySpeechRecognizerDelegate,IFlyRecognizerViewDelegate{
     
     fileprivate var atSomeOneButton:UIButton!;
     fileprivate var atSomeoneView:DropdownView?
@@ -31,6 +31,26 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             _imagePicker.delegate = self;
             
             return _imagePicker;
+        }
+    }
+    
+    fileprivate var _iflyRecognizerView:IFlyRecognizerView!
+    fileprivate var iflyRecognizerView:IFlyRecognizerView {
+        get {
+            guard _iflyRecognizerView == nil else {
+                return _iflyRecognizerView;
+            }
+            
+            _iflyRecognizerView = IFlyRecognizerView.init(center: self.navController!.viewControllers[0].view.center);
+            _iflyRecognizerView.setParameter("", forKey: IFlySpeechConstant.params());
+            _iflyRecognizerView.setParameter("iat", forKey: IFlySpeechConstant.ifly_DOMAIN());
+            _iflyRecognizerView.delegate = self;
+            _iflyRecognizerView.setParameter(IFLY_AUDIO_SOURCE_MIC, forKey: "audio_source");
+            _iflyRecognizerView.setParameter("plain", forKey: IFlySpeechConstant.result_TYPE());
+            _iflyRecognizerView.setParameter("0", forKey: IFlySpeechConstant.asr_PTT());
+            _iflyRecognizerView.setParameter("asr.pcm", forKey: IFlySpeechConstant.asr_AUDIO_PATH());
+            
+            return _iflyRecognizerView;
         }
     }
 
@@ -128,7 +148,17 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
         self.setNeedsLayout();
     }
     
+    func closeKeyboard() -> Void {
+        if let delegate = self.vcDelegate {
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "CloseKeyboard";
+            delegate.OnPushVC(msg: msg);
+        }
+    }
+    
     @objc func AudioClick(sender: UIButton) {
+        self.closeKeyboard();
+        self.iflyRecognizerView.start();
     }
     
     @objc func TakePhotoClick(sender: UIButton) {
@@ -241,4 +271,49 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.navController?.dismiss(animated: true, completion: nil);
     }
+    
+    
+    //MARK : -IFlySpeechRecognizerDelegate
+    func onResults(_ results: [Any]!, isLast: Bool) {
+        var returnString = "";
+        if results != nil,results.count > 0 , let dic = results[0] as? NSDictionary {
+            for key in dic.allKeys {
+                if let str = key as? String,str.count > 0 {
+                    returnString.append(str);
+                }
+            }
+        }
+        if returnString.count > 0 {
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "IFlyAudio";
+                msg["PARAM1"] = returnString;
+                delegate.OnPushVC(msg: msg);
+            }
+        }
+    }
+    
+    func onResult(_ resultArray: [Any]!, isLast: Bool) {
+        var returnString = "";
+        if resultArray != nil,resultArray.count > 0 , let dic = resultArray[0] as? NSDictionary {
+            for key in dic.allKeys {
+                if let str = key as? String,str.count > 0 {
+                    returnString.append(str);
+                }
+            }
+        }
+        if returnString.count > 0 {
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "InsertContent";
+                msg["PARAM1"] = returnString;
+                delegate.OnPushVC(msg: msg);
+            }
+        }
+    }
+    
+    func onError(_ errorCode: IFlySpeechError!) {
+        
+    }
+    
 }

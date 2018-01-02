@@ -36,6 +36,18 @@
 		2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */; };
 		2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */; };
 		2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */; };
+		2FF03D7F1FFB345900A06E4F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */; };
+		2FF03D811FFB52FA00A06E4F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D801FFB52FA00A06E4F /* libz.tbd */; };
+		2FF03D831FFB530400A06E4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D821FFB530400A06E4F /* AVFoundation.framework */; };
+		2FF03D851FFB530F00A06E4F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D841FFB530F00A06E4F /* SystemConfiguration.framework */; };
+		2FF03D871FFB531800A06E4F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D861FFB531800A06E4F /* AudioToolbox.framework */; };
+		2FF03D891FFB532000A06E4F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D881FFB532000A06E4F /* QuartzCore.framework */; };
+		2FF03D8B1FFB532A00A06E4F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D8A1FFB532A00A06E4F /* UIKit.framework */; };
+		2FF03D8D1FFB533600A06E4F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D8C1FFB533600A06E4F /* Foundation.framework */; };
+		2FF03D8F1FFB534000A06E4F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D8E1FFB534000A06E4F /* CoreGraphics.framework */; };
+		2FF03D911FFB534F00A06E4F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D901FFB534F00A06E4F /* AddressBook.framework */; };
+		2FF03D931FFB535A00A06E4F /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D921FFB535A00A06E4F /* Contacts.framework */; };
+		2FF03D941FFB537E00A06E4F /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */; };
 		6A1619CDDC5448126528E603 /* Pods_guanggoo_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F225A1249737370F60AFF7C /* Pods_guanggoo_iOS.framework */; };
 		7A18F3581FF884D400E318B8 /* TextToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A18F3571FF884D400E318B8 /* TextToolView.swift */; };
 /* End PBXBuildFile section */
@@ -72,6 +84,19 @@
 		2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
+		2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
+		2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		2FF03D801FFB52FA00A06E4F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		2FF03D821FFB530400A06E4F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2FF03D841FFB530F00A06E4F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2FF03D861FFB531800A06E4F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		2FF03D881FFB532000A06E4F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		2FF03D8A1FFB532A00A06E4F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2FF03D8C1FFB533600A06E4F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2FF03D8E1FFB534000A06E4F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2FF03D901FFB534F00A06E4F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		2FF03D921FFB535A00A06E4F /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
+		2FF03D9F1FFB56B200A06E4F /* guanggoo-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "guanggoo-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		4A14F4A8071B86B5BB3B593F /* Pods-guanggoo-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-guanggoo-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		7A18F3571FF884D400E318B8 /* TextToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToolView.swift; sourceTree = "<group>"; };
 		833BA3C19FF256FD0D8B1727 /* Pods-guanggoo-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-guanggoo-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +108,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FF03D941FFB537E00A06E4F /* iflyMSC.framework in Frameworks */,
+				2FF03D931FFB535A00A06E4F /* Contacts.framework in Frameworks */,
+				2FF03D911FFB534F00A06E4F /* AddressBook.framework in Frameworks */,
+				2FF03D8F1FFB534000A06E4F /* CoreGraphics.framework in Frameworks */,
+				2FF03D8D1FFB533600A06E4F /* Foundation.framework in Frameworks */,
+				2FF03D8B1FFB532A00A06E4F /* UIKit.framework in Frameworks */,
+				2FF03D891FFB532000A06E4F /* QuartzCore.framework in Frameworks */,
+				2FF03D871FFB531800A06E4F /* AudioToolbox.framework in Frameworks */,
+				2FF03D851FFB530F00A06E4F /* SystemConfiguration.framework in Frameworks */,
+				2FF03D831FFB530400A06E4F /* AVFoundation.framework in Frameworks */,
+				2FF03D811FFB52FA00A06E4F /* libz.tbd in Frameworks */,
+				2FF03D7F1FFB345900A06E4F /* CoreTelephony.framework in Frameworks */,
 				6A1619CDDC5448126528E603 /* Pods_guanggoo_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +206,7 @@
 		2FD3F9351FDE25FA005DD1F1 = {
 			isa = PBXGroup;
 			children = (
+				2FF03D7B1FFB33B400A06E4F /* ThirdParty */,
 				2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */,
 				2FD3F93F1FDE25FA005DD1F1 /* Products */,
 				EAC4ED0321939C0CFD3BCEB8 /* Pods */,
@@ -194,6 +232,7 @@
 				2F1568001FE8DDB100169984 /* ContentPage */,
 				2F41E6941FE7DD7A00D8C4B4 /* HomePage */,
 				2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */,
+				2FF03D9F1FFB56B200A06E4F /* guanggoo-iOS-Bridging-Header.h */,
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
 				2FD3F94D1FDE25FA005DD1F1 /* Info.plist */,
@@ -202,9 +241,28 @@
 			path = "guanggoo-iOS";
 			sourceTree = "<group>";
 		};
+		2FF03D7B1FFB33B400A06E4F /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
 		AEFCA0C76E1BD61AAC1D29A3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FF03D921FFB535A00A06E4F /* Contacts.framework */,
+				2FF03D901FFB534F00A06E4F /* AddressBook.framework */,
+				2FF03D8E1FFB534000A06E4F /* CoreGraphics.framework */,
+				2FF03D8C1FFB533600A06E4F /* Foundation.framework */,
+				2FF03D8A1FFB532A00A06E4F /* UIKit.framework */,
+				2FF03D881FFB532000A06E4F /* QuartzCore.framework */,
+				2FF03D861FFB531800A06E4F /* AudioToolbox.framework */,
+				2FF03D841FFB530F00A06E4F /* SystemConfiguration.framework */,
+				2FF03D821FFB530400A06E4F /* AVFoundation.framework */,
+				2FF03D801FFB52FA00A06E4F /* libz.tbd */,
+				2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */,
 				8F225A1249737370F60AFF7C /* Pods_guanggoo_iOS.framework */,
 			);
 			name = Frameworks;
@@ -254,6 +312,7 @@
 				TargetAttributes = {
 					2FD3F93D1FDE25FA005DD1F1 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -530,16 +589,23 @@
 			baseConfigurationReference = 4A14F4A8071B86B5BB3B593F /* Pods-guanggoo-iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/ThirdParty/",
+				);
 				INFOPLIST_FILE = "guanggoo-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ff3380cd-d265-4e9f-b214-afb32098c849";
 				PROVISIONING_PROFILE_SPECIFIER = guanggoo_development;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/guanggoo-iOS/guanggoo-iOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -550,16 +616,22 @@
 			baseConfigurationReference = 833BA3C19FF256FD0D8B1727 /* Pods-guanggoo-iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/ThirdParty/",
+				);
 				INFOPLIST_FILE = "guanggoo-iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sjjvenu.guanggoo-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "ff3380cd-d265-4e9f-b214-afb32098c849";
 				PROVISIONING_PROFILE_SPECIFIER = guanggoo_development;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/guanggoo-iOS/guanggoo-iOS-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

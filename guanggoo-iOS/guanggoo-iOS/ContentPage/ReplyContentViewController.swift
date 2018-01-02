@@ -286,6 +286,9 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVC
                     self.textView.text = text;
                 }
             }
+            else if msgtype == "CloseKeyboard" {
+                self.textView.resignFirstResponder();
+            }
         }
     }
 }
