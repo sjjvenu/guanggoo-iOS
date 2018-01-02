@@ -59,11 +59,17 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
     }
     
     fileprivate var _completion:HandleCompletion?
-    required init(urlString:String,completion:HandleCompletion?)
+    required init(title:String,content:String,urlString:String,completion:HandleCompletion?)
     {
         super.init(nibName: nil, bundle: nil);
         
         self.commitURLString = urlString;
+        if title.count > 0 {
+            self.titleTextField.text = title;
+        }
+        if content.count > 0 {
+            self.textView.text = content;
+        }
         
         self._completion = completion;
     }
@@ -161,14 +167,6 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
             "content": self.textView.text!,
             "_xsrf": uuid
         ]
-        
-        //        dict["Cookie"] = "_xsrf=" + uuid;
-        //        dict["Referer"] = self.commentURLString;
-        //        dict["Host"] = "www.guanggoo.com";
-        //        dict["Origin"] = GUANGGUSITE;
-        //        dict["User-Agent"] =  USER_AGENT;
-        //        dict["Connection"] = "keep-alive";
-        //        dict["Cache-Control"] = "max-age=0";
         
         MBProgressHUD.showAdded(to: self.view, animated: true);
         

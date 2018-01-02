@@ -289,7 +289,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                 if link[link.startIndex] == "/" {
                     link.removeFirst();
                 }
-                let vc = CreateTitleViewController.init(urlString: GUANGGUSITE+link, completion: { [weak self](bSuccess) in
+                let vc = CreateTitleViewController.init(title:"",content:"",urlString: GUANGGUSITE+link, completion: { [weak self](bSuccess) in
                     if bSuccess {
                         self?.tableView.mj_header.beginRefreshing();
                     }

@@ -553,13 +553,29 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     if replyLink[replyLink.startIndex] == "/" {
                         replyLink.removeFirst();
                     }
-                    if let content = self.contentData?.getContentDataByID(urlString: GUANGGUSITE + replyLink) ,content.count > 0{
-                        let vc = ReplyContentViewController.init(string: content, urlString: GUANGGUSITE + replyLink, nameArray: Array(self.contentData!.nameList), completion: { [weak self](bSuccess) in
-                            if bSuccess {
-                                self?.tableView.mj_header.beginRefreshing();
-                            }
-                        })
-                        self.navigationController?.pushViewController(vc, animated: true);
+                    if let dic = self.contentData?.getContentDataByURL(urlString: GUANGGUSITE + replyLink,isComment: true) as NSDictionary?{
+                        if let content = dic["Content"] as? String {
+                            let vc = ReplyContentViewController.init(string: content, urlString: GUANGGUSITE + replyLink, nameArray: Array(self.contentData!.nameList), completion: { [weak self](bSuccess) in
+                                if bSuccess {
+                                    self?.tableView.mj_header.beginRefreshing();
+                                }
+                            })
+                            self.navigationController?.pushViewController(vc, animated: true);
+                        }
+                    }
+                }
+            }
+            else if msgtype == "EditTitle" {
+                if let url = msg["PARAM1"] as? String {
+                    if let dic = self.contentData?.getContentDataByURL(urlString: url,isComment: false) as NSDictionary?{
+                        if let content = dic["Content"] as? String ,let title = dic["Title"] as? String{
+                            let vc = CreateTitleViewController.init(title: title, content: content, urlString: url, completion: { [weak self](bSuccess) in
+                                if bSuccess {
+                                    self?.tableView.mj_header.beginRefreshing();
+                                }
+                            })
+                            self.navigationController?.pushViewController(vc, animated: true);
+                        }
                     }
                 }
             }

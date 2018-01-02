@@ -218,17 +218,17 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                         msg["MSGTYPE"] = "InsertContent";
                                         msg["PARAM1"] = markDownURL;
                                         self.vcDelegate?.OnPushVC(msg: msg);
+                                        return;
                                     }
                                 }
                             }
-                            else {
-                                hudProgress.hide(animated: true);
-                                self.makeToast("上传失败!",duration:1.0,position:.center);
-                            }
+                            hudProgress.hide(animated: true);
+                            self.makeToast("上传图片失败!",duration:1.0,position:.center);
                         }
                         
                     case .failure(let encodingError):
                         print(encodingError);
+                        self.makeToast("上传图片失败!",duration:1.0,position:.center);
                     }
                 })
                 

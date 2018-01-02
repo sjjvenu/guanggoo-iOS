@@ -159,10 +159,10 @@ class ContentDataSource: NSObject {
         }
     }
     
-    func getContentDataByID(urlString:String) -> String? {
+    func getContentDataByURL(urlString:String,isComment:Bool) -> [String:String] {
         guard let myURL = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL");
-            return nil;
+            return [:];
         }
         do {
             let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
@@ -173,10 +173,26 @@ class ContentDataSource: NSObject {
                 let headerClasses = try doc.getElementsByClass("topic-create");
                 for object in headerClasses
                 {
-                    let contentElements = try object.getElementsByClass("content");
-                    let contentText = try contentElements.text();
-                    
-                    return contentText;
+                    if isComment {
+                        let contentElements = try object.getElementsByClass("content");
+                        let contentText = try contentElements.text();
+                        
+                        return ["Content":contentText];
+                    }
+                    else {
+                        let titleElements = try object.getElementById("prependedInput");
+                        let titleText = try titleElements?.attr("value");
+                        
+                        let contentElements = try object.getElementById("contentArea");
+                        let contentText = try contentElements?.text();
+                        
+                        if let title = titleText,title.count > 0,let content = contentText,content.count > 0 {
+                            return ["Title":title,"Content":content];
+                        }
+                        else {
+                            return [:];
+                        }
+                    }
                 }
             }catch Exception.Error(let type, let message)
             {
@@ -188,7 +204,7 @@ class ContentDataSource: NSObject {
         } catch let error {
             print("Error: \(error)");
         }
-        return nil;
+        return [:];
     }
     
     func reloadData(completion: @escaping () -> Void) -> Void {

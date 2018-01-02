@@ -157,8 +157,22 @@ class CPHeaderView: UIView {
             msg["PARAM1"] = self.creatorNameLabel.text;
             self.vcDelegate?.OnPushVC(msg: msg);
         }
-        let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         action.addAction(replySomeone);
+        if self.creatorNameLabel.text == GuangGuAccount.shareInstance.user?.userName && self.titleLink.count > 0{
+            let editComment = UIAlertAction.init(title: "编辑主题", style: .default) { (action) in
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "EditTitle";
+                var editURL = self.titleLink;
+                if let index = editURL.index(of: "#") {
+                    editURL = String(editURL[editURL.startIndex..<index])
+                }
+                editURL = editURL.replacingOccurrences(of: "/t/", with: "/t/edit/")
+                msg["PARAM1"] = editURL;
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
+            action.addAction(editComment);
+        }
+        let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         action.addAction(copy);
         action.addAction(cancel);
         let msg = NSMutableDictionary.init();
