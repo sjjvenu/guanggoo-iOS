@@ -14,6 +14,7 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
     
     //MARK: - property
     weak var vcDelegate:GuangGuVCDelegate?
+    var itemModel:GuangGuComent?
     //creator imageView
     var _creatorImageView : UIImageView!;
     var creatorImageView : UIImageView {
@@ -82,8 +83,6 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             return _floorLabel;
         }
     }
-    
-    var itemModel:GuangGuComent?
 
     //MARK: - function
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -173,6 +172,15 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
         }
         let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         action.addAction(replySomeone);
+        if self.itemModel?.creatorName == GuangGuAccount.shareInstance.user?.userName,let count =  self.itemModel?.replyLink.count,count > 0{
+            let editComment = UIAlertAction.init(title: "编辑回复", style: .default) { (action) in
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "EditComment";
+                msg["PARAM1"] = self.itemModel!;
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
+            action.addAction(editComment);
+        }
         action.addAction(copy);
         action.addAction(cancel);
         let msg = NSMutableDictionary.init();

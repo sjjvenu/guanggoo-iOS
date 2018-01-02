@@ -12,9 +12,13 @@ import Toast_Swift
 import MBProgressHUD
 import Alamofire
 
-class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
+class CreateTitleViewController: UIViewController ,YYTextViewDelegate,GuangGuVCDelegate{
     
     fileprivate var commitURLString:String = "";
+    fileprivate var containerView = UIView.init();
+    fileprivate var toolView:TextToolView!;
+    fileprivate var keyboardOffset:CGFloat = 0;
+    fileprivate var originY:CGFloat = 0;                //记录初始view的y值，第三方键盘会影响view下移
     fileprivate var _textView:YYTextView!
     fileprivate var textView:YYTextView {
         get {
@@ -59,11 +63,17 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
     }
     
     fileprivate var _completion:HandleCompletion?
-    required init(urlString:String,completion:HandleCompletion?)
+    required init(title:String,content:String,urlString:String,completion:HandleCompletion?)
     {
         super.init(nibName: nil, bundle: nil);
         
         self.commitURLString = urlString;
+        if title.count > 0 {
+            self.titleTextField.text = title;
+        }
+        if content.count > 0 {
+            self.textView.text = content;
+        }
         
         self._completion = completion;
     }
@@ -90,30 +100,61 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
         rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightButton);
         
-        self.view.addSubview(self.titleTextField);
-        self.titleTextField.snp.makeConstraints { (make) in
+        self.view.backgroundColor = UIColor.white;
+        self.view.window?.backgroundColor = UIColor.white;
+        
+        self.view.addSubview(self.containerView);
+        self.containerView.snp.makeConstraints { (make) in
             make.left.equalTo(self.view).offset(10);
             make.right.equalTo(self.view).offset(-10);
             make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
-            make.height.equalTo(30);
-        }
-        
-        self.view.addSubview(self.textView);
-        self.textView.snp.makeConstraints { (make) in
-            make.left.equalTo(self.view).offset(10);
-            make.right.equalTo(self.view).offset(-10);
-            make.top.equalTo(self.titleTextField.snp.bottom).offset(10);
             if #available(iOS 11, *) {
                 make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin).offset(-10);
             } else {
                 make.bottom.equalTo(self.view).offset(-10);
             }
         }
+        
+        self.containerView.addSubview(self.titleTextField);
+        self.titleTextField.snp.makeConstraints { (make) in
+            make.left.right.top.equalTo(self.containerView);
+            make.height.equalTo(30);
+        }
+        
+        self.containerView.addSubview(self.textView);
+        self.textView.snp.makeConstraints { (make) in
+            make.left.right.bottom.equalTo(self.containerView);
+            make.top.equalTo(self.titleTextField.snp.bottom).offset(10);
+        }
+        
+        self.toolView = TextToolView.init(nameArray: [], nav: self.navigationController);
+        self.toolView.hideAtSomeone = true;
+        self.toolView.vcDelegate = self;
+        self.toolView.backgroundColor = UIColor.clear;
+        self.textView.addSubview(self.toolView);
+        self.toolView.snp.makeConstraints { (make) in
+            make.left.right.equalTo(self.containerView);
+            make.bottom.equalTo(self.containerView).offset(-7);
+            make.height.equalTo(30);
+        }
+        
+        //add keyboard notification
+        NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated);
+        self.originY = self.view.frame.origin.y;
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func textViewDidChange(_ textView: YYTextView) {
@@ -162,14 +203,6 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
             "_xsrf": uuid
         ]
         
-        //        dict["Cookie"] = "_xsrf=" + uuid;
-        //        dict["Referer"] = self.commentURLString;
-        //        dict["Host"] = "www.guanggoo.com";
-        //        dict["Origin"] = GUANGGUSITE;
-        //        dict["User-Agent"] =  USER_AGENT;
-        //        dict["Connection"] = "keep-alive";
-        //        dict["Cache-Control"] = "max-age=0";
-        
         MBProgressHUD.showAdded(to: self.view, animated: true);
         
         Alamofire.request(self.commitURLString, method: HTTPMethod.post, parameters: para, headers: dict).responseString
@@ -189,6 +222,57 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate{
                     completion(false);
                 }
                 break;
+            }
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.textView.resignFirstResponder();
+    }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        //在真机上有自定义键盘，第一次打开键盘此消息会响应两次
+        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let keyboardFrame = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect{
+            UIView.animate(withDuration: duration, animations: {
+                if self.view.frame.origin.y < 0,self.keyboardOffset > 0 {
+                    self.view.frame.origin.y += self.keyboardOffset;
+                }
+                self.keyboardOffset = keyboardFrame.height;
+                self.view.frame.origin.y -= self.keyboardOffset;
+                self.containerView.snp.updateConstraints({ (make) in
+                    make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10+self.keyboardOffset);
+                })
+                self.view.layoutIfNeeded();
+                self.view.updateConstraintsIfNeeded();
+            })
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let _ = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            UIView.animate(withDuration: duration, animations: {
+                self.view.frame.origin.y = self.originY;
+                self.containerView.snp.updateConstraints({ (make) in
+                    make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
+                })
+                self.view.setNeedsLayout();
+                self.view.layoutIfNeeded();
+            })
+        }
+    }
+    
+    
+    func OnPushVC(msg: NSDictionary) {
+        if let msgtype = msg["MSGTYPE"] as? String {
+            if msgtype == "InsertContent" {
+                if let insertContent = msg["PARAM1"] as? String {
+                    let text = self.textView.text + insertContent;
+                    self.textView.text = text;
+                }
+            }
+            else if msgtype == "CloseKeyboard" {
+                self.textView.resignFirstResponder();
             }
         }
     }

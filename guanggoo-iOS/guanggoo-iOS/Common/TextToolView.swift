@@ -11,14 +11,35 @@ import SnapKit
 import Alamofire
 import MBProgressHUD
 
-class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,IFlySpeechRecognizerDelegate,IFlyRecognizerViewDelegate{
     
+    var _hideAtSomeone:Bool!
+    var hideAtSomeone:Bool {
+        get {
+            guard _hideAtSomeone == nil else {
+                return _hideAtSomeone;
+            }
+            _hideAtSomeone = true;
+            return _hideAtSomeone;
+        }
+        set(new) {
+            if new {
+                self.atSomeoneView?.isHidden = true;
+                self.atSomeOneButton.isHidden = true;
+            }
+            else {
+                self.atSomeoneView?.isHidden = false;
+                self.atSomeOneButton.isHidden = false;
+            }
+        }
+    }
     fileprivate var atSomeOneButton:UIButton!;
-    fileprivate var atSomeoneView:DropdownView?
+    fileprivate var atSomeoneView:DropdownView?;
     fileprivate var atSomeoneViewHeight = 30;
     fileprivate var showAtSomeoneView = false;
     fileprivate var nameList = [String]();
     fileprivate var navController:UINavigationController?;
+    weak var vcDelegate:GuangGuVCDelegate?
     
     fileprivate var _imagePicker:UIImagePickerController!
     fileprivate var imagePicker:UIImagePickerController {
@@ -30,6 +51,26 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             _imagePicker.delegate = self;
             
             return _imagePicker;
+        }
+    }
+    
+    fileprivate var _iflyRecognizerView:IFlyRecognizerView!
+    fileprivate var iflyRecognizerView:IFlyRecognizerView {
+        get {
+            guard _iflyRecognizerView == nil else {
+                return _iflyRecognizerView;
+            }
+            
+            _iflyRecognizerView = IFlyRecognizerView.init(center: self.navController!.viewControllers[0].view.center);
+            _iflyRecognizerView.setParameter("", forKey: IFlySpeechConstant.params());
+            _iflyRecognizerView.setParameter("iat", forKey: IFlySpeechConstant.ifly_DOMAIN());
+            _iflyRecognizerView.delegate = self;
+            _iflyRecognizerView.setParameter(IFLY_AUDIO_SOURCE_MIC, forKey: "audio_source");
+            _iflyRecognizerView.setParameter("plain", forKey: IFlySpeechConstant.result_TYPE());
+            _iflyRecognizerView.setParameter("0", forKey: IFlySpeechConstant.asr_PTT());
+            _iflyRecognizerView.setParameter("asr.pcm", forKey: IFlySpeechConstant.asr_AUDIO_PATH());
+            
+            return _iflyRecognizerView;
         }
     }
 
@@ -127,7 +168,17 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
         self.setNeedsLayout();
     }
     
+    func closeKeyboard() -> Void {
+        if let delegate = self.vcDelegate {
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "CloseKeyboard";
+            delegate.OnPushVC(msg: msg);
+        }
+    }
+    
     @objc func AudioClick(sender: UIButton) {
+        self.closeKeyboard();
+        self.iflyRecognizerView.start();
     }
     
     @objc func TakePhotoClick(sender: UIButton) {
@@ -147,19 +198,28 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     
     //处理点击@某人时不响应的问题
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if (self.atSomeoneView?.bounds.contains(self.convert(point, to: self.atSomeoneView)))! {
+        if self.atSomeoneView != nil && (self.atSomeoneView?.bounds.contains(self.convert(point, to: self.atSomeoneView)))! {
             return true;
         }
         return super.point(inside: point, with: event);
     }
     
     func reloadAtSomeoneView() -> Void {
+        if self.hideAtSomeone {
+            return;
+        }
         self.atSomeoneView?.removeFromSuperview();
         self.atSomeoneView = nil;
         let nameArray = Array(self.nameList)
         if nameArray.count > 0 {
             self.atSomeoneView = DropdownView.init(array: nameArray, handle: { [weak self](tableView, indexPath) in
-                let name = nameArray[indexPath.row];
+                if indexPath.row < nameArray.count {
+                    let name = nameArray[indexPath.row];
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "InsertContent";
+                    msg["PARAM1"] = "@" + name + " ";
+                    self?.vcDelegate?.OnPushVC(msg: msg);
+                }
                 self?.showAtSomeoneView = false;
                 self?.atSomeoneView?.snp.updateConstraints({ (make) in
                     make.height.equalTo(0);
@@ -206,14 +266,22 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                 if let data = json["data"] as? NSDictionary {
                                     hudProgress.hide(animated: true);
                                     if let url = data["url"] as? String {
-                                        let markDownURL = "[![1.png](" + url + ")](" + url + ")";
+                                        let markDownURL = "\n[![1.png](" + url + ")](" + url + ")";
+                                        let msg = NSMutableDictionary.init();
+                                        msg["MSGTYPE"] = "InsertContent";
+                                        msg["PARAM1"] = markDownURL;
+                                        self.vcDelegate?.OnPushVC(msg: msg);
+                                        return;
                                     }
                                 }
                             }
+                            hudProgress.hide(animated: true);
+                            self.makeToast("上传图片失败!",duration:1.0,position:.center);
                         }
                         
                     case .failure(let encodingError):
                         print(encodingError);
+                        self.makeToast("上传图片失败!",duration:1.0,position:.center);
                     }
                 })
                 
@@ -226,4 +294,49 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.navController?.dismiss(animated: true, completion: nil);
     }
+    
+    
+    //MARK : -IFlySpeechRecognizerDelegate
+    func onResults(_ results: [Any]!, isLast: Bool) {
+        var returnString = "";
+        if results != nil,results.count > 0 , let dic = results[0] as? NSDictionary {
+            for key in dic.allKeys {
+                if let str = key as? String,str.count > 0 {
+                    returnString.append(str);
+                }
+            }
+        }
+        if returnString.count > 0 {
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "IFlyAudio";
+                msg["PARAM1"] = returnString;
+                delegate.OnPushVC(msg: msg);
+            }
+        }
+    }
+    
+    func onResult(_ resultArray: [Any]!, isLast: Bool) {
+        var returnString = "";
+        if resultArray != nil,resultArray.count > 0 , let dic = resultArray[0] as? NSDictionary {
+            for key in dic.allKeys {
+                if let str = key as? String,str.count > 0 {
+                    returnString.append(str);
+                }
+            }
+        }
+        if returnString.count > 0 {
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "InsertContent";
+                msg["PARAM1"] = returnString;
+                delegate.OnPushVC(msg: msg);
+            }
+        }
+    }
+    
+    func onError(_ errorCode: IFlySpeechError!) {
+        
+    }
+    
 }

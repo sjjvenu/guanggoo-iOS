@@ -133,6 +133,9 @@ class ContentDataSource: NSObject {
                         item.creatorLink = (commentNode.xPath("div[@class='main']/div/a").first?["href"])!;
                         item.replyTime = (commentNode.xPath("div[@class='main']/div/span").first?.content)!;
                         item.contentHtml = (commentNode.xPath("div[@class='main']/span").first?.content)!;
+                        if let replyLink = commentNode.xPath("div[@class='main']/div/a[2]").first?["href"]{
+                            item.replyLink = replyLink;
+                        }
                         
                         let commentAttributedString:NSMutableAttributedString = NSMutableAttributedString(string: "")
                         let contentNodes = commentNode.xPath("div[@class='main']/span[@class='content']/node()")
@@ -154,6 +157,54 @@ class ContentDataSource: NSObject {
         } catch let error {
             print("Error: \(error)");
         }
+    }
+    
+    func getContentDataByURL(urlString:String,isComment:Bool) -> [String:String] {
+        guard let myURL = URL(string: urlString) else {
+            print("Error: \(urlString) doesn't seem to be a valid URL");
+            return [:];
+        }
+        do {
+            let myHTMLString = try String(contentsOf: myURL, encoding: .utf8)
+            
+            do{
+                let doc: Document = try SwiftSoup.parse(myHTMLString)
+                //parse header
+                let headerClasses = try doc.getElementsByClass("topic-create");
+                for object in headerClasses
+                {
+                    if isComment {
+                        let contentElements = try object.getElementsByClass("content");
+                        let contentText = try contentElements.text();
+                        
+                        return ["Content":contentText];
+                    }
+                    else {
+                        let titleElements = try object.getElementById("prependedInput");
+                        let titleText = try titleElements?.attr("value");
+                        
+                        let contentElements = try object.getElementById("contentArea");
+                        let contentText = try contentElements?.text();
+                        
+                        if let title = titleText,title.count > 0,let content = contentText,content.count > 0 {
+                            return ["Title":title,"Content":content];
+                        }
+                        else {
+                            return [:];
+                        }
+                    }
+                }
+            }catch Exception.Error(let type, let message)
+            {
+                print("Type:\(type) Error:\(message)");
+            }catch{
+                print("error");
+            }
+            
+        } catch let error {
+            print("Error: \(error)");
+        }
+        return [:];
     }
     
     func reloadData(completion: @escaping () -> Void) -> Void {
