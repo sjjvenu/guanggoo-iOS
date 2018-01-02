@@ -547,6 +547,22 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }
+            else if msgtype == "EditComment" {
+                if let item = msg["PARAM1"] as? GuangGuComent {
+                    var replyLink = item.replyLink;
+                    if replyLink[replyLink.startIndex] == "/" {
+                        replyLink.removeFirst();
+                    }
+                    if let content = self.contentData?.getContentDataByID(urlString: GUANGGUSITE + replyLink) ,content.count > 0{
+                        let vc = ReplyContentViewController.init(string: content, urlString: GUANGGUSITE + replyLink, nameArray: Array(self.contentData!.nameList), completion: { [weak self](bSuccess) in
+                            if bSuccess {
+                                self?.tableView.mj_header.beginRefreshing();
+                            }
+                        })
+                        self.navigationController?.pushViewController(vc, animated: true);
+                    }
+                }
+            }
         }
     }
 }

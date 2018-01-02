@@ -19,6 +19,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     fileprivate var showAtSomeoneView = false;
     fileprivate var nameList = [String]();
     fileprivate var navController:UINavigationController?;
+    weak var vcDelegate:GuangGuVCDelegate?
     
     fileprivate var _imagePicker:UIImagePickerController!
     fileprivate var imagePicker:UIImagePickerController {
@@ -159,7 +160,13 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
         let nameArray = Array(self.nameList)
         if nameArray.count > 0 {
             self.atSomeoneView = DropdownView.init(array: nameArray, handle: { [weak self](tableView, indexPath) in
-                let name = nameArray[indexPath.row];
+                if indexPath.row < nameArray.count {
+                    let name = nameArray[indexPath.row];
+                    let msg = NSMutableDictionary.init();
+                    msg["MSGTYPE"] = "InsertContent";
+                    msg["PARAM1"] = "@" + name + " ";
+                    self?.vcDelegate?.OnPushVC(msg: msg);
+                }
                 self?.showAtSomeoneView = false;
                 self?.atSomeoneView?.snp.updateConstraints({ (make) in
                     make.height.equalTo(0);
@@ -206,9 +213,17 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                 if let data = json["data"] as? NSDictionary {
                                     hudProgress.hide(animated: true);
                                     if let url = data["url"] as? String {
-                                        let markDownURL = "[![1.png](" + url + ")](" + url + ")";
+                                        let markDownURL = "\n[![1.png](" + url + ")](" + url + ")";
+                                        let msg = NSMutableDictionary.init();
+                                        msg["MSGTYPE"] = "InsertContent";
+                                        msg["PARAM1"] = markDownURL;
+                                        self.vcDelegate?.OnPushVC(msg: msg);
                                     }
                                 }
+                            }
+                            else {
+                                hudProgress.hide(animated: true);
+                                self.makeToast("上传失败!",duration:1.0,position:.center);
                             }
                         }
                         

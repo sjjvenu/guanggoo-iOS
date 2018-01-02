@@ -12,7 +12,7 @@ import Toast_Swift
 import MBProgressHUD
 import Alamofire
 
-class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
+class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVCDelegate{
     
     fileprivate var initString:String = "";
     fileprivate var commentURLString:String = "";
@@ -46,8 +46,8 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             //_textView.becomeFirstResponder();
             
             let str = NSMutableAttributedString(string: self.initString)
-            str.yy_font = _textView.font
-            str.yy_color = _textView.textColor
+            str.yy_font = UIFont.systemFont(ofSize: 18);
+            str.yy_color = UIColor.black;
             
             _textView.attributedText = str
             
@@ -139,6 +139,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
         }
         
         self.toolView = TextToolView.init(nameArray: self.nameList, nav: self.navigationController);
+        self.toolView.vcDelegate = self;
         self.toolView.backgroundColor = UIColor.clear;
         self.textView.addSubview(self.toolView);
         self.toolView.snp.makeConstraints { (make) in
@@ -275,6 +276,18 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate{
             })
         }
     }
+    
+    
+    func OnPushVC(msg: NSDictionary) {
+        if let msgtype = msg["MSGTYPE"] as? String {
+            if msgtype == "InsertContent" {
+                if let insertContent = msg["PARAM1"] as? String {
+                    let text = self.textView.text + insertContent;
+                    self.textView.text = text;
+                }
+            }
+        }
+    }
 }
 
 
@@ -309,6 +322,8 @@ class GGMentionedBindingParser: NSObject ,YYTextParser{
         }
         return false;
     }
+    
+    
     
     
 }
