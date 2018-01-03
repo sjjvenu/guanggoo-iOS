@@ -579,6 +579,36 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     }
                 }
             }
+            else if msgtype == "ReportComment" {
+                if let floor = msg["PARAM1"] as? String ,floor.count > 0 ,var titleLink = self.contentData?.headerModel?.titleLink,titleLink.count > 0{
+                    if titleLink.first == "/" {
+                        titleLink.remove(at: titleLink.startIndex);
+                    }
+                    titleLink = GUANGGUSITE + titleLink;
+                    let content = "@Caixin919 ,在主题[" + titleLink + "](" + titleLink + ")的" + floor+"有违规内容"
+                    let vc = ReplyContentViewController.init(string: content, urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
+                        if bSuccess {
+                            self?.tableView.mj_header.beginRefreshing();
+                        }
+                    };
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
+            else if msgtype == "ReportTitle" {
+                if var titleLink = self.contentData?.headerModel?.titleLink,titleLink.count > 0{
+                    if titleLink.first == "/" {
+                        titleLink.remove(at: titleLink.startIndex);
+                    }
+                    titleLink = GUANGGUSITE + titleLink;
+                    let content = "@Caixin919 ,主题[" + titleLink + "](" + titleLink + ")有违规内容";
+                    let vc = ReplyContentViewController.init(string: content, urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
+                        if bSuccess {
+                            self?.tableView.mj_header.beginRefreshing();
+                        }
+                    };
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
         }
     }
 }

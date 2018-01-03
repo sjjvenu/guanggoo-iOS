@@ -172,8 +172,14 @@ class CPHeaderView: UIView {
             }
             action.addAction(editComment);
         }
+        let report = UIAlertAction.init(title: "举报", style: .default) { (action) in
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "ReportTitle";
+            self.vcDelegate?.OnPushVC(msg: msg);
+        }
         let cancel = UIAlertAction.init(title: "取消", style: .cancel, handler: nil);
         action.addAction(copy);
+        action.addAction(report);
         action.addAction(cancel);
         let msg = NSMutableDictionary.init();
         msg["MSGTYPE"] = "PresentViewController";

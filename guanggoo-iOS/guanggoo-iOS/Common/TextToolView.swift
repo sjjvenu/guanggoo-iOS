@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Alamofire
 import MBProgressHUD
+import WXImageCompress
 
 class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,IFlySpeechRecognizerDelegate,IFlyRecognizerViewDelegate{
     
@@ -19,7 +20,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             guard _hideAtSomeone == nil else {
                 return _hideAtSomeone;
             }
-            _hideAtSomeone = true;
+            _hideAtSomeone = false;
             return _hideAtSomeone;
         }
         set(new) {
@@ -133,15 +134,15 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             make.width.equalTo(photoButton.snp.height);
         }
         
-        let commitButton = UIButton.init();
-        commitButton.setBackgroundImage(UIImage.init(named: "ic_submit"), for: .normal);
-        commitButton.addTarget(self, action: #selector(TextToolView.SubmitClick(sender:)), for: UIControlEvents.touchUpInside)
-        self.addSubview(commitButton);
-        stackView.addArrangedSubview(commitButton);
-        commitButton.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(stackView);
-            make.width.equalTo(commitButton.snp.height);
-        }
+//        let commitButton = UIButton.init();
+//        commitButton.setBackgroundImage(UIImage.init(named: "ic_submit"), for: .normal);
+//        commitButton.addTarget(self, action: #selector(TextToolView.SubmitClick(sender:)), for: UIControlEvents.touchUpInside)
+//        self.addSubview(commitButton);
+//        stackView.addArrangedSubview(commitButton);
+//        commitButton.snp.makeConstraints { (make) in
+//            make.top.bottom.equalTo(stackView);
+//            make.width.equalTo(commitButton.snp.height);
+//        }
         
         self.isUserInteractionEnabled = true;
         self.reloadAtSomeoneView();
@@ -245,7 +246,8 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     //MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            if let data = UIImagePNGRepresentation(chosenImage) as NSData? {
+            let compressImage = chosenImage.wxCompress();
+            if let data = UIImagePNGRepresentation(compressImage) as NSData? {
                 Alamofire.upload(multipartFormData: { (multipartFormData) in
                     multipartFormData.append(data as Data!, withName: "smfile", fileName: "1.png", mimeType: "image/jpeg")
                 }, to: "https://sm.ms/api/upload", encodingCompletion: { (result) in
@@ -275,6 +277,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                     }
                                 }
                             }
+                            print(response);
                             hudProgress.hide(animated: true);
                             self.makeToast("上传图片失败!",duration:1.0,position:.center);
                         }
@@ -338,5 +341,4 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     func onError(_ errorCode: IFlySpeechError!) {
         
     }
-    
 }

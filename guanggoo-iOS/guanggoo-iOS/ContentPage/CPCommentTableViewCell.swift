@@ -181,7 +181,14 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
             }
             action.addAction(editComment);
         }
+        let report = UIAlertAction.init(title: "举报", style: .default) { (action) in
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "ReportComment";
+            msg["PARAM1"] = self.floorLabel.text;
+            self.vcDelegate?.OnPushVC(msg: msg);
+        }
         action.addAction(copy);
+        action.addAction(report);
         action.addAction(cancel);
         let msg = NSMutableDictionary.init();
         msg["MSGTYPE"] = "PresentViewController";

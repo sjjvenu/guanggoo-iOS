@@ -38,6 +38,7 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate,GuangGuVCD
             _textView.layer.borderColor = UIColor.lightGray.cgColor;
             _textView.layer.cornerRadius = 5;
             _textView.layer.borderWidth = 0.5;
+            _textView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 40, right: 0);
             //_textView.resignFirstResponder();
             
             return _textView;

@@ -15,6 +15,7 @@ def pods
     pod 'Kingfisher'
     pod "MWPhotoBrowser", :podspec =>'https://raw.githubusercontent.com/moinku07/MWPhotoBrowser/master/MWPhotoBrowser.podspec'
     pod 'Toast-Swift', '~> 3.0.1'
+    pod 'WXImageCompress', '~> 0.1.1'
 end
 
 target 'guanggoo-iOS' do
