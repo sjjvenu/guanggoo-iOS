@@ -151,6 +151,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVC
         //add keyboard notification
         NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReplyContentViewController.statusFrameChanged(notification:)), name: NSNotification.Name.UIApplicationWillChangeStatusBarFrame, object: nil);
     }
 
     override func didReceiveMemoryWarning() {
@@ -265,6 +266,7 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVC
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        self.keyboardOffset = 0;
         if let duration = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as? Double,let _ = notification.userInfo![UIKeyboardFrameEndUserInfoKey] as? CGRect {
             UIView.animate(withDuration: duration, animations: {
                 self.view.frame.origin.y = self.originY;
@@ -274,6 +276,25 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVC
                 self.view.setNeedsLayout();
                 self.view.layoutIfNeeded();
             })
+        }
+    }
+    
+    @objc func statusFrameChanged(notification: NSNotification) {
+        if (self.keyboardOffset > 0)
+        {
+            if let statusBarFrame = notification.userInfo![UIApplicationStatusBarFrameUserInfoKey] as? CGRect{
+                var statusHeight = statusBarFrame.height;
+                if UIScreen.main.bounds.size.height == 812 {
+                    statusHeight -= 44;
+                }
+                else {
+                    statusHeight -= 20;
+                }
+                self.view.frame.origin.y = self.originY - self.keyboardOffset - statusHeight;
+                self.containerView.snp.updateConstraints({ (make) in
+                    make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(10);
+                })
+            }
         }
     }
     
