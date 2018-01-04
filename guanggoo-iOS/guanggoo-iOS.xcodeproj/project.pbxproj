@@ -30,6 +30,8 @@
 		2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */; };
 		2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */; };
 		2FC657131FEE244A0001DADC /* NodesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC657121FEE244A0001DADC /* NodesDataSource.swift */; };
+		2FCE266E1FFDC93000CFFB72 /* BlacklistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCE266D1FFDC93000CFFB72 /* BlacklistViewController.swift */; };
+		2FCE26701FFDC94E00CFFB72 /* BlackDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCE266F1FFDC94E00CFFB72 /* BlackDataSource.swift */; };
 		2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */; };
 		2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */; };
 		2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */; };
@@ -76,6 +78,8 @@
 		2FC20BDF1FE9EE8000381CDB /* GuangGuCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuCommon.swift; sourceTree = "<group>"; };
 		2FC20BE11FEA4A4800381CDB /* CPCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPCommentTableViewCell.swift; sourceTree = "<group>"; };
 		2FC657121FEE244A0001DADC /* NodesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesDataSource.swift; sourceTree = "<group>"; };
+		2FCE266D1FFDC93000CFFB72 /* BlacklistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlacklistViewController.swift; sourceTree = "<group>"; };
+		2FCE266F1FFDC94E00CFFB72 /* BlackDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackDataSource.swift; sourceTree = "<group>"; };
 		2FD3F93E1FDE25FA005DD1F1 /* guanggoo-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "guanggoo-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 				2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */,
 				2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */,
 				2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */,
+				2FCE266D1FFDC93000CFFB72 /* BlacklistViewController.swift */,
+				2FCE266F1FFDC94E00CFFB72 /* BlackDataSource.swift */,
 			);
 			path = Left;
 			sourceTree = "<group>";
@@ -395,10 +401,12 @@
 				"${BUILT_PRODUCTS_DIR}/Ji/Ji.framework",
 				"${BUILT_PRODUCTS_DIR}/KVOController/KVOController.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/LeanCloud/LeanCloud.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/MWPhotoBrowser/MWPhotoBrowser.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
@@ -413,10 +421,12 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ji.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KVOController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LeanCloud.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MWPhotoBrowser.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
@@ -455,12 +465,14 @@
 				2F044F3D1FF08B3A0036C47D /* NotificationViewController.swift in Sources */,
 				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
 				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
+				2FCE266E1FFDC93000CFFB72 /* BlacklistViewController.swift in Sources */,
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 				2F1389F01FF48EE1007BF316 /* CreateTitleViewController.swift in Sources */,
 				2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */,
 				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
+				2FCE26701FFDC94E00CFFB72 /* BlackDataSource.swift in Sources */,
 				2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

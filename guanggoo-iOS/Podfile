@@ -16,6 +16,8 @@ def pods
     pod "MWPhotoBrowser", :podspec =>'https://raw.githubusercontent.com/moinku07/MWPhotoBrowser/master/MWPhotoBrowser.podspec'
     pod 'Toast-Swift', '~> 3.0.1'
     pod 'WXImageCompress', '~> 0.1.1'
+    pod 'LeanCloud'
+    pod 'SQLite.swift', '~> 0.11.4'
 end
 
 target 'guanggoo-iOS' do

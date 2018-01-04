@@ -68,7 +68,8 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             _iflyRecognizerView.delegate = self;
             _iflyRecognizerView.setParameter(IFLY_AUDIO_SOURCE_MIC, forKey: "audio_source");
             _iflyRecognizerView.setParameter("plain", forKey: IFlySpeechConstant.result_TYPE());
-            _iflyRecognizerView.setParameter("0", forKey: IFlySpeechConstant.asr_PTT());
+            //设置标点
+            _iflyRecognizerView.setParameter("1", forKey: IFlySpeechConstant.asr_PTT());
             _iflyRecognizerView.setParameter("asr.pcm", forKey: IFlySpeechConstant.asr_AUDIO_PATH());
             
             return _iflyRecognizerView;
@@ -268,7 +269,8 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                 if let data = json["data"] as? NSDictionary {
                                     hudProgress.hide(animated: true);
                                     if let url = data["url"] as? String {
-                                        let markDownURL = "\n[![1.png](" + url + ")](" + url + ")";
+                                        //此处需要加两个换行，否则会出现只显示图片的bug
+                                        let markDownURL = "\n\n[![1.png](" + url + ")](" + url + ")";
                                         let msg = NSMutableDictionary.init();
                                         msg["MSGTYPE"] = "InsertContent";
                                         msg["PARAM1"] = markDownURL;

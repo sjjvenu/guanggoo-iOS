@@ -209,7 +209,12 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let count = self.userNameText?.count,count > 0 {
-            return 3;
+            if GuangGuAccount.shareInstance.user?.userName == self.userNameText {
+                return 4;
+            }
+            else {
+                return 3;
+            }
         }
         return 0;
     }
@@ -294,6 +299,14 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                 cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
                 cell!.accessoryType = .disclosureIndicator;
                 break;
+            case 3:
+                if let userName = self.userNameText {
+                    cell!.textLabel?.text = userName + "的黑名单";
+                }
+                cell!.textLabel?.textColor = UIColor.black;
+                cell!.textLabel?.font = UIFont.systemFont(ofSize: 16);
+                cell!.accessoryType = .disclosureIndicator;
+                break;
             default:
                 break;
             }
@@ -350,6 +363,16 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                     msg["PARAM1"] = vc;
                     delegate.OnPushVC(msg: msg);
                 }
+            }
+            break;
+        case 3:
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "PushViewController";
+                let vc = BlacklistViewController.init(nibName: nil, bundle: nil);
+                vc.title = "黑名单";
+                msg["PARAM1"] = vc;
+                delegate.OnPushVC(msg: msg);
             }
             break;
         default:
