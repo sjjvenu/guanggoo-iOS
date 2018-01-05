@@ -25,7 +25,6 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
             _tableView.dataSource = self;
             _tableView.backgroundColor = UIColor.white;
             _tableView.allowsSelection = true;
-            _tableView.separatorStyle = .none;
             
             return _tableView;
         }
@@ -71,10 +70,6 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
         return BlackDataSource.shareInstance.itemList.count;
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 110;
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44;
     }
@@ -87,12 +82,28 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
             cell = UITableViewCell.init(style: .default, reuseIdentifier: identifier);
             
         }
+        if indexPath.row < BlackDataSource.shareInstance.itemList.count {
+            let array = Array(BlackDataSource.shareInstance.itemList);
+            cell!.textLabel?.text = array[indexPath.row];
+        }
+        cell!.textLabel?.textAlignment = .center;
         cell!.backgroundColor = UIColor.clear;
         cell!.selectionStyle = .none;
         return cell!;
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true;
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.row < BlackDataSource.shareInstance.itemList.count {
+                let array = Array(BlackDataSource.shareInstance.itemList);
+                BlackDataSource.shareInstance.deleteData(userName: array[indexPath.row])
+                self.tableView.reloadData();
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
+            }
+        }
     }
 }

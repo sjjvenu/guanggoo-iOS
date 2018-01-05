@@ -172,6 +172,15 @@ class CPHeaderView: UIView {
             }
             action.addAction(editComment);
         }
+        else if BlackDataSource.shareInstance.itemList.contains(self.creatorNameLabel.text!) == false {
+            let block = UIAlertAction.init(title: "屏蔽此人", style: .default) { (action) in
+                BlackDataSource.shareInstance.insertData(userName: self.creatorNameLabel.text);
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "ReloadHomePage";
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
+            action.addAction(block);
+        }
         let report = UIAlertAction.init(title: "举报", style: .default) { (action) in
             let msg = NSMutableDictionary.init();
             msg["MSGTYPE"] = "ReportTitle";

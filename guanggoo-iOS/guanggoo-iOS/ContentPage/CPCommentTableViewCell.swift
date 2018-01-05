@@ -184,6 +184,10 @@ class CPCommentTableViewCell: UITableViewCell ,GuangGuCommentAttachmentImageTapD
         else if BlackDataSource.shareInstance.itemList.contains(self.creatorNameLabel.text!) == false {
             let block = UIAlertAction.init(title: "屏蔽此人", style: .default) { (action) in
                 BlackDataSource.shareInstance.insertData(userName: self.creatorNameLabel.text);
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "ReloadData";
+                msg["PARAM1"] = self.creatorNameLabel.text;
+                self.vcDelegate?.OnPushVC(msg: msg);
             }
             action.addAction(block);
         }

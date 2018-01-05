@@ -47,6 +47,9 @@ class BlackDataSource: NSObject {
     }
     
     func reloadData() -> Void {
+        guard GuangGuAccount.shareInstance.isLogin() == true else {
+            return;
+        }
         if let table = self.blackListTable {
             
             do {
@@ -85,6 +88,27 @@ class BlackDataSource: NSObject {
                 if let db = self.db ,self.itemList.contains(userName!) == false {
                     let insert = table.insert(name <- GuangGuAccount.shareInstance.user!.userName, blackList <- userName);
                     try db.run(insert);
+                    self.reloadData();
+                }
+            } catch {
+                print("insert sqlite file error");
+            }
+        }
+    }
+    
+    func deleteData(userName:String?) -> Void {
+        guard userName != nil else {
+            return ;
+        }
+        
+        if let table = self.blackListTable {
+            do {
+                let name = Expression<String>("name")
+                let blackList = Expression<String?>("blacklist")
+                
+                if let db = self.db ,self.itemList.contains(userName!) == true {
+                    let deleteFilter = table.filter(name == GuangGuAccount.shareInstance.user!.userName).filter(blackList == userName)
+                    try db.run(deleteFilter.delete());
                     self.reloadData();
                 }
             } catch {

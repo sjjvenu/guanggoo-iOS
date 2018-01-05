@@ -94,6 +94,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     //MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -257,8 +258,14 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             return 1;
         case 1:
             if let count = self.contentData?.itemList.count,indexPath.row < count {
-                let layout = self.contentData?.itemList[indexPath.row].textLayout!
-                return layout!.textBoundingRect.size.height + 60;
+                let item = self.contentData?.itemList[indexPath.row];
+                if BlackDataSource.shareInstance.itemList.contains(item!.creatorName) {
+                    return 0;
+                }
+                else {
+                    let layout = self.contentData?.itemList[indexPath.row].textLayout!
+                    return layout!.textBoundingRect.size.height + 60;
+                }
             }
             else {
                 return 60;
@@ -326,6 +333,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                             }
                         }
                     }
+                }
+                if BlackDataSource.shareInstance.itemList.contains(item!.creatorName) {
+                    cell?.isHidden = true;
+                }
+                else {
+                    cell?.isHidden = false;
                 }
             }
             
@@ -608,6 +621,20 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     };
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
+            }
+            else if msgtype == "ReloadData" {
+                if let userName = msg["PARAM1"] as? String ,userName.count > 0 ,userName == self.contentData?.headerModel?.creatorName {
+                    //如果屏蔽的是主题创建者，则退出详情页面
+                    self.navigationController?.popViewController(animated: true);
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
+                }
+                else {
+                    self.tableView.mj_header.beginRefreshing();
+                }
+            }
+            else if msgtype == "ReloadHomePage" {
+                self.navigationController?.popViewController(animated: true);
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
             }
         }
     }

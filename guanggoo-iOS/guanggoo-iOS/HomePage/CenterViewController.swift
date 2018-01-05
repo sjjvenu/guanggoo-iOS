@@ -53,6 +53,10 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self);
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -75,6 +79,8 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         }
         //解决mj下拉刷新出切出去，再切回来上拉头部没有回弹回去的问题
         self.navigationController?.navigationBar.isTranslucent = false;
+        //黑名单更新
+        NotificationCenter.default.addObserver(self, selector: #selector(blackListFresh(notification:)), name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,10 +161,15 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         if let count = self.homePageData?.itemList.count {
             if count > 0 {
                 if let item = self.homePageData?.itemList[indexPath.row] {
-                    let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
-                    let labelWidth = UIScreen.main.bounds.size.width - 30;
-                    let lines = (Int)(titleWidth/labelWidth) + 1;
-                    return CGFloat(85+20*lines);
+                    if BlackDataSource.shareInstance.itemList.contains(item.creatorName) {
+                        return 0;
+                    }
+                    else {
+                        let titleWidth = item.title.width(withConstraintedHeight: 20, font: UIFont.systemFont(ofSize: 16));
+                        let labelWidth = UIScreen.main.bounds.size.width - 30;
+                        let lines = (Int)(titleWidth/labelWidth) + 1;
+                        return CGFloat(85+20*lines);
+                    }
                 }
             }
             else {
@@ -183,6 +194,12 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                     cell?.nodeNameLabel.text = item.node;
                     cell?.setTitleContent(item.title);
                     cell?.creatorImageView.sd_setImage(with: URL.init(string: item.creatorImg), completed: nil);
+                    if BlackDataSource.shareInstance.itemList.contains(item.creatorName) {
+                        cell?.isHidden = true;
+                    }
+                    else {
+                        cell?.isHidden = false;
+                    }
                 }
                 return cell!;
             }
@@ -328,6 +345,10 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             self.tableView.mj_footer.endRefreshing();
             self.tableView.reloadData();
         }
+    }
+    
+    @objc func blackListFresh(notification: NSNotification) {
+        self.tableView.mj_header.beginRefreshing();
     }
     
     func OnPushVC(msg: NSDictionary) {

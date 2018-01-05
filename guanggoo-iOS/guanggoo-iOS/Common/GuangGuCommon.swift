@@ -22,6 +22,8 @@ let DBFILE = "db.sqlite3"
 //站点地址,客户端只有https,禁用http
 let GUANGGUSITE = "http://www.guanggoo.com/"
 
+//黑名单更新时强制刷新
+let BLACKLISTTOREFRESH = "BLACKLISTTOREFRESH"
 
 extension String {
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
