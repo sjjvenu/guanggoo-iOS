@@ -140,8 +140,9 @@ class HomePageDataSource: NSObject {
                         if GuangGuAccount.shareInstance.cookie.count == 0 {
                             self.fetchCookie(urlString: GUANGGUSITE);
                         }
+                        
                         //BlackDataSource.shareInstance.reloadData();
-                        BlackDataSource.shareInstance.loginWithToken();
+                        //BlackDataSource.shareInstance.loginWithToken();
                         break;
                     }
                     if userClasses.array().count == 0 {

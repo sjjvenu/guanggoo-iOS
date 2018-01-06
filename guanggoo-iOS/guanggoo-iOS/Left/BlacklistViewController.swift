@@ -61,6 +61,8 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
         rightView.addSubview(downloadButton);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightView);
         downloadButton.addTarget(self, action: #selector(BlacklistViewController.downloadClick(sender:)), for: .touchUpInside);
+        
+        BlackDataSource.shareInstance.loginWithToken();
     }
     
     override func didReceiveMemoryWarning() {
