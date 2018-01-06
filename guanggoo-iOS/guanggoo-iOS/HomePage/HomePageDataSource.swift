@@ -140,6 +140,8 @@ class HomePageDataSource: NSObject {
                         if GuangGuAccount.shareInstance.cookie.count == 0 {
                             self.fetchCookie(urlString: GUANGGUSITE);
                         }
+                        //BlackDataSource.shareInstance.reloadData();
+                        BlackDataSource.shareInstance.loginWithToken();
                         break;
                     }
                     if userClasses.array().count == 0 {
@@ -147,6 +149,7 @@ class HomePageDataSource: NSObject {
                         GuangGuAccount.shareInstance.user?.userLink = "";
                         GuangGuAccount.shareInstance.user?.userName = "";
                         GuangGuAccount.shareInstance.notificationText = "";
+                        BlackDataSource.shareInstance.itemList.removeAll();
                     }
                 }
                 //初始化首页时查看是否有未读消息

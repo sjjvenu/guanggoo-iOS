@@ -344,6 +344,7 @@ class LeftViewController: UIViewController ,UITableViewDelegate,UITableViewDataS
                     let msg = NSMutableDictionary.init();
                     msg["MSGTYPE"] = "reloadData";
                     delegate.OnPushVC(msg: msg);
+                    BlackDataSource.shareInstance.deleteTokenFile();
                 }
             }
         }

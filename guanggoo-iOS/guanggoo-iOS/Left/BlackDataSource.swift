@@ -8,6 +8,7 @@
 
 import UIKit
 import SQLite
+import LeanCloud
 
 class BlackDataSource: NSObject {
     
@@ -15,6 +16,7 @@ class BlackDataSource: NSObject {
     
     fileprivate var db:Connection?;
     fileprivate var blackListTable:Table?
+    
     var itemList = Set<String>();
     
     override init() {
@@ -76,7 +78,7 @@ class BlackDataSource: NSObject {
     }
     
     func insertData(userName:String?) -> Void {
-        guard userName != nil else {
+        guard userName != nil && GuangGuAccount.shareInstance.isLogin() else {
             return ;
         }
         
@@ -86,8 +88,12 @@ class BlackDataSource: NSObject {
                 let blackList = Expression<String?>("blacklist")
                 
                 if let db = self.db ,self.itemList.contains(userName!) == false {
+                    
                     let insert = table.insert(name <- GuangGuAccount.shareInstance.user!.userName, blackList <- userName);
                     try db.run(insert);
+                    
+                    
+                    
                     self.reloadData();
                 }
             } catch {
@@ -114,6 +120,105 @@ class BlackDataSource: NSObject {
             } catch {
                 print("insert sqlite file error");
             }
+        }
+    }
+    
+    func upload() -> Void {
+        if let currentUser = LCUser.current {
+            // 上传当前数据
+            currentUser.set("black_list", value: Array(self.itemList))
+            
+            currentUser.save { result in
+                switch result {
+                case .success:
+                    break;
+                case .failure(let error):
+                    print(error)
+                    break;
+                }
+            }
+        }
+    }
+    
+    func fetchDataFromRemote() -> Bool {
+        var returnValue = false;
+        if let currentUser = LCUser.current {
+            let value = currentUser.get("black_list")
+            if let array = value?.arrayValue {
+                var blackUserList = Set<String>();
+                for item in array {
+                    if let userName = item.lcValue.stringValue,userName.count > 0 {
+                        self.insertData(userName: userName);
+                        blackUserList.insert(userName);
+                    }
+                }
+                self.itemList.removeAll();
+                self.itemList = blackUserList;
+                returnValue = true;
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
+            }
+        }
+        return returnValue;
+    }
+    
+    
+    func login(userName:String,password:String) -> Void {
+        let randomUser = LCUser()
+        
+        randomUser.username = LCString(userName)
+        randomUser.password = LCString(password)
+        
+        let _ = randomUser.signUp()
+        
+        LCUser.logIn(username: userName, password: password) { result in
+            switch result {
+            case .success(let user):
+                _ = self.fetchDataFromRemote();
+                let sessionToken = user.sessionToken;
+                let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+                do {
+                    try sessionToken?.value.write(to: fileURL, atomically: false, encoding: .ascii)
+                }
+                catch {
+                    print("write token to file failed")
+                }
+                break
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func loginWithToken() -> Void {
+        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+        do {
+            let tokenText = try String(contentsOf: fileURL)
+            LCUser.logIn(sessionToken: tokenText){ result in
+                switch result {
+                case .success( _):
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        catch {
+            print("write token to file failed")
+        }
+    }
+
+    func deleteTokenFile() -> Void {
+        if LCUser.current != nil {
+            LCUser.logOut();
+        }
+        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch let error as NSError {
+            print("Error: \(error.domain)")
         }
     }
 }

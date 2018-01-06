@@ -18,6 +18,8 @@ let MOBILE_CLIENT_HEADERS = ["user-agent":USER_AGENT]
 
 let DBFILE = "db.sqlite3"
 
+let TOKENFILE = "token.txt"
+
 
 //站点地址,客户端只有https,禁用http
 let GUANGGUSITE = "http://www.guanggoo.com/"

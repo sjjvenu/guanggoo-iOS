@@ -275,6 +275,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                             if let completion = self._completion {
                                 self.dismiss(animated: true, completion: nil);
                                 completion(true);
+                                BlackDataSource.shareInstance.login(userName: email!, password: password!);
                             }
                             return;
                         }

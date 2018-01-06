@@ -8,6 +8,7 @@
 
 import UIKit
 import DrawerController
+import LeanCloud
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,6 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //初始化讯飞语音
         IFlySpeechUtility.createUtility("appid=");
+        //初始化leanCloun
+        LeanCloud.initialize(applicationID: "", applicationKey: "")
         
         return true
     }

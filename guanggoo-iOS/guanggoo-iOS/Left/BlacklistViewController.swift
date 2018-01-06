@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Toast_Swift
 
 class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
 
@@ -46,6 +47,20 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
                 make.bottom.equalTo(self.view);
             }
         }
+        
+        let rightView = UIView.init(frame: CGRect(x: 0, y: 0, width: 80, height: 40));
+        let uploadButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
+        uploadButton.setImage(UIImage.init(named: "ic_upload"), for: .normal);
+        uploadButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15);
+        uploadButton.addTarget(self, action: #selector(BlacklistViewController.uploadClick(sender:)), for: UIControlEvents.touchUpInside);
+        rightView.addSubview(uploadButton);
+        
+        let downloadButton = UIButton.init(frame: CGRect(x: 40, y: 0, width: 40, height: 40));
+        downloadButton.setImage(UIImage.init(named: "ic_download"), for: .normal);
+        downloadButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15);
+        rightView.addSubview(downloadButton);
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightView);
+        downloadButton.addTarget(self, action: #selector(BlacklistViewController.downloadClick(sender:)), for: .touchUpInside);
     }
     
     override func didReceiveMemoryWarning() {
@@ -104,6 +119,18 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
                 self.tableView.reloadData();
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
             }
+        }
+    }
+    
+    @objc func uploadClick(sender: UIButton) {
+        BlackDataSource.shareInstance.upload()
+        self.view.makeToast("上传成功", duration: 1.0, position: .center)
+    }
+    
+    @objc func downloadClick(sender: UIButton) {
+        if BlackDataSource.shareInstance.fetchDataFromRemote() {
+            self.view.makeToast("下载成功", duration: 1.0, position: .center)
+            self.tableView.reloadData();
         }
     }
 }
