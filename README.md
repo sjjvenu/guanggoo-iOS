@@ -1,8 +1,8 @@
-# guanggoo-android
+# 光谷社区
 
 [光谷社区](http://www.guanggoo.com) 第三方客户端。
 
-# 光谷社区 iOS下载地址
+## 光谷社区 iOS下载地址
 
 ## 光谷社区 android下载地址
 
