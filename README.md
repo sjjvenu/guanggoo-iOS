@@ -89,11 +89,12 @@ URL: <http://www.guanggoo.com/t/25804>
 | URL | 回复url或者编辑url |
 
 请求参数
+
 | 参数名称 | 类型 | 是否必须 | 描述 |
 | ------| ------ | ------ | ------ |
-| tid | String | 是 | 主题id，如若是编辑，则是编辑内容id |
+| tid | String | 是 | 主题id，如若是编辑，则是编辑内容id |
 | content | String | 是 | 回复内容 |
-| _xsrf | String | 是 | 唯一标识符，登录时记下 |
+| _xsrf | String | 是 | 唯一标识符，登录时记下 |
 
 ##  创建或编辑主题
 
@@ -103,11 +104,12 @@ URL: <http://www.guanggoo.com/t/25804>
 | URL | 创建或编辑主题url |
 
 请求参数
+
 | 参数名称 | 类型 | 是否必须 | 描述 |
 | ------| ------ | ------ | ------ |
 | title | String | 是 | 主题内容 |
 | content | String | 是 | 主题内容 |
-| _xsrf | String | 是 | 唯一标识符，登录时记下 |
+| _xsrf | String | 是 | 唯一标识符，登录时记下 |
 
 ## 个人信息页
 
