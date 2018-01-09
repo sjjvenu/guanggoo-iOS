@@ -3,7 +3,17 @@
 [光谷社区](http://www.guanggoo.com) 第三方客户端。
 
 ## 光谷社区 iOS下载地址
+[App Store下载地址](https://itunes.apple.com/us/app/%E5%85%89%E8%B0%B7%E7%A4%BE%E5%8C%BA/id1330088850?l=zh&ls=1&mt=8)
 
+截图
+
+![image](https://wx1.sinaimg.cn/mw690/a9a6744agy1fmvh56dddhj20ku112jwv.jpg)
+![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmvh5615abj20ku112gp9.jpg)
+![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmvh56fet5j20ku112af8.jpg)
+![image](https://wx4.sinaimg.cn/mw690/a9a6744agy1fmvh56i99kj20ku112q8p.jpg)
+![image](https://wx1.sinaimg.cn/mw690/a9a6744agy1fmvh56a2f9j20ku112jwd.jpg)
+![image](https://wx3.sinaimg.cn/mw690/a9a6744agy1fmvh58drifj20ku112nmt.jpg)
+![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmw6dz932xj20ku1124go.jpg)
 ## 光谷社区 android下载地址
 
 | Google Play                                                                                                                                                                                | 小米应用商店                                                                                                                                                    | 酷安                                                                                                                                             | GitHub                                                           |
