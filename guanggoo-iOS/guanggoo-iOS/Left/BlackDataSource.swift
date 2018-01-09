@@ -123,7 +123,7 @@ class BlackDataSource: NSObject {
         }
     }
     
-    func upload() -> Void {
+    func upload(view:UIView!) -> Void {
         if let currentUser = LCUser.current {
             // 上传当前数据
             currentUser.set("black_list", value: Array(self.itemList))
@@ -131,12 +131,17 @@ class BlackDataSource: NSObject {
             currentUser.save { result in
                 switch result {
                 case .success:
+                    view.makeToast("上传成功", duration: 1.0, position: .center)
                     break;
                 case .failure(let error):
+                    view.makeToast("上传失败，请稍后再试", duration: 1.0, position: .center)
                     print(error)
                     break;
                 }
             }
+        }
+        else {
+            view.makeToast("上传失败，请退出用户后重新登录再试!", duration: 1.0, position: .center)
         }
     }
     

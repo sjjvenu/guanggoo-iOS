@@ -125,8 +125,7 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
     }
     
     @objc func uploadClick(sender: UIButton) {
-        BlackDataSource.shareInstance.upload()
-        self.view.makeToast("上传成功", duration: 1.0, position: .center)
+        BlackDataSource.shareInstance.upload(view: self.view)
     }
     
     @objc func downloadClick(sender: UIButton) {
