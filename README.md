@@ -7,13 +7,42 @@
 
 截图
 
+主题列表
 ![image](https://wx1.sinaimg.cn/mw690/a9a6744agy1fmvh56dddhj20ku112jwv.jpg)
+节点列表
 ![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmvh5615abj20ku112gp9.jpg)
+侧边栏
 ![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmvh56fet5j20ku112af8.jpg)
-![image](https://wx4.sinaimg.cn/mw690/a9a6744agy1fmvh56i99kj20ku112q8p.jpg)
+主题详情页
 ![image](https://wx1.sinaimg.cn/mw690/a9a6744agy1fmvh56a2f9j20ku112jwd.jpg)
-![image](https://wx3.sinaimg.cn/mw690/a9a6744agy1fmvh58drifj20ku112nmt.jpg)
-![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fmw6dz932xj20ku1124go.jpg)
+
+作者操作（长按作者显示区域弹出操作对话框，如作者是登录本人支持编辑主题，如不是则支持屏蔽该作者）
+![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fna2c1efzwj20hr0vkwig.jpg)
+
+回复操作（长按回复显示区域弹出对话框，如回复是本人支持编辑回复，如不是则支持屏蔽回复者）
+![image](https://wx4.sinaimg.cn/mw690/a9a6744agy1fna2c2o64oj20hr0vktbw.jpg)
+![image](https://wx1.sinaimg.cn/mw690/a9a6744agy1fna2c2ngwfj20hr0vkgon.jpg)
+
+回复详情页(支持@某一个人，讯飞语音输入，插入拍照或者相片图片)
+![image](https://wx2.sinaimg.cn/mw690/a9a6744agy1fna2c1lshxj20hr0vkgmf.jpg)
+
+| 功能 |   是否支持 |
+| ------| ------ |
+| 登录与切换账号 | 是 |
+| 注册 | 暂不支持，请去浏览器内完成注册 |
+| 创建编辑主题 | 是 |
+| 创建编辑回复 | 是 |
+| 收藏与取消收藏 | 是 |
+| 查看我的消息、主题、回复、收藏 | 是 |
+| 黑名单 | 支持本地屏蔽，重新安装后会丢失 |
+| 社区表情 | 不支持，暂无支持计划 |
+| @某人 | 支持 |
+| 语音输入 | 支持 |
+| 图片 | 支持，使用sm.ms图床，自动插入图片 |
+
+### 安装方式
+
+首先确保安装了cocoapods,然后将工程用git clone下来后，在Podfile目录执行命令pod install。等待命令完成后，会生成一个guanggoo-iOS.xcworkspace的文件，打开这个文件进行编译即可。
 ## 光谷社区 android下载地址
 
 | Google Play                                                                                                                                                                                | 小米应用商店                                                                                                                                                    | 酷安                                                                                                                                             | GitHub                                                           |
