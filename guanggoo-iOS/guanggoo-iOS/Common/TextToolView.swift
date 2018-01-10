@@ -135,15 +135,15 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             make.width.equalTo(photoButton.snp.height);
         }
         
-//        let commitButton = UIButton.init();
-//        commitButton.setBackgroundImage(UIImage.init(named: "ic_submit"), for: .normal);
-//        commitButton.addTarget(self, action: #selector(TextToolView.SubmitClick(sender:)), for: UIControlEvents.touchUpInside)
-//        self.addSubview(commitButton);
-//        stackView.addArrangedSubview(commitButton);
-//        commitButton.snp.makeConstraints { (make) in
-//            make.top.bottom.equalTo(stackView);
-//            make.width.equalTo(commitButton.snp.height);
-//        }
+        let externalLinkButton = UIButton.init();
+        externalLinkButton.setBackgroundImage(UIImage.init(named: "ic_external_link"), for: .normal);
+        externalLinkButton.addTarget(self, action: #selector(TextToolView.InsertLinkClick(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(externalLinkButton);
+        stackView.addArrangedSubview(externalLinkButton);
+        externalLinkButton.snp.makeConstraints { (make) in
+            make.top.bottom.equalTo(stackView);
+            make.width.equalTo(externalLinkButton.snp.height);
+        }
         
         self.isUserInteractionEnabled = true;
         self.reloadAtSomeoneView();
@@ -195,7 +195,16 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
         self.navController?.present(self.imagePicker, animated: true, completion: nil);
     }
     
-    @objc func SubmitClick(sender: UIButton) {
+    @objc func InsertLinkClick(sender: UIButton) {
+        if let string = UIPasteboard.general.string,string.count > 0 {
+            let msg = NSMutableDictionary.init();
+            msg["MSGTYPE"] = "InsertContent";
+            msg["PARAM1"] = "["  + string +  "](" + string +  ")";
+            self.vcDelegate?.OnPushVC(msg: msg);
+        }
+        else {
+            self.makeToast("请复制链接，然后点击此按钮!",duration:1.0,position:.center);
+        }
     }
     
     //处理点击@某人时不响应的问题
