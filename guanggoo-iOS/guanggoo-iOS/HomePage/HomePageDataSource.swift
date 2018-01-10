@@ -26,6 +26,23 @@ struct GuangGuStruct {
     var isFavorite = false;                         //是否收藏
     var favoriteURL = "";                           //收藏操作
     var images:NSMutableArray = NSMutableArray();   //html中的image链接
+    mutating func clear() -> Void {
+        title = "";
+        titleLink = "";
+        creatorImg = "";
+        creatorName = "";
+        creatTime = "";
+        creatorLink = "";
+        lastReplyName = "";
+        lastReplyLink = "";
+        replyDescription = "";
+        node = "";
+        replyCount = 0;
+        contentHtml = "";
+        isFavorite = false;
+        favoriteURL = "";
+        images.removeAllObjects();
+    }
 }
 
 

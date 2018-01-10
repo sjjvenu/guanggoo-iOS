@@ -77,6 +77,8 @@ class ContentDataSource: NSObject {
                     if self.headerModel == nil {
                         self.headerModel = GuangGuStruct();
                     }
+                    self.headerModel?.clear();
+                    self.headerModel?.images.removeAllObjects();
                     let uiHeaderElements = try object.getElementsByClass("ui-header");
                     self.headerModel?.creatorLink = try uiHeaderElements.select("a").attr("href");
                     self.headerModel?.creatorImg = try uiHeaderElements.select("a").select("img").attr("src");
