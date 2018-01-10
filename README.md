@@ -60,6 +60,8 @@
 | <a href="https://play.google.com/store/apps/details?id=org.mazhuang.guanggoo" target="_blank"><img alt="Google Play" width="183px" height="39px" src="https://raw.githubusercontent.com/mzlogin/guanggoo-android/e37a6cb7f16ddb56b5279c933f365a024cf17126/assets/image/play-store.png"/></a> | <a href="http://app.mi.com/details?id=org.mazhuang.guanggoo" target="_blank"><img alt="小米应用商店" height="39px" src="https://raw.githubusercontent.com/mzlogin/guanggoo-android/e37a6cb7f16ddb56b5279c933f365a024cf17126/assets/image/xiaomi-market.png"/></a> | <a href="https://www.coolapk.com/apk/org.mazhuang.guanggoo" target="_blank"><img alt="酷安" height="39px" src="https://raw.githubusercontent.com/mzlogin/guanggoo-android/e37a6cb7f16ddb56b5279c933f365a024cf17126/assets/image/coolapk.png"/></a> | [Releases](https://github.com/mzlogin/guanggoo-android/releases) |
 
 
+android项目github地址:[https://github.com/mzlogin/guanggoo-android](https://github.com/mzlogin/guanggoo-android)
+
 # 光谷社区 API 列表
 
 <!-- vim-markdown-toc GFM -->
