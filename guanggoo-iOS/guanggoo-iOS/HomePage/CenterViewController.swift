@@ -375,6 +375,15 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }
+            else if msgtype == "ContentPageViewController" {
+                if case var urlString as String = msg["PARAM1"] {
+                    if let index = urlString.index(of: "#") {
+                        urlString = String(urlString[urlString.startIndex..<index])
+                    }
+                    let vc = ContentPageViewController.init(urlString: urlString,model:nil);
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
             else if msgtype == "PushViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     self.navigationController?.pushViewController(vc, animated: true);

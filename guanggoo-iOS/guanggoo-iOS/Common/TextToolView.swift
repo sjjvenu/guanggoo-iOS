@@ -199,7 +199,8 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
         if let string = UIPasteboard.general.string,string.count > 0 {
             let msg = NSMutableDictionary.init();
             msg["MSGTYPE"] = "InsertContent";
-            msg["PARAM1"] = "["  + string +  "](" + string +  ")";
+            //此处需要加上空格，否则Ji识别不出链接
+            msg["PARAM1"] = " ["  + string +  "](" + string +  ") ";
             self.vcDelegate?.OnPushVC(msg: msg);
         }
         else {

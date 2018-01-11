@@ -636,6 +636,15 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 self.navigationController?.popViewController(animated: true);
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
             }
+            else if msgtype == "ContentPageViewController" {
+                if case var urlString as String = msg["PARAM1"] {
+                    if let index = urlString.index(of: "#") {
+                        urlString = String(urlString[urlString.startIndex..<index])
+                    }
+                    let vc = ContentPageViewController.init(urlString: urlString,model:nil);
+                    self.navigationController?.pushViewController(vc, animated: true);
+                }
+            }
         }
     }
 }
