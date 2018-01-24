@@ -235,7 +235,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 headerView.creatorImageView.isUserInteractionEnabled = true;
                 let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.headUserNameClick(ges:)));
                 headerView.creatorImageView.addGestureRecognizer(singleTap);
-                headerView.titleLink = "http://www.guanggoo.com" + item.titleLink;
+                headerView.titleLink = self.urlString;
                 headerView.vcDelegate = self;
                 return headerView;
             }

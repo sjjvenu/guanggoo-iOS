@@ -37,7 +37,7 @@ struct GuangGuStruct {
         lastReplyLink = "";
         replyDescription = "";
         node = "";
-        replyCount = 0;
+        //replyCount = 0;                           详情面没有回复数目，只能从上级传入，不能清除
         contentHtml = "";
         isFavorite = false;
         favoriteURL = "";

@@ -197,11 +197,15 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     
     @objc func InsertLinkClick(sender: UIButton) {
         if let string = UIPasteboard.general.string,string.count > 0 {
-            let msg = NSMutableDictionary.init();
-            msg["MSGTYPE"] = "InsertContent";
-            //此处需要加上空格，否则Ji识别不出链接
-            msg["PARAM1"] = " ["  + string +  "](" + string +  ") ";
-            self.vcDelegate?.OnPushVC(msg: msg);
+            if string.contains("http") == false {
+                self.makeToast("请复制带http或https格式链接",duration:1.0,position:.center);
+            }
+            else {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "InsertContent";
+                msg["PARAM1"] = "["  + string +  "](" + string +  ")";
+                self.vcDelegate?.OnPushVC(msg: msg);
+            }
         }
         else {
             self.makeToast("请复制链接，然后点击此按钮!",duration:1.0,position:.center);
@@ -279,8 +283,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                 if let data = json["data"] as? NSDictionary {
                                     hudProgress.hide(animated: true);
                                     if let url = data["url"] as? String {
-                                        //此处需要加两个换行，否则会出现只显示图片的bug
-                                        let markDownURL = "\n\n[![1.png](" + url + ")](" + url + ")";
+                                        let markDownURL = "\n[![1.png](" + url + ")](" + url + ")";
                                         let msg = NSMutableDictionary.init();
                                         msg["MSGTYPE"] = "InsertContent";
                                         msg["PARAM1"] = markDownURL;

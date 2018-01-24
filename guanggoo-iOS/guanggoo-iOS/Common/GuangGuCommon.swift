@@ -143,8 +143,8 @@ func preformAttributedString(_ commentAttributedString:NSMutableAttributedString
             else
             {
                 let subImgElement = element.xPath("node()")
-                if subImgElement.first?.name != "text" && subImgElement.count > 0 {
-                    //img隐藏在<p><a>下
+                if (element.content != element.value || subElement.first?.name != "text") && subImgElement.count > 0 {
+                    //img隐藏在<p><a>下,链接处理
                     preformAttributedString(commentAttributedString, nodes: subImgElement,model,handle: handle);
                 }
                 else {
