@@ -43,6 +43,31 @@ extension String {
         return ceil(boundingBox.width)
     }
     
+    func index(of string: String, options: CompareOptions = .literal) -> Index? {
+        return range(of: string, options: options)?.lowerBound
+    }
+    func endIndex(of string: String, options: CompareOptions = .literal) -> Index? {
+        return range(of: string, options: options)?.upperBound
+    }
+    func indexes(of string: String, options: CompareOptions = .literal) -> [Index] {
+        var result: [Index] = []
+        var start = startIndex
+        while let range = range(of: string, options: options, range: start..<endIndex) {
+            result.append(range.lowerBound)
+            start = range.lowerBound < range.upperBound ? range.upperBound : index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
+    }
+    func ranges(of string: String, options: CompareOptions = .literal) -> [Range<Index>] {
+        var result: [Range<Index>] = []
+        var start = startIndex
+        while let range = range(of: string, options: options, range: start..<endIndex) {
+            result.append(range)
+            start = range.lowerBound < range.upperBound ? range.upperBound : index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+        }
+        return result
+    }
+    
     var data: Data {
         return Data(utf8)
     }
@@ -135,8 +160,8 @@ func preformAttributedString(_ commentAttributedString:NSMutableAttributedString
         }
             
         else if let content = element.content{//其他
-            let subElement = element.xPath("a/node()")
-            if subElement.first?.name != "text" && subElement.count > 0 {
+            let subElement = element.xPath("node()")
+            if subElement.count > 1 {
                 //img隐藏在<p><a>下
                 preformAttributedString(commentAttributedString, nodes: subElement,model,handle: handle);
             }

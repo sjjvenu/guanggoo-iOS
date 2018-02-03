@@ -205,6 +205,7 @@ class HomePageDataSource: NSObject {
     func reloadData(completion: @escaping () -> Void) -> Void {
         DispatchQueue.global(qos: .background).async {
             self.loadData(urlString: self.homePageString, loadNew: true);
+            self.pageCount = 1;
             DispatchQueue.main.async {
                 completion();
             }

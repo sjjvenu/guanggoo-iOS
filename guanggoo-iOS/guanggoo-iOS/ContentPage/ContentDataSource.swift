@@ -243,6 +243,8 @@ class ContentDataSource: NSObject {
     
     func reloadData(completion: @escaping () -> Void) -> Void {
         DispatchQueue.global(qos: .background).async {
+            self.contentPageString = self.contentPageString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p=1")
+            self.pageCount = 1;
             self.loadData(urlString: self.contentPageString, loadNew: true);
             DispatchQueue.main.async {
                 completion();
@@ -252,10 +254,10 @@ class ContentDataSource: NSObject {
     
     func loadOlder(completion: @escaping () -> Void) -> Void {
         DispatchQueue.global(qos: .background).async {
-            var urlString = self.contentPageString;
-            urlString = urlString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p="+String(self.pageCount+1))
+            //var urlString = self.contentPageString;
+            self.contentPageString = self.contentPageString.replacingOccurrences(of: "?p="+String(self.pageCount), with: "?p="+String(self.pageCount+1))
             self.pageCount += 1;
-            self.loadData(urlString: urlString, loadNew: false);
+            self.loadData(urlString: self.contentPageString, loadNew: false);
             DispatchQueue.main.async {
                 completion();
             }
