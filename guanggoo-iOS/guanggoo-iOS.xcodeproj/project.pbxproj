@@ -21,6 +21,7 @@
 		2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F163DF31FF341E700805436 /* ReplyContentViewController.swift */; };
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
 		2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */; };
+		2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */; };
 		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
 		2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */; };
 		2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */; };
@@ -38,6 +39,7 @@
 		2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */; };
 		2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */; };
 		2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */; };
+		2FE6DDDF20A139130090AAF9 /* GuangGuColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */; };
 		2FF03D7F1FFB345900A06E4F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */; };
 		2FF03D811FFB52FA00A06E4F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D801FFB52FA00A06E4F /* libz.tbd */; };
 		2FF03D831FFB530400A06E4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D821FFB530400A06E4F /* AVFoundation.framework */; };
@@ -69,6 +71,7 @@
 		2F163DF31FF341E700805436 /* ReplyContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyContentViewController.swift; sourceTree = "<group>"; };
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
 		2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewTableViewCell.swift; sourceTree = "<group>"; };
+		2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuSettings.swift; sourceTree = "<group>"; };
 		2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
 		2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentDataSource.swift; sourceTree = "<group>"; };
 		2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 		2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
+		2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuColor.swift; sourceTree = "<group>"; };
 		2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		2FF03D801FFB52FA00A06E4F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -196,6 +200,8 @@
 				2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */,
 				2F163DF11FF32FDE00805436 /* DropdownView.swift */,
 				7A18F3571FF884D400E318B8 /* TextToolView.swift */,
+				2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */,
+				2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -469,8 +475,10 @@
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 				2F1389F01FF48EE1007BF316 /* CreateTitleViewController.swift in Sources */,
+				2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */,
 				2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */,
 				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
+				2FE6DDDF20A139130090AAF9 /* GuangGuColor.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
 				2FCE26701FFDC94E00CFFB72 /* BlackDataSource.swift in Sources */,
 				2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */,
