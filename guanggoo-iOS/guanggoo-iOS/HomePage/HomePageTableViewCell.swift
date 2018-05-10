@@ -148,6 +148,10 @@ class HomePageTableViewCell: UITableViewCell {
             make.height.equalTo(20);
             //make.bottom.equalTo(self).offset(-10);
         }
+        
+        self.themeChangedHandler = {[weak self] (style) -> Void in
+            self?.creatorNameLabel.textColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "Up");
+        }
     }
     
     func setTitleContent(_ title: String) -> Void {

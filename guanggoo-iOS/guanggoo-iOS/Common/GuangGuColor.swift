@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import SwiftSoup
 
 class GuangGuColor: NSObject {
     
     fileprivate static let STYLE_KEY = "styleKey"
     static let sharedInstance = GuangGuColor();
     @objc dynamic var style:String
+    var colorSettingsDoc: Document?
     
     fileprivate override init() {
         
@@ -22,7 +24,37 @@ class GuangGuColor: NSObject {
         else {
             self.style = "default";
         }
+        if let path = Bundle.main.path(forResource: self.style, ofType: "xml") {
+            do {
+                let xmlString = try String.init(contentsOfFile: path);
+                self.colorSettingsDoc = try SwiftSoup.parse(xmlString);
+            }
+            catch {
+                
+            }
+        }
         super.init();
+    }
+    
+    func getColor(node:String,name:String) -> UIColor? {
+        if let doc = self.colorSettingsDoc {
+            do {
+                let headerClasses = try doc.select(node).select("Node")
+                for object in headerClasses {
+                    let nodeName = try object.attr("name");
+                    if name == nodeName {
+                        let red = try object.attr("R");
+                        let green = try object.attr("G");
+                        let blue = try object.attr("B");
+                        return UIColor.init(red: CGFloat(Double(red)!/255.0), green: CGFloat(Double(green)!/255.0), blue: CGFloat(Double(blue)!/255.0), alpha: 1)
+                    }
+                }
+            }
+            catch {
+                return nil;
+            }
+        }
+        return nil;
     }
 }
 

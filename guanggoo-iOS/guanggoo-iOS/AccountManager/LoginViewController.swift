@@ -86,14 +86,13 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             height = 44 + 44;
         }
         self.view.addSubview(headerView);
-        headerView.backgroundColor = UIColor.white;
         headerView.snp.makeConstraints { (make) in
             make.left.right.top.equalTo(self.view);
             make.height.equalTo(height);
         }
         
         let backButton = UIButton.init();
-        backButton.setImage(UIImage.init(named: "ic_menu_back"), for: .normal);
+        backButton.setImage(UIImage.init(named: "close"), for: .normal);
         backButton.imageEdgeInsets = UIEdgeInsetsMake(10, 0, 10, 20);
         backButton.addTarget(self, action: #selector(backClick(sender:)), for: UIControlEvents.touchUpInside);
         headerView.addSubview(backButton);
@@ -103,21 +102,19 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             make.width.height.equalTo(40);
         }
         
-        let titleLabel = UILabel.init();
-        titleLabel.textColor = UIColor.black;
-        titleLabel.text = "登录";
-        titleLabel.textAlignment = .center;
-        headerView.addSubview(titleLabel);
-        titleLabel.snp.makeConstraints { (make) in
-            make.centerX.equalTo(headerView);
-            make.bottom.equalTo(headerView);
-            make.width.equalTo(200);
-            make.height.equalTo(40);
-        }
+//        let titleLabel = UILabel.init();
+//        titleLabel.text = "登录";
+//        titleLabel.textAlignment = .center;
+//        headerView.addSubview(titleLabel);
+//        titleLabel.snp.makeConstraints { (make) in
+//            make.centerX.equalTo(headerView);
+//            make.bottom.equalTo(headerView);
+//            make.width.equalTo(200);
+//            make.height.equalTo(40);
+//        }
         
         let registerButton = UIButton.init();
         registerButton.setTitle("注册", for: .normal);
-        registerButton.setTitleColor(UIColor.blue, for: .normal);
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16);
         registerButton.addTarget(self, action: #selector(registerClick(sender:)), for: UIControlEvents.touchUpInside);
         headerView.addSubview(registerButton);
@@ -132,6 +129,11 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             make.top.equalTo(headerView.snp.bottom)
             make.left.right.bottom.equalTo(self.view);
         }
+        
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "BackColor");
+        self.tableView.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "BackColor");
+        headerView.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "BackColor");
+        registerButton.setTitleColor(GuangGuColor.sharedInstance.getColor(node: "Login", name: "CtrlTxtColor"), for: .normal);
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,11 +149,17 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3;
+        return 5;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44;
+        if indexPath.row == 0 {
+            return 192;
+        }
+        else if indexPath.row == 3 {
+            return 37;
+        }
+        return 48;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -161,22 +169,36 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
             cell = UITableViewCell.init(style: .default, reuseIdentifier: identifier);
             switch indexPath.row {
             case 0:
-                let imageView = UIImageView.init(image: UIImage.init(named: "ic_account_circle"));
+                let imageView = UIImageView.init(image: UIImage.init(named: "login_logo"));
                 cell!.contentView.addSubview(imageView);
                 imageView.snp.makeConstraints({ (make) in
+                    make.centerX.equalTo(cell!.contentView);
+                    make.width.height.equalTo(100);
+                    make.top.equalTo(cell!.contentView).offset(50);
+                })
+                break;
+            case 1:
+                let label = UILabel.init();
+                label.textColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "TxtColor");
+                label.text = "账号";
+                label.font = UIFont.systemFont(ofSize: 16);
+                cell!.contentView.addSubview(label);
+                label.snp.makeConstraints({ (make) in
                     make.left.equalTo(20);
                     make.centerY.equalTo(cell!.contentView);
-                    make.width.height.equalTo(30);
+                    make.height.equalTo(22);
+                    make.width.equalTo(35);
                 })
                 cell!.contentView.addSubview(self.userNameTextField);
                 self.userNameTextField.snp.makeConstraints({ (make) in
-                    make.left.equalTo(imageView.snp.right).offset(10);
+                    make.left.equalTo(label.snp.right).offset(5);
                     make.centerY.equalTo(cell!.contentView);
                     make.right.equalTo(cell!.contentView).offset(-20);
-                    make.height.equalTo(30);
+                    make.height.equalTo(22);
                 })
+                self.userNameTextField.textAlignment = .right;
                 let divideLine = UILabel.init();
-                divideLine.backgroundColor = UIColor.black;
+                divideLine.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "DivideLineColor");
                 cell!.contentView.addSubview(divideLine);
                 divideLine.snp.makeConstraints({ (make) in
                     make.left.equalTo(cell!.contentView).offset(20);
@@ -185,23 +207,28 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                     make.height.equalTo(0.5);
                 })
                 break;
-            case 1:
-                let imageView = UIImageView.init(image: UIImage.init(named: "ic_lock"));
-                cell!.contentView.addSubview(imageView);
-                imageView.snp.makeConstraints({ (make) in
+            case 2:
+                let label = UILabel.init();
+                label.textColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "TxtColor");
+                label.text = "账号";
+                label.font = UIFont.systemFont(ofSize: 16);
+                cell!.contentView.addSubview(label);
+                label.snp.makeConstraints({ (make) in
                     make.left.equalTo(20);
                     make.centerY.equalTo(cell!.contentView);
-                    make.width.height.equalTo(30);
+                    make.height.equalTo(22);
+                    make.width.equalTo(35);
                 })
                 cell!.contentView.addSubview(self.passwordTextField);
                 self.passwordTextField.snp.makeConstraints({ (make) in
-                    make.left.equalTo(imageView.snp.right).offset(10);
+                    make.left.equalTo(label.snp.right).offset(0);
                     make.centerY.equalTo(cell!.contentView);
                     make.right.equalTo(cell!.contentView).offset(-20);
                     make.height.equalTo(30);
                 })
+                self.passwordTextField.textAlignment = .right;
                 let divideLine = UILabel.init();
-                divideLine.backgroundColor = UIColor.black;
+                divideLine.backgroundColor =  GuangGuColor.sharedInstance.getColor(node: "Login", name: "DivideLineColor");
                 cell!.contentView.addSubview(divideLine);
                 divideLine.snp.makeConstraints({ (make) in
                     make.left.equalTo(cell!.contentView).offset(20);
@@ -210,10 +237,12 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                     make.height.equalTo(0.5);
                 })
                 break;
-            case 2:
+            case 3:
+                break;
+            case 4:
                 let loginButton = UIButton.init(type: .roundedRect);
-                loginButton.backgroundColor = UIColor.lightGray;
-                loginButton.setTitleColor(UIColor.black, for: .normal);
+                loginButton.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Login", name: "LoginBtnColor");
+                loginButton.setTitleColor(UIColor.white, for: .normal);
                 loginButton.setTitle("登  录", for: .normal);
                 loginButton.addTarget(self, action: #selector(LoginViewController.loginClick(sender:)), for: UIControlEvents.touchUpInside);
                 loginButton.clipsToBounds = true;
@@ -222,8 +251,7 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 loginButton.snp.makeConstraints({ (make) in
                     make.left.equalTo(cell!.contentView).offset(20);
                     make.right.equalTo(cell!.contentView).offset(-20);
-                    make.bottom.equalTo(cell!.contentView);
-                    make.height.equalTo(35);
+                    make.bottom.top.equalTo(cell!.contentView);
                 })
                 break;
             default:

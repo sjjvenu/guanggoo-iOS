@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F0368121FE3A95C00E3DB47 /* Media.xcassets */; };
 		2F044F3D1FF08B3A0036C47D /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */; };
 		2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */; };
 		2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */; };
@@ -22,6 +21,8 @@
 		2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */; };
 		2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */; };
 		2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */; };
+		2F6ECD2720A3E88400905ABA /* default.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2620A3E88400905ABA /* default.xml */; };
+		2F6ECD2920A4147500905ABA /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2820A4147400905ABA /* Media.xcassets */; };
 		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
 		2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */; };
 		2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */; };
@@ -57,7 +58,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2F0368121FE3A95C00E3DB47 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		2F044F3C1FF08B3A0036C47D /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		2F044F3E1FF08CC50036C47D /* NotificationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDataSource.swift; sourceTree = "<group>"; };
 		2F044F401FF0D2EA0036C47D /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +72,8 @@
 		2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageDataSource.swift; sourceTree = "<group>"; };
 		2F65E2161FECEEAD0053AF48 /* LeftViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewTableViewCell.swift; sourceTree = "<group>"; };
 		2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuSettings.swift; sourceTree = "<group>"; };
+		2F6ECD2620A3E88400905ABA /* default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.xml; sourceTree = "<group>"; };
+		2F6ECD2820A4147400905ABA /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
 		2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentDataSource.swift; sourceTree = "<group>"; };
 		2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -138,7 +140,6 @@
 		2F0368111FE3A95C00E3DB47 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2F0368121FE3A95C00E3DB47 /* Media.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -182,6 +183,14 @@
 				2FCE266F1FFDC94E00CFFB72 /* BlackDataSource.swift */,
 			);
 			path = Left;
+			sourceTree = "<group>";
+		};
+		2F6ECD2520A3E88400905ABA /* Setttings */ = {
+			isa = PBXGroup;
+			children = (
+				2F6ECD2620A3E88400905ABA /* default.xml */,
+			);
+			path = Setttings;
 			sourceTree = "<group>";
 		};
 		2FC20BDB1FE9EDAE00381CDB /* AccountManager */ = {
@@ -246,8 +255,10 @@
 				2FD3F9411FDE25FA005DD1F1 /* AppDelegate.swift */,
 				2FF03D9F1FFB56B200A06E4F /* guanggoo-iOS-Bridging-Header.h */,
 				2FD3F9481FDE25FA005DD1F1 /* Assets.xcassets */,
+				2F6ECD2820A4147400905ABA /* Media.xcassets */,
 				2FD3F94A1FDE25FA005DD1F1 /* LaunchScreen.storyboard */,
 				2FD3F94D1FDE25FA005DD1F1 /* Info.plist */,
+				2F6ECD2520A3E88400905ABA /* Setttings */,
 				2F0368111FE3A95C00E3DB47 /* Resources */,
 			);
 			path = "guanggoo-iOS";
@@ -353,8 +364,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FD3F94C1FDE25FA005DD1F1 /* LaunchScreen.storyboard in Resources */,
-				2F0368131FE3A95C00E3DB47 /* Media.xcassets in Resources */,
 				2FD3F9491FDE25FA005DD1F1 /* Assets.xcassets in Resources */,
+				2F6ECD2920A4147500905ABA /* Media.xcassets in Resources */,
+				2F6ECD2720A3E88400905ABA /* default.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

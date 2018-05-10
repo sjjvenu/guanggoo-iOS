@@ -29,7 +29,6 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             _tableView = UITableView.init();
             _tableView.delegate = self;
             _tableView.dataSource = self;
-            _tableView.backgroundColor = UIColor.white;
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
@@ -67,7 +66,6 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         else {
             setNavBarItem();
         }
-        self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.left.right.top.equalTo(self.view);
@@ -81,6 +79,12 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         self.navigationController?.navigationBar.isTranslucent = false;
         //黑名单更新
         NotificationCenter.default.addObserver(self, selector: #selector(blackListFresh(notification:)), name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
+        
+        
+        self.themeChangedHandler = {[weak self] (style) -> Void in
+            self?.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+            self?.tableView.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        }
     }
 
     override func didReceiveMemoryWarning() {
