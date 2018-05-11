@@ -93,9 +93,11 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     //首页消失时去除右滑打开左边页面手势，出现时恢复手势操作
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
         appDelegate.drawController?.openDrawerGestureModeMask = .panningCenterView
     }
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated);
         appDelegate.drawController?.openDrawerGestureModeMask = []
     }
     

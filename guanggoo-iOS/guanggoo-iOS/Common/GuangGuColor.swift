@@ -46,7 +46,11 @@ class GuangGuColor: NSObject {
                         let red = try object.attr("R");
                         let green = try object.attr("G");
                         let blue = try object.attr("B");
-                        return UIColor.init(red: CGFloat(Double(red)!/255.0), green: CGFloat(Double(green)!/255.0), blue: CGFloat(Double(blue)!/255.0), alpha: 1)
+                        var a = try object.attr("A");
+                        if a.count == 0 {
+                            a = "1";
+                        }
+                        return UIColor.init(red: CGFloat(Double(red)!/255.0), green: CGFloat(Double(green)!/255.0), blue: CGFloat(Double(blue)!/255.0), alpha: CGFloat(Double(a)!))
                     }
                 }
             }

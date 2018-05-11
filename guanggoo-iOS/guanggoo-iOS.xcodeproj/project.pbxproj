@@ -23,6 +23,14 @@
 		2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */; };
 		2F6ECD2720A3E88400905ABA /* default.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2620A3E88400905ABA /* default.xml */; };
 		2F6ECD2920A4147500905ABA /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6ECD2820A4147400905ABA /* Media.xcassets */; };
+		2F6ECD3B20A4396A00905ABA /* UIBarButtonItem+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3120A4396A00905ABA /* UIBarButtonItem+Extention.m */; };
+		2F6ECD3C20A4396A00905ABA /* NSString+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3220A4396A00905ABA /* NSString+Extention.m */; };
+		2F6ECD3D20A4396A00905ABA /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3320A4396A00905ABA /* UIView+Extension.m */; };
+		2F6ECD3E20A4396A00905ABA /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3420A4396A00905ABA /* EditViewController.m */; };
+		2F6ECD3F20A4396A00905ABA /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3520A4396A00905ABA /* MenuView.m */; };
+		2F6ECD4020A4396A00905ABA /* MenuViewBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3820A4396A00905ABA /* MenuViewBtn.m */; };
+		2F6ECD4120A4396A00905ABA /* FloodView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD3920A4396A00905ABA /* FloodView.m */; };
+		2F6ECD4320A43EB700905ABA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6ECD4220A43EB700905ABA /* HomeViewController.swift */; };
 		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
 		2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */; };
 		2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */; };
@@ -74,6 +82,22 @@
 		2F6ECD2120A3DDD800905ABA /* GuangGuSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuSettings.swift; sourceTree = "<group>"; };
 		2F6ECD2620A3E88400905ABA /* default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.xml; sourceTree = "<group>"; };
 		2F6ECD2820A4147400905ABA /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		2F6ECD2B20A4396A00905ABA /* ZTPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZTPage.h; sourceTree = "<group>"; };
+		2F6ECD2C20A4396A00905ABA /* MenuViewBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewBtn.h; sourceTree = "<group>"; };
+		2F6ECD2E20A4396A00905ABA /* UIBarButtonItem+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Extention.h"; sourceTree = "<group>"; };
+		2F6ECD2F20A4396A00905ABA /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		2F6ECD3020A4396A00905ABA /* NSString+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extention.h"; sourceTree = "<group>"; };
+		2F6ECD3120A4396A00905ABA /* UIBarButtonItem+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Extention.m"; sourceTree = "<group>"; };
+		2F6ECD3220A4396A00905ABA /* NSString+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extention.m"; sourceTree = "<group>"; };
+		2F6ECD3320A4396A00905ABA /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
+		2F6ECD3420A4396A00905ABA /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
+		2F6ECD3520A4396A00905ABA /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
+		2F6ECD3620A4396A00905ABA /* FloodView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloodView.h; sourceTree = "<group>"; };
+		2F6ECD3720A4396A00905ABA /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		2F6ECD3820A4396A00905ABA /* MenuViewBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewBtn.m; sourceTree = "<group>"; };
+		2F6ECD3920A4396A00905ABA /* FloodView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FloodView.m; sourceTree = "<group>"; };
+		2F6ECD3A20A4396A00905ABA /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
+		2F6ECD4220A43EB700905ABA /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
 		2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentDataSource.swift; sourceTree = "<group>"; };
 		2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
@@ -164,6 +188,7 @@
 				2F41E6981FE7DE8100D8C4B4 /* HomePageDataSource.swift */,
 				2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */,
 				2F1389EF1FF48EE1007BF316 /* CreateTitleViewController.swift */,
+				2F6ECD4220A43EB700905ABA /* HomeViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -191,6 +216,37 @@
 				2F6ECD2620A3E88400905ABA /* default.xml */,
 			);
 			path = Setttings;
+			sourceTree = "<group>";
+		};
+		2F6ECD2A20A4396A00905ABA /* ZTpage */ = {
+			isa = PBXGroup;
+			children = (
+				2F6ECD2D20A4396A00905ABA /* Category */,
+				2F6ECD3A20A4396A00905ABA /* MenuView.h */,
+				2F6ECD3520A4396A00905ABA /* MenuView.m */,
+				2F6ECD3720A4396A00905ABA /* EditViewController.h */,
+				2F6ECD3420A4396A00905ABA /* EditViewController.m */,
+				2F6ECD2C20A4396A00905ABA /* MenuViewBtn.h */,
+				2F6ECD3820A4396A00905ABA /* MenuViewBtn.m */,
+				2F6ECD3620A4396A00905ABA /* FloodView.h */,
+				2F6ECD3920A4396A00905ABA /* FloodView.m */,
+				2F6ECD2B20A4396A00905ABA /* ZTPage.h */,
+			);
+			name = ZTpage;
+			path = "guanggoo-iOS/ZTpage";
+			sourceTree = "<group>";
+		};
+		2F6ECD2D20A4396A00905ABA /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				2F6ECD2E20A4396A00905ABA /* UIBarButtonItem+Extention.h */,
+				2F6ECD2F20A4396A00905ABA /* UIView+Extension.h */,
+				2F6ECD3020A4396A00905ABA /* NSString+Extention.h */,
+				2F6ECD3120A4396A00905ABA /* UIBarButtonItem+Extention.m */,
+				2F6ECD3220A4396A00905ABA /* NSString+Extention.m */,
+				2F6ECD3320A4396A00905ABA /* UIView+Extension.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		2FC20BDB1FE9EDAE00381CDB /* AccountManager */ = {
@@ -227,6 +283,7 @@
 		2FD3F9351FDE25FA005DD1F1 = {
 			isa = PBXGroup;
 			children = (
+				2F6ECD2A20A4396A00905ABA /* ZTpage */,
 				2FF03D7B1FFB33B400A06E4F /* ThirdParty */,
 				2FD3F9401FDE25FA005DD1F1 /* guanggoo-iOS */,
 				2FD3F93F1FDE25FA005DD1F1 /* Products */,
@@ -474,24 +531,32 @@
 				2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */,
 				2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */,
 				2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */,
+				2F6ECD4320A43EB700905ABA /* HomeViewController.swift in Sources */,
 				2F1568021FE8E71D00169984 /* ContentPageViewController.swift in Sources */,
 				2F65E2171FECEEAD0053AF48 /* LeftViewTableViewCell.swift in Sources */,
 				2FD3F9421FDE25FA005DD1F1 /* AppDelegate.swift in Sources */,
 				2F1568061FE905D600169984 /* CPHeaderTableViewCell.swift in Sources */,
+				2F6ECD4120A4396A00905ABA /* FloodView.m in Sources */,
 				2FC20BE01FE9EE8000381CDB /* GuangGuCommon.swift in Sources */,
 				2F41E6991FE7DE8100D8C4B4 /* HomePageDataSource.swift in Sources */,
 				2F044F3D1FF08B3A0036C47D /* NotificationViewController.swift in Sources */,
 				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
+				2F6ECD3C20A4396A00905ABA /* NSString+Extention.m in Sources */,
 				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
 				2FCE266E1FFDC93000CFFB72 /* BlacklistViewController.swift in Sources */,
+				2F6ECD4020A4396A00905ABA /* MenuViewBtn.m in Sources */,
+				2F6ECD3D20A4396A00905ABA /* UIView+Extension.m in Sources */,
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,
+				2F6ECD3E20A4396A00905ABA /* EditViewController.m in Sources */,
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 				2F1389F01FF48EE1007BF316 /* CreateTitleViewController.swift in Sources */,
 				2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */,
 				2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */,
+				2F6ECD3F20A4396A00905ABA /* MenuView.m in Sources */,
 				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
 				2FE6DDDF20A139130090AAF9 /* GuangGuColor.swift in Sources */,
 				2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */,
+				2F6ECD3B20A4396A00905ABA /* UIBarButtonItem+Extention.m in Sources */,
 				2FCE26701FFDC94E00CFFB72 /* BlackDataSource.swift in Sources */,
 				2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */,
 			);
