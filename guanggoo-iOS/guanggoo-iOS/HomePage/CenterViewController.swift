@@ -14,6 +14,8 @@ import MBProgressHUD
 
 class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
     //MARK: - init
+    //MARK: - property
+    weak var vcDelegate:GuangGuVCDelegate?
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
     fileprivate var homePageData:HomePageDataSource?;
     fileprivate var mURLString:String?;
@@ -37,6 +39,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             return _tableView;
         }
     }
+    
     
     fileprivate var createTitleButton:UIButton?;
     //MARK: - UIViewController
@@ -238,12 +241,24 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                 if let index = titleLink.index(of: "#") {
                     let link = titleLink[titleLink.startIndex..<index]+"?p=1";
                     let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                    self.navigationController?.pushViewController(vc, animated: true);
+                    vc.hidesBottomBarWhenPushed = true;
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "pushViewController";
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
                 }
                 else {
                     let link = titleLink+"?p=1";
                     let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                    self.navigationController?.pushViewController(vc, animated: true);
+                    vc.hidesBottomBarWhenPushed = true;
+                    if let delegate = self.vcDelegate {
+                        let msg = NSMutableDictionary.init();
+                        msg["MSGTYPE"] = "pushViewController";
+                        msg["PARAM1"] = vc;
+                        delegate.OnPushVC(msg: msg);
+                    }
                 }
             }
         }
@@ -261,21 +276,35 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         if let index = titleLink.index(of: "#") {
                             let link = titleLink[titleLink.startIndex..<index];
                             let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                            weakSelf.navigationController?.pushViewController(vc, animated: true);
                             weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
+                            if let delegate = weakSelf.vcDelegate {
+                                let msg = NSMutableDictionary.init();
+                                msg["MSGTYPE"] = "pushViewController";
+                                msg["PARAM1"] = vc;
+                                delegate.OnPushVC(msg: msg);
+                            }
                         }
                         else {
                             let link = titleLink;
                             let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:item);
-                            weakSelf.navigationController?.pushViewController(vc, animated: true);
                             weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
+                            if let delegate = weakSelf.vcDelegate {
+                                let msg = NSMutableDictionary.init();
+                                msg["MSGTYPE"] = "pushViewController";
+                                msg["PARAM1"] = vc;
+                                delegate.OnPushVC(msg: msg);
+                            }
                         }
                     }
                 }
             })
-            vc.vcDelegate = self;
-            //self.navigationController?.pushViewController(vc, animated: true);
-            self.present(vc, animated: true, completion: nil);
+            vc.vcDelegate = self.vcDelegate;
+            if let delegate = self.vcDelegate {
+                let msg = NSMutableDictionary.init();
+                msg["MSGTYPE"] = "LoginViewController";
+                msg["PARAM1"] = vc;
+                delegate.OnPushVC(msg: msg);
+            }
         }
         
     }
@@ -359,52 +388,12 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     
     func OnPushVC(msg: NSDictionary) {
         if let msgtype = msg["MSGTYPE"] as? String {
-            if msgtype == "PhotoBrowser" {
-                if let vc = msg["PARAM1"] as? UIViewController{
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "LoginViewController" {
-                if let vc = msg["PARAM1"] as? UIViewController{
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "PresentViewController" {
-                if let vc = msg["PARAM1"] as? UIViewController{
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "UserInfoViewController" {
-                if case let urlString as String = msg["PARAM1"] {
-                    let vc = UserInfoViewController.init(urlString: GUANGGUSITE + urlString);
-                    vc.vcDelegate = self;
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "ContentPageViewController" {
-                if case var urlString as String = msg["PARAM1"] {
-                    if let index = urlString.index(of: "#") {
-                        urlString = String(urlString[urlString.startIndex..<index])
-                    }
-                    let vc = ContentPageViewController.init(urlString: urlString,model:nil);
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "PushViewController" {
-                if let vc = msg["PARAM1"] as? UIViewController{
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "CenterViewController" {
-                if let vc = msg["PARAM1"] as? UIViewController{
-                    self.navigationController?.pushViewController(vc, animated: true);
-                }
-            }
-            else if msgtype == "reloadData" {
+            
+            if msgtype == "reloadData" {
                 self.homePageData?.reloadData(completion: {self.tableView.reloadData()});
             }
             else if msgtype == "GotoHomePage" {
-                self.navigationController?.popToRootViewController(animated: true);
+                //self.navigationController?.popToRootViewController(animated: true);
                 self.homePageData?.reloadData(completion: {self.tableView.reloadData()});
             }
             else if msgtype == "changeNode" {
@@ -443,6 +432,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         self.present(vc, animated: true, completion: nil);
                     }
                 }
+            }
+            else {
+                //self.helper?.OnPushHelp(msg);
             }
         }
     }

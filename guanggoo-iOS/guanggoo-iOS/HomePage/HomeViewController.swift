@@ -8,7 +8,9 @@
 
 import UIKit
 
-class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelegate{
+class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelegate,GuangGuVCDelegate{
+    
+    fileprivate var helper:GuangGuHelpDelegate?;
     
     fileprivate var _menuView: MenuView!;
     fileprivate var menuView: MenuView {
@@ -31,6 +33,7 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
                 return _pageDefault;
             }
             _pageDefault = CenterViewController.init(urlString: GUANGGUSITE);
+            _pageDefault.vcDelegate = self;
             return _pageDefault;
         }
     }
@@ -42,6 +45,7 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
                 return _pageNew;
             }
             _pageNew = CenterViewController.init(urlString: GUANGGUSITE + "?tab=latest");
+            _pageNew.vcDelegate = self;
             return _pageNew;
         }
     }
@@ -53,6 +57,7 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
                 return _pageExtract;
             }
             _pageExtract = CenterViewController.init(urlString: GUANGGUSITE + "?tab=elite");
+            _pageExtract.vcDelegate = self;
             return _pageExtract;
         }
     }
@@ -61,6 +66,10 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.helper = GuangGuHelpDelegate();
+        self.helper?.currentVC = self;
+        self.helper?.vcDelegate = self;
+        
         self.title = "光谷社区";
         
         var rect = self.view.frame;
@@ -215,5 +224,9 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
             self.menuView.select(with: Page, andOtherIndex: Page+1);
             self.menuView.select(with: Page, andOtherIndex: Page-1);
         }
+    }
+    
+    func OnPushVC(msg: NSDictionary) {
+        self.helper?.OnPushHelp(msg);
     }
 }
