@@ -19,16 +19,16 @@ class NodesDataSource: NSObject {
     fileprivate var homePageString = "";
     var itemList = [GuangGuNode]();
     
-    required init(urlString: String) {
+    required init(urlString: String,bInsertAll:Bool) {
         super.init();
         guard urlString.count > 0 else {
             return;
         }
         self.homePageString = urlString;
-        loadData(urlString: self.homePageString, loadNew: true);
+        loadData(urlString: self.homePageString, loadNew: true,bInsertAll: bInsertAll);
     }
     
-    func loadData(urlString:String,loadNew:Bool) -> Void {
+    func loadData(urlString:String,loadNew:Bool,bInsertAll:Bool) -> Void {
         guard let myURL = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL");
             return
@@ -63,11 +63,13 @@ class NodesDataSource: NSObject {
                         }
                     }
                 }
-                var item = GuangGuNode();
-                item.category = "全部";
-                item.name = "全部";
-                item.link = "";
-                itemList.insert(item, at: 0);
+                if bInsertAll {
+                    var item = GuangGuNode();
+                    item.category = "全部";
+                    item.name = "全部";
+                    item.link = "";
+                    itemList.insert(item, at: 0);
+                }
                 
             }catch Exception.Error(let type, let message)
             {

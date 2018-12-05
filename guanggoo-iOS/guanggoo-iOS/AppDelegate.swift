@@ -37,12 +37,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
         drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
         
-        self.window?.rootViewController = drawController;
+        
+        let homeVC = HomeViewController.init();
+        homeVC.tabBarItem = UITabBarItem.init(title: "社区动态", image: UIImage(named: "homepage")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "homepage_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        let homeNav = UINavigationController.init(rootViewController: homeVC);
+        let homeVC1 = InterestViewController.init();
+        homeVC1.tabBarItem = UITabBarItem.init(title: "兴趣节点", image: UIImage(named: "groups")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "groups_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        let vc1Nav = UINavigationController.init(rootViewController: homeVC1);
+        let homeVC2 = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
+        homeVC2.tabBarItem = UITabBarItem.init(title: "消息通知", image: UIImage(named: "message")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "message_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        let vc2Nav = UINavigationController.init(rootViewController: homeVC2);
+        let homeVC3 = HomeViewController.init();
+        homeVC3.tabBarItem = UITabBarItem.init(title: "个人中心", image: UIImage(named: "settings")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "settings_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        let tabVC = UITabBarController.init();
+        tabVC.viewControllers = [homeNav,vc1Nav,vc2Nav,homeVC3];
+        
+        self.window?.rootViewController = tabVC;
         
         //初始化讯飞语音
-        IFlySpeechUtility.createUtility("appid=");
+        IFlySpeechUtility.createUtility("appid=5a4b2f2f");
         //初始化leanCloun
-        LeanCloud.initialize(applicationID: "", applicationKey: "")
+        LeanCloud.initialize(applicationID: "7pPF4eyeCKI11qGEmbP67SgJ-gzGzoHsz", applicationKey: "iYv1dRM9UY3dt5vCpTXyzDGW")
         
         return true
     }

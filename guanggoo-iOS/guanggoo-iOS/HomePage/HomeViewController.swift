@@ -77,8 +77,7 @@ class HomeViewController: UIViewController ,UIScrollViewDelegate ,MenuViewDelega
         
         rect.size.height = rect.size.height - (self.navigationController?.navigationBar.frame.size.height)!;
         var menuViewY = self.navigationController?.navigationBar.frame.size.height;
-        let fversion = Double(UIDevice.current.systemVersion);
-        if(fversion! >= 7.0)
+        if let fversion = Double(UIDevice.current.systemVersion),fversion >= 7.0
         {
             rect.size.height = rect.size.height - 20;
             menuViewY! += 20;

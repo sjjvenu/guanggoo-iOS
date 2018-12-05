@@ -100,6 +100,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let lButton = UIButton.init(type: .custom);
+        lButton.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20);
+        lButton.setImage(UIImage.init(named: "ic_menu_back"), for: .normal);
+        lButton.setImage(UIImage.init(named: "ic_menu_back"), for: .selected);
+        lButton.backgroundColor = UIColor.clear;
+        
         self.view.backgroundColor = UIColor.white;
         self.title = "主题详情";
         let footViewHeight = 50;

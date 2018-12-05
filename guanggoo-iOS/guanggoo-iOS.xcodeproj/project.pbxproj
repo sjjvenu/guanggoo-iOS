@@ -35,6 +35,7 @@
 		2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */; };
 		2F8EF9321FF21D830067083D /* UserCommentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */; };
 		2F8EF9341FF221050067083D /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */; };
+		2F9C07FD21B763B700B7510E /* InterestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9C07FC21B763B700B7510E /* InterestViewController.swift */; };
 		2FB02FD11FED149D009F2EA1 /* CommWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */; };
 		2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */; };
 		2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */; };
@@ -103,6 +104,7 @@
 		2F8EF92F1FF21D3D0067083D /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
 		2F8EF9311FF21D830067083D /* UserCommentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentDataSource.swift; sourceTree = "<group>"; };
 		2F8EF9331FF221050067083D /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
+		2F9C07FC21B763B700B7510E /* InterestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterestViewController.swift; sourceTree = "<group>"; };
 		2FB02FD01FED149D009F2EA1 /* CommWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommWebViewController.swift; sourceTree = "<group>"; };
 		2FBD2B891FEBCC2F009ED1A0 /* GuangGuAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuAccount.swift; sourceTree = "<group>"; };
 		2FC20BDC1FE9EDF300381CDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				2F1567FB1FE89ABB00169984 /* HomePageTableViewCell.swift */,
 				2F1389EF1FF48EE1007BF316 /* CreateTitleViewController.swift */,
 				2F6ECD4220A43EB700905ABA /* HomeViewController.swift */,
+				2F9C07FC21B763B700B7510E /* InterestViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 				2FC20BDD1FE9EDF300381CDB /* LoginViewController.swift in Sources */,
 				2F1389F01FF48EE1007BF316 /* CreateTitleViewController.swift in Sources */,
 				2F6ECD2220A3DDD800905ABA /* GuangGuSettings.swift in Sources */,
+				2F9C07FD21B763B700B7510E /* InterestViewController.swift in Sources */,
 				2F163DF41FF341E700805436 /* ReplyContentViewController.swift in Sources */,
 				2F6ECD3F20A4396A00905ABA /* MenuView.m in Sources */,
 				2F8EF9301FF21D3D0067083D /* UserCommentViewController.swift in Sources */,
@@ -693,6 +697,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;
@@ -720,6 +725,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = LRY68UN9JJ;

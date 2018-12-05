@@ -82,12 +82,13 @@ class LoginViewController: UIViewController ,UITableViewDelegate,UITableViewData
         // Do any additional setup after loading the view.
         let headerView = UIView.init();
         var height = 20 + 44;
-        if UIScreen.main.bounds.height == 812 {
+        if IPHONE_FULLSCREEN {
             height = 44 + 44;
         }
         self.view.addSubview(headerView);
         headerView.snp.makeConstraints { (make) in
-            make.left.right.top.equalTo(self.view);
+            make.left.right.equalTo(self.view);
+            make.top.equalTo(self.view);
             make.height.equalTo(height);
         }
         

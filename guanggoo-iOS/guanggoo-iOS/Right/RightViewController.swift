@@ -16,7 +16,7 @@ class RightViewController: UIViewController ,UITableViewDelegate,UITableViewData
     weak var vcDelegate:GuangGuVCDelegate?;
     fileprivate let appDelegate = UIApplication.shared.delegate as! AppDelegate;
     
-    fileprivate var nodesData = NodesDataSource.init(urlString: GUANGGUSITE + "nodes")
+    fileprivate var nodesData = NodesDataSource.init(urlString: GUANGGUSITE + "nodes",bInsertAll: true)
     
     fileprivate var _tableView: UITableView!;
     fileprivate var tableView: UITableView {
@@ -62,7 +62,7 @@ class RightViewController: UIViewController ,UITableViewDelegate,UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         if self.nodesData.itemList.count == 0 {
-            self.nodesData = NodesDataSource.init(urlString: GUANGGUSITE + "nodes")
+            self.nodesData = NodesDataSource.init(urlString: GUANGGUSITE + "nodes",bInsertAll: true)
             self.tableView.reloadData();
         }
     }

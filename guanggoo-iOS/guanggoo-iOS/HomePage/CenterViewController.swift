@@ -67,7 +67,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             //用户主题，不需要初始化左侧边栏
         }
         else {
-            setNavBarItem();
+            //setNavBarItem();
         }
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
