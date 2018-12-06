@@ -53,6 +53,9 @@ class UserCommentViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        let backImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popnav))
+        
         self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
@@ -63,6 +66,10 @@ class UserCommentViewController: UIViewController ,UITableViewDelegate,UITableVi
                 make.bottom.equalTo(self.view);
             }
         }
+    }
+    
+    @objc func popnav() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {

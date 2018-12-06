@@ -17,6 +17,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     //MARK: - init
     weak var vcDelegate:GuangGuVCDelegate?
     var contentData: NotificationDataSource?;
+    var hideBackButton:Bool?;
     
     fileprivate var urlString:String!;
     
@@ -54,6 +55,11 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        if hideBackButton == nil || hideBackButton == false {
+            let backImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popnav))
+        }
+        
         self.title = "我的消息";
         self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
@@ -73,6 +79,10 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
             self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
         }
+    }
+    
+    @objc func popnav() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {

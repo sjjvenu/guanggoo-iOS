@@ -51,6 +51,7 @@
 		2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */; };
 		2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */; };
 		2FE6DDDF20A139130090AAF9 /* GuangGuColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */; };
+		2FEBD7DD21B8C1CC008AA38F /* PersonalCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */; };
 		2FF03D7F1FFB345900A06E4F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */; };
 		2FF03D811FFB52FA00A06E4F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D801FFB52FA00A06E4F /* libz.tbd */; };
 		2FF03D831FFB530400A06E4F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D821FFB530400A06E4F /* AVFoundation.framework */; };
@@ -122,6 +123,7 @@
 		2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
 		2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuColor.swift; sourceTree = "<group>"; };
+		2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCenterViewController.swift; sourceTree = "<group>"; };
 		2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
 		2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		2FF03D801FFB52FA00A06E4F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -194,6 +196,7 @@
 				2F1389EF1FF48EE1007BF316 /* CreateTitleViewController.swift */,
 				2F6ECD4220A43EB700905ABA /* HomeViewController.swift */,
 				2F9C07FC21B763B700B7510E /* InterestViewController.swift */,
+				2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */,
 				2FBD2B8A1FEBCC2F009ED1A0 /* GuangGuAccount.swift in Sources */,
 				2F1568081FE909DC00169984 /* CPHeaderView.swift in Sources */,
+				2FEBD7DD21B8C1CC008AA38F /* PersonalCenterViewController.swift in Sources */,
 				7A18F3581FF884D400E318B8 /* TextToolView.swift in Sources */,
 				2F01822E20B00A200034EB49 /* GuangGuHelpDelegate.swift in Sources */,
 				2F163DF21FF32FDE00805436 /* DropdownView.swift in Sources */,

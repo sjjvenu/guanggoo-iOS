@@ -110,6 +110,10 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        
+        let backImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popnav))
+        
         self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
@@ -120,6 +124,17 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                 make.bottom.equalTo(self.view);
             }
         }
+        
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
+    }
+    
+    @objc func popnav() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {

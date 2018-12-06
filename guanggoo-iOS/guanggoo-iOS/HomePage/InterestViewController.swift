@@ -86,7 +86,6 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
         }
         
         self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
-        
         self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
         self.navigationController?.navigationBar.isTranslucent = false;
         if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {

@@ -24,19 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.frame = UIScreen.main.bounds;
         self.window?.makeKeyAndVisible();
         
-        let ceneterViewController = CenterViewController.init(urlString: GUANGGUSITE);
-        ceneterViewController.title = "全部";
-        let centerNav = UINavigationController(rootViewController: ceneterViewController);
-        let leftViewController = LeftViewController();
-        leftViewController.vcDelegate = ceneterViewController;
-        let rightViewController = RightViewController();
-        rightViewController.vcDelegate = ceneterViewController;
-        drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
-        drawController?.maximumLeftDrawerWidth = UIScreen.main.bounds.size.width*3/4;
-        drawController?.maximumRightDrawerWidth = 100;
-        drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
-        drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
-        
+//        let ceneterViewController = CenterViewController.init(urlString: GUANGGUSITE);
+//        ceneterViewController.title = "全部";
+//        let centerNav = UINavigationController(rootViewController: ceneterViewController);
+//        let leftViewController = LeftViewController();
+//        leftViewController.vcDelegate = ceneterViewController;
+//        let rightViewController = RightViewController();
+//        rightViewController.vcDelegate = ceneterViewController;
+//        drawController = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftViewController, rightDrawerViewController: rightViewController);
+//        drawController?.maximumLeftDrawerWidth = UIScreen.main.bounds.size.width*3/4;
+//        drawController?.maximumRightDrawerWidth = 100;
+//        drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
+//        drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
         
         let homeVC = HomeViewController.init();
         homeVC.tabBarItem = UITabBarItem.init(title: "社区动态", image: UIImage(named: "homepage")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "homepage_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
@@ -45,12 +44,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         homeVC1.tabBarItem = UITabBarItem.init(title: "兴趣节点", image: UIImage(named: "groups")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "groups_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc1Nav = UINavigationController.init(rootViewController: homeVC1);
         let homeVC2 = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
+        homeVC2.hideBackButton = true;
         homeVC2.tabBarItem = UITabBarItem.init(title: "消息通知", image: UIImage(named: "message")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "message_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc2Nav = UINavigationController.init(rootViewController: homeVC2);
-        let homeVC3 = HomeViewController.init();
+        let homeVC3 = PersonalCenterViewController.init();
         homeVC3.tabBarItem = UITabBarItem.init(title: "个人中心", image: UIImage(named: "settings")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "settings_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        let vc3Nav = UINavigationController.init(rootViewController: homeVC3);
         let tabVC = UITabBarController.init();
-        tabVC.viewControllers = [homeNav,vc1Nav,vc2Nav,homeVC3];
+        tabVC.viewControllers = [homeNav,vc1Nav,vc2Nav,vc3Nav];
         
         self.window?.rootViewController = tabVC;
         
