@@ -108,18 +108,23 @@ class ReplyContentViewController: UIViewController ,YYTextViewDelegate,GuangGuVC
         // Do any additional setup after loading the view.
         let leftButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         leftButton.setTitle("取消", for: .normal);
-        leftButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
+        leftButton.setTitleColor(GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor"), for: .normal);
         leftButton.addTarget(self, action: #selector(CenterViewController.leftClick(sender:)), for: .touchUpInside);
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftButton);
         
         let rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         rightButton.setTitle("提交", for: .normal);
-        rightButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
+        rightButton.setTitleColor(GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor"), for: .normal);
         rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightButton);
         
-        self.view.backgroundColor = UIColor.white;
-        self.view.window?.backgroundColor = UIColor.white;
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
+        self.view.window?.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
         
         self.view.addSubview(self.containerView);
         self.containerView.snp.makeConstraints { (make) in

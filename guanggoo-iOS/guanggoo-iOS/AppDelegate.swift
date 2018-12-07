@@ -44,7 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         homeVC1.tabBarItem = UITabBarItem.init(title: "兴趣节点", image: UIImage(named: "groups")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "groups_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc1Nav = UINavigationController.init(rootViewController: homeVC1);
         let homeVC2 = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
-        homeVC2.hideBackButton = true;
         homeVC2.tabBarItem = UITabBarItem.init(title: "消息通知", image: UIImage(named: "message")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "message_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc2Nav = UINavigationController.init(rootViewController: homeVC2);
         let homeVC3 = PersonalCenterViewController.init();

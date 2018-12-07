@@ -37,7 +37,11 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.white;
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.left.right.top.equalTo(self.view);
@@ -63,6 +67,12 @@ class BlacklistViewController: UIViewController ,UITableViewDelegate,UITableView
         downloadButton.addTarget(self, action: #selector(BlacklistViewController.downloadClick(sender:)), for: .touchUpInside);
         
         BlackDataSource.shareInstance.loginWithToken();
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
     }
     
     override func didReceiveMemoryWarning() {

@@ -63,6 +63,12 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        
         if (self.mURLString?.contains("www.guanggoo.com/u/"))! {
             //用户主题，不需要初始化左侧边栏
         }
@@ -83,7 +89,12 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
         //黑名单更新
         NotificationCenter.default.addObserver(self, selector: #selector(blackListFresh(notification:)), name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
         
-        
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
         self.themeChangedHandler = {[weak self] (style) -> Void in
             self?.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
             self?.tableView.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");

@@ -47,7 +47,6 @@ class CommWebViewController: UIViewController ,WKNavigationDelegate{
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.webView);
         self.webView.snp.makeConstraints { (make) in
             make.left.right.top.equalTo(self.view);
@@ -58,6 +57,13 @@ class CommWebViewController: UIViewController ,WKNavigationDelegate{
             }
         }
         self.webView.load(URLRequest.init(url: self.webURL));
+        
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
     }
 
     override func didReceiveMemoryWarning() {

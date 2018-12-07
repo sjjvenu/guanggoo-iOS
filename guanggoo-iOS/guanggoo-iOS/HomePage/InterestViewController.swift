@@ -75,6 +75,12 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        
         self.title = " 兴趣节点";
         self.helper = GuangGuHelpDelegate();
         self.helper?.currentVC = self;

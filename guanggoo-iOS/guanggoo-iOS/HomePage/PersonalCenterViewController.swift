@@ -137,6 +137,12 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        
         self.helper = GuangGuHelpDelegate();
         self.helper?.currentVC = self;
         self.helper?.vcDelegate = self;
@@ -272,7 +278,6 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
                 let vc = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
                 vc.vcDelegate = self;
                 vc.hidesBottomBarWhenPushed = true;
-                vc.hideBackButton = false;
                 self.navigationController?.pushViewController(vc, animated: true);
                 break;
             case 2:

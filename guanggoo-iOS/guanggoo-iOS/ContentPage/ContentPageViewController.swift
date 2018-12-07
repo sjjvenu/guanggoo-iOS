@@ -38,7 +38,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 return _rightButton;
             }
             _rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
-            _rightButton.setImage(UIImage.init(named: "ic_unfavorite"), for: .normal);
+            _rightButton.setImage(UIImage.init(named: "ic_unfavorite")?.withRenderingMode(.alwaysOriginal), for: .normal);
             _rightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 5, 0);
             _rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
             return _rightButton;
@@ -100,13 +100,17 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        
         let lButton = UIButton.init(type: .custom);
         lButton.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20);
         lButton.setImage(UIImage.init(named: "ic_menu_back"), for: .normal);
         lButton.setImage(UIImage.init(named: "ic_menu_back"), for: .selected);
         lButton.backgroundColor = UIColor.clear;
         
-        self.view.backgroundColor = UIColor.white;
         self.title = "主题详情";
         let footViewHeight = 50;
         self.view.addSubview(self.tableView);
@@ -143,7 +147,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         
         self.footView.addSubview(self.footRightButton);
         self.footRightButton.addTarget(self, action: #selector(ContentPageViewController.ReplyClick(sender:)), for: UIControlEvents.touchUpInside)
-        self.footRightButton.setBackgroundImage(UIImage.init(named: "ic_reply"), for: .normal);
+        self.footRightButton.setBackgroundImage(UIImage.init(named: "ic_reply")?.withRenderingMode(.alwaysOriginal), for: .normal);
         //self.footRightButton.setImage(UIImage.init(named: "ic_reply"), for: .normal);
         //self.footRightButton.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 5, 0);
         self.footRightButton.snp.makeConstraints { (make) in
@@ -155,6 +159,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.rightButton);
         //解决mj下拉刷新出切出去，再切回来上拉头部没有回弹回去的问题
         self.navigationController?.navigationBar.isTranslucent = false;
+        self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
+        self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
+        self.navigationController?.navigationBar.isTranslucent = false;
+        if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
+            self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -174,7 +184,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                         self.endRefreshingWithNoMoreData()
                     }
                     if (self.contentData?.headerModel?.isFavorite)! {
-                        self.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
+                        self.rightButton.setImage(UIImage.init(named: "ic_favorite")?.withRenderingMode(.alwaysOriginal), for: .normal);
                     }
                     self.tableView.mj_footer.isHidden = false;
                     self.reloadAtSomeoneView();

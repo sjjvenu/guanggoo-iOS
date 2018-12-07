@@ -17,7 +17,6 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     //MARK: - init
     weak var vcDelegate:GuangGuVCDelegate?
     var contentData: NotificationDataSource?;
-    var hideBackButton:Bool?;
     
     fileprivate var urlString:String!;
     
@@ -55,13 +54,12 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        if hideBackButton == nil || hideBackButton == false {
-            let backImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(popnav))
-        }
+        let yourBackImage = UIImage(named: "ic_back")?.withRenderingMode(.alwaysOriginal)
+        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
         
         self.title = "我的消息";
-        self.view.backgroundColor = UIColor.white;
         self.view.addSubview(self.tableView);
         self.tableView.snp.makeConstraints { (make) in
             make.left.right.top.equalTo(self.view);
@@ -73,16 +71,11 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         }
         
         self.view.backgroundColor = GuangGuColor.sharedInstance.getColor(node: "Default", name: "BackColor");
-        
         self.navigationController?.navigationBar.barTintColor = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "BackColor");
         self.navigationController?.navigationBar.isTranslucent = false;
         if let color = GuangGuColor.sharedInstance.getColor(node: "TOPBAR", name: "TxtColor") {
             self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): color];
         }
-    }
-    
-    @objc func popnav() {
-        self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {
