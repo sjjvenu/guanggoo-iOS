@@ -42,6 +42,19 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     fileprivate var navController:UINavigationController?;
     weak var vcDelegate:GuangGuVCDelegate?
     
+    fileprivate var _imageTakePhotoPicker:UIImagePickerController!
+    fileprivate var imageTakePhotoPicker:UIImagePickerController {
+        get {
+            guard _imageTakePhotoPicker == nil else {
+                return _imageTakePhotoPicker;
+            }
+            _imageTakePhotoPicker = UIImagePickerController.init();
+            _imageTakePhotoPicker.delegate = self;
+            
+            return _imageTakePhotoPicker;
+        }
+    }
+    
     fileprivate var _imagePicker:UIImagePickerController!
     fileprivate var imagePicker:UIImagePickerController {
         get {
@@ -184,9 +197,9 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
     }
     
     @objc func TakePhotoClick(sender: UIButton) {
-        self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
-        self.imagePicker.allowsEditing = false;
-        self.navController?.present(self.imagePicker, animated: true, completion: nil);
+        self.imageTakePhotoPicker.sourceType = UIImagePickerControllerSourceType.camera;
+        self.imageTakePhotoPicker.allowsEditing = false;
+        self.navController?.present(self.imageTakePhotoPicker, animated: true, completion: nil);
     }
     
     @objc func UploadPhotoClick(sender: UIButton) {
@@ -264,7 +277,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
             let compressImage = chosenImage.wxCompress();
             if let data = UIImagePNGRepresentation(compressImage) as NSData? {
                 Alamofire.upload(multipartFormData: { (multipartFormData) in
-                    multipartFormData.append(data as Data!, withName: "smfile", fileName: "1.png", mimeType: "image/jpeg")
+                    multipartFormData.append(data as Data, withName: "smfile", fileName: "1.png", mimeType: "image/png")
                 }, to: "https://sm.ms/api/upload", encodingCompletion: { (result) in
                     switch result {
                     case .success(let upload, _, _):

@@ -289,6 +289,7 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
                     let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/topics");
                     vc.title = GuangGuAccount.shareInstance.user!.userName + "的主题";
                     vc.hidesBottomBarWhenPushed = true;
+                    vc.vcDelegate = self;
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
                 break;
@@ -339,6 +340,7 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
                 
                 let vc = UserInfoViewController.init(urlString: GUANGGUSITE + userLink);
                 vc.vcDelegate = self;
+                vc.hidesBottomBarWhenPushed = true;
                 self.navigationController?.pushViewController(vc, animated: true);
             }
         }

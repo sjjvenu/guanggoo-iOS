@@ -339,6 +339,8 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                     msg["MSGTYPE"] = "CenterViewController";
                     let vc = CenterViewController.init(urlString: GUANGGUSITE + userLink + "/topics");
                     vc.title = userName + "的主题";
+                    vc.vcDelegate = self.vcDelegate;
+                    vc.hidesBottomBarWhenPushed = true;
                     msg["PARAM1"] = vc;
                     delegate.OnPushVC(msg: msg);
                 }
@@ -351,10 +353,11 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                 }
                 if let delegate = self.vcDelegate {
                     let msg = NSMutableDictionary.init();
-                    msg["MSGTYPE"] = "CenterViewController";
+                    msg["MSGTYPE"] = "PushViewController";
                     let vc = UserCommentViewController.init(urlString: GUANGGUSITE + userLink + "/replies");
                     vc.title = userName + "的回复";
                     vc.vcDelegate = self.vcDelegate;
+                    vc.hidesBottomBarWhenPushed = true;
                     msg["PARAM1"] = vc;
                     delegate.OnPushVC(msg: msg);
                 }
@@ -372,6 +375,8 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                     vc.needRefreshInAppear = true;
                     vc.title = userName + "的收藏";
                     msg["PARAM1"] = vc;
+                    vc.vcDelegate = self.vcDelegate;
+                    vc.hidesBottomBarWhenPushed = true;
                     delegate.OnPushVC(msg: msg);
                 }
             }
@@ -382,6 +387,8 @@ class UserInfoViewController: UIViewController ,UITableViewDelegate,UITableViewD
                 msg["MSGTYPE"] = "PushViewController";
                 let vc = BlacklistViewController.init(nibName: nil, bundle: nil);
                 vc.title = "黑名单";
+                vc.hidesBottomBarWhenPushed = true;
+                vc.vcDelegate = self.vcDelegate;
                 msg["PARAM1"] = vc;
                 delegate.OnPushVC(msg: msg);
             }

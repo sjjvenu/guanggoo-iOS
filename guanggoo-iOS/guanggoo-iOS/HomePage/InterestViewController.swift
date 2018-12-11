@@ -15,6 +15,7 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
     fileprivate let btnHeight = 26;
     fileprivate let sectionProduce = 1000;
     fileprivate var helper:GuangGuHelpDelegate?;
+    var createTitle:Bool?;
     
     fileprivate var nodesList = [[GuangGuNode]]();
 
@@ -48,6 +49,7 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
             _tableView.dataSource = self;
             _tableView.delegate = self;
             _tableView.separatorStyle = .none;
+            _tableView.allowsSelection = false;
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(InterestViewController.reloadData));
             
@@ -81,7 +83,7 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
         self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
         
-        self.title = " 兴趣节点";
+        //self.title = " 兴趣节点";
         self.helper = GuangGuHelpDelegate();
         self.helper?.currentVC = self;
         self.helper?.vcDelegate = self;
@@ -182,26 +184,42 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
                 nodeString.removeFirst();
             }
         }
-        if GuangGuAccount.shareInstance.isLogin() {
-            let vc = CenterViewController.init(urlString: GUANGGUSITE + nodeString);
-            vc.title = item.name;
-            vc.vcDelegate = self;
+        if createTitle == true {
+            nodeString = nodeString.replacingOccurrences(of: "node/", with: "t/create/")
+            let vc = CommWebViewController.init(url: URL.init(string: GUANGGUSITE+nodeString));
+            vc.title = "发表主题"
+            vc.hidesBottomBarWhenPushed = true;
             self.navigationController?.pushViewController(vc, animated: true);
+//            let vc = CreateTitleViewController.init(title:"",content:"",urlString: GUANGGUSITE+nodeString, completion: { [weak self](bSuccess) in
+//                if bSuccess {
+//                    self?.navigationController?.popToRootViewController(animated: true);
+//                }
+//            })
+//            self.navigationController?.pushViewController(vc, animated: true);
         }
-        else
-        {
-            let vc = LoginViewController.init(completion: { [weak self] (loginSuccess) in
-                if let weakSelf = self, loginSuccess {
-                    let vc = CenterViewController.init(urlString: GUANGGUSITE + nodeString);
-                    vc.title = item.name;
-                    vc.vcDelegate = weakSelf;
-                    weakSelf.navigationController?.pushViewController(vc, animated: true);
-                }
-                else {
-                }
-            })
-            //vc.vcDelegate = self;
-            self.present(vc, animated: true, completion: nil);
+        else {
+            if GuangGuAccount.shareInstance.isLogin() {
+                let vc = CenterViewController.init(urlString: GUANGGUSITE + nodeString);
+                vc.title = item.name;
+                vc.vcDelegate = self;
+                vc.hidesBottomBarWhenPushed = true;
+                self.navigationController?.pushViewController(vc, animated: true);
+            }
+            else
+            {
+                let vc = LoginViewController.init(completion: { [weak self] (loginSuccess) in
+                    if let weakSelf = self, loginSuccess {
+                        let vc = CenterViewController.init(urlString: GUANGGUSITE + nodeString);
+                        vc.title = item.name;
+                        vc.vcDelegate = weakSelf;
+                        vc.hidesBottomBarWhenPushed = true;
+                        weakSelf.navigationController?.pushViewController(vc, animated: true);
+                    }
+                    else {
+                    }
+                })
+                self.present(vc, animated: true, completion: nil);
+            }
         }
     }
 

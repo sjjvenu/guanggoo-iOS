@@ -15,7 +15,7 @@ class GuangGuHelpDelegate: NSObject ,GuangGuVCDelegate{
     
     func OnPushHelp(_ msg:NSDictionary) -> Void {
         if let msgtype = msg["MSGTYPE"] as? String {
-            if msgtype == "pushViewController" {
+            if msgtype == "PushViewController" {
                 if let vc = msg["PARAM1"] as? UIViewController{
                     currentVC?.navigationController?.pushViewController(vc, animated: true);
                 }

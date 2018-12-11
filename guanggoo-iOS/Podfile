@@ -18,6 +18,8 @@ def pods
     pod 'WXImageCompress', '~> 0.1.1'
     pod 'LeanCloud'
     pod 'SQLite.swift', '~> 0.11.4'
+    pod 'CYLTabBarController', '~> 1.17.4'
+    pod 'IQKeyboardManagerSwift', '5.0.0'
 end
 
 target 'guanggoo-iOS' do

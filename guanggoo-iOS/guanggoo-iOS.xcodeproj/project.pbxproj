@@ -50,6 +50,8 @@
 		2FD3F9541FDE2E33005DD1F1 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */; };
 		2FD3F9561FDE2E45005DD1F1 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */; };
 		2FD3F9581FDE2E52005DD1F1 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */; };
+		2FDB394521BA1E9B0053376A /* PublishButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB394421BA1E9B0053376A /* PublishButton.swift */; };
+		2FDB394721BA6EF20053376A /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB394621BA6EF20053376A /* MainTabBarViewController.swift */; };
 		2FE6DDDF20A139130090AAF9 /* GuangGuColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */; };
 		2FEBD7DD21B8C1CC008AA38F /* PersonalCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */; };
 		2FF03D7F1FFB345900A06E4F /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF03D7E1FFB345900A06E4F /* CoreTelephony.framework */; };
@@ -122,6 +124,8 @@
 		2FD3F9531FDE2E33005DD1F1 /* LeftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		2FD3F9551FDE2E45005DD1F1 /* CenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		2FD3F9571FDE2E51005DD1F1 /* RightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
+		2FDB394421BA1E9B0053376A /* PublishButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishButton.swift; sourceTree = "<group>"; };
+		2FDB394621BA6EF20053376A /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		2FE6DDDE20A139130090AAF9 /* GuangGuColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuangGuColor.swift; sourceTree = "<group>"; };
 		2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalCenterViewController.swift; sourceTree = "<group>"; };
 		2FF03D7C1FFB33D000A06E4F /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iflyMSC.framework; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 				2F6ECD4220A43EB700905ABA /* HomeViewController.swift */,
 				2F9C07FC21B763B700B7510E /* InterestViewController.swift */,
 				2FEBD7DC21B8C1CC008AA38F /* PersonalCenterViewController.swift */,
+				2FDB394421BA1E9B0053376A /* PublishButton.swift */,
+				2FDB394621BA6EF20053376A /* MainTabBarViewController.swift */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -480,8 +486,10 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-guanggoo-iOS/Pods-guanggoo-iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
 				"${BUILT_PRODUCTS_DIR}/DACircularProgress/DACircularProgress.framework",
 				"${BUILT_PRODUCTS_DIR}/DrawerController/DrawerController.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Ji/Ji.framework",
 				"${BUILT_PRODUCTS_DIR}/KVOController/KVOController.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
@@ -500,8 +508,10 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DACircularProgress.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DrawerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ji.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KVOController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
@@ -554,7 +564,9 @@
 				2FC20BE21FEA4A4800381CDB /* CPCommentTableViewCell.swift in Sources */,
 				2F6ECD3C20A4396A00905ABA /* NSString+Extention.m in Sources */,
 				2F044F3F1FF08CC50036C47D /* NotificationDataSource.swift in Sources */,
+				2FDB394721BA6EF20053376A /* MainTabBarViewController.swift in Sources */,
 				2FCE266E1FFDC93000CFFB72 /* BlacklistViewController.swift in Sources */,
+				2FDB394521BA1E9B0053376A /* PublishButton.swift in Sources */,
 				2F6ECD4020A4396A00905ABA /* MenuViewBtn.m in Sources */,
 				2F6ECD3D20A4396A00905ABA /* UIView+Extension.m in Sources */,
 				2F044F411FF0D2EA0036C47D /* UserInfoViewController.swift in Sources */,

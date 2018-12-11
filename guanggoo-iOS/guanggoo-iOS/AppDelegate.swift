@@ -9,6 +9,8 @@
 import UIKit
 import DrawerController
 import LeanCloud
+import CYLTabBarController
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,10 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        self.window = UIWindow();
-        self.window?.frame = UIScreen.main.bounds;
-        self.window?.makeKeyAndVisible();
         
 //        let ceneterViewController = CenterViewController.init(urlString: GUANGGUSITE);
 //        ceneterViewController.title = "全部";
@@ -37,28 +35,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        drawController?.openDrawerGestureModeMask=OpenDrawerGestureMode.panningCenterView
 //        drawController?.closeDrawerGestureModeMask=CloseDrawerGestureMode.all;
         
+        PublishButton.register();
         let homeVC = HomeViewController.init();
-        homeVC.tabBarItem = UITabBarItem.init(title: "社区动态", image: UIImage(named: "homepage")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "homepage_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let homeNav = UINavigationController.init(rootViewController: homeVC);
         let homeVC1 = InterestViewController.init();
-        homeVC1.tabBarItem = UITabBarItem.init(title: "兴趣节点", image: UIImage(named: "groups")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "groups_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
+        homeVC1.title = "兴趣节点";
         let vc1Nav = UINavigationController.init(rootViewController: homeVC1);
         let homeVC2 = NotificationViewController.init(urlString: GUANGGUSITE + "notifications");
-        homeVC2.tabBarItem = UITabBarItem.init(title: "消息通知", image: UIImage(named: "message")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "message_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc2Nav = UINavigationController.init(rootViewController: homeVC2);
         let homeVC3 = PersonalCenterViewController.init();
-        homeVC3.tabBarItem = UITabBarItem.init(title: "个人中心", image: UIImage(named: "settings")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), selectedImage: UIImage(named: "settings_selected")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal));
         let vc3Nav = UINavigationController.init(rootViewController: homeVC3);
-        let tabVC = UITabBarController.init();
-        tabVC.viewControllers = [homeNav,vc1Nav,vc2Nav,vc3Nav];
+        let dic1 = [CYLTabBarItemTitle:"社区动态",CYLTabBarItemImage:"homepage",CYLTabBarItemSelectedImage:"homepage_selected"];
+        let dic2 = [CYLTabBarItemTitle:"兴趣节点",CYLTabBarItemImage:"groups",CYLTabBarItemSelectedImage:"groups_selected"];
+        let dic3 = [CYLTabBarItemTitle:"消息通知",CYLTabBarItemImage:"message",CYLTabBarItemSelectedImage:"message_selected"];
+        let dic4 = [CYLTabBarItemTitle:"个人中心",CYLTabBarItemImage:"settings",CYLTabBarItemSelectedImage:"settings_selected"];
         
-        self.window?.rootViewController = tabVC;
+        let tabVC = MainTabBarViewController.init(viewControllers: [homeNav,vc1Nav,vc2Nav,vc3Nav], tabBarItemsAttributes: [dic1,dic2,dic3,dic4])
         
         //初始化讯飞语音
         IFlySpeechUtility.createUtility("appid=5a4b2f2f");
         //初始化leanCloun
         LeanCloud.initialize(applicationID: "7pPF4eyeCKI11qGEmbP67SgJ-gzGzoHsz", applicationKey: "iYv1dRM9UY3dt5vCpTXyzDGW")
         
+        IQKeyboardManager.sharedManager().enable = true
+
+        self.window = UIWindow()
+        self.window?.frame  = UIScreen.main.bounds
+        self.window?.rootViewController = tabVC
+        self.window?.makeKeyAndVisible()
         return true
     }
 

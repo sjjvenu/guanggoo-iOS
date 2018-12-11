@@ -446,6 +446,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                                 self?.contentData?.headerModel?.isFavorite = true;
                                 self?.contentData?.headerModel?.favoriteURL = model.favoriteURL.replacingOccurrences(of: "favorite", with: "unfavorite");
                                 self?.rightButton.setImage(UIImage.init(named: "ic_favorite"), for: .normal);
+                                return;
                             }
                         }
                         else {
@@ -457,6 +458,12 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     break;
                 case .failure(let error):
                     print("Request failed with error: \(error)")
+                    if model.isFavorite {
+                        self?.view.makeToast("取消收藏成功!")
+                        self?.contentData?.headerModel?.isFavorite = false;
+                        self?.contentData?.headerModel?.favoriteURL = model.favoriteURL.replacingOccurrences(of: "unfavorite", with: "favorite");
+                        self?.rightButton.setImage(UIImage.init(named: "ic_unfavorite"), for: .normal);
+                    }
                     break;
                 }
             }
@@ -552,7 +559,8 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 }
             }
             else if msgtype == "CenterViewController" {
-                if let vc = msg["PARAM1"] as? UIViewController{
+                if let vc = msg["PARAM1"] as? CenterViewController{
+                    vc.vcDelegate = self;
                     self.navigationController?.pushViewController(vc, animated: true);
                 }
             }

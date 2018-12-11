@@ -165,6 +165,7 @@ class UserCommentViewController: UIViewController ,UITableViewDelegate,UITableVi
         }
         let link = titleLink!+"?p=1";
         let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:nil);
+        vc.hidesBottomBarWhenPushed = true;
         self.navigationController?.pushViewController(vc, animated: true);
     }
     

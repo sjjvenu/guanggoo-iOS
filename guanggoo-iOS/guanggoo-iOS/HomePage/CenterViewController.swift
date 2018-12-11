@@ -255,8 +255,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                     vc.hidesBottomBarWhenPushed = true;
                     if let delegate = self.vcDelegate {
                         let msg = NSMutableDictionary.init();
-                        msg["MSGTYPE"] = "pushViewController";
+                        msg["MSGTYPE"] = "PushViewController";
                         msg["PARAM1"] = vc;
+                        vc.hidesBottomBarWhenPushed = true;
                         delegate.OnPushVC(msg: msg);
                     }
                 }
@@ -266,8 +267,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                     vc.hidesBottomBarWhenPushed = true;
                     if let delegate = self.vcDelegate {
                         let msg = NSMutableDictionary.init();
-                        msg["MSGTYPE"] = "pushViewController";
+                        msg["MSGTYPE"] = "PushViewController";
                         msg["PARAM1"] = vc;
+                        vc.hidesBottomBarWhenPushed = true;
                         delegate.OnPushVC(msg: msg);
                     }
                 }
@@ -290,8 +292,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                             weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
                             if let delegate = weakSelf.vcDelegate {
                                 let msg = NSMutableDictionary.init();
-                                msg["MSGTYPE"] = "pushViewController";
+                                msg["MSGTYPE"] = "PushViewController";
                                 msg["PARAM1"] = vc;
+                                vc.hidesBottomBarWhenPushed = true;
                                 delegate.OnPushVC(msg: msg);
                             }
                         }
@@ -301,8 +304,9 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                             weakSelf.homePageData?.reloadData(completion: {weakSelf.tableView.reloadData()});
                             if let delegate = weakSelf.vcDelegate {
                                 let msg = NSMutableDictionary.init();
-                                msg["MSGTYPE"] = "pushViewController";
+                                msg["MSGTYPE"] = "PushViewController";
                                 msg["PARAM1"] = vc;
+                                vc.hidesBottomBarWhenPushed = true;
                                 delegate.OnPushVC(msg: msg);
                             }
                         }

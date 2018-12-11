@@ -91,13 +91,13 @@ class CreateTitleViewController: UIViewController ,YYTextViewDelegate,GuangGuVCD
         
         let leftButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         leftButton.setTitle("取消", for: .normal);
-        leftButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
+        leftButton.setTitleColor(UIColor.white, for: .normal);
         leftButton.addTarget(self, action: #selector(CenterViewController.leftClick(sender:)), for: .touchUpInside);
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftButton);
         
         let rightButton = UIButton.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40));
         rightButton.setTitle("提交", for: .normal);
-        rightButton.setTitleColor(UIColor.init(red: 75.0/255.0, green: 145.0/255.0, blue: 214.0/255.0, alpha: 1), for: .normal);
+        rightButton.setTitleColor(UIColor.white, for: .normal);
         rightButton.addTarget(self, action: #selector(CenterViewController.rightClick(sender:)), for: .touchUpInside);
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightButton);
         

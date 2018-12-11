@@ -170,6 +170,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
         }
         let link = titleLink!+"?p=1";
         let vc = ContentPageViewController.init(urlString: GUANGGUSITE+link,model:nil);
+        vc.hidesBottomBarWhenPushed = true;
         self.navigationController?.pushViewController(vc, animated: true);
     }
     
