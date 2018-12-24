@@ -11,7 +11,7 @@ import SnapKit
 import SDWebImage
 import Alamofire
 
-class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate{
+class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,GuangGuVCDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
     //MARK: - property
     fileprivate var helper:GuangGuHelpDelegate?;
     
@@ -89,6 +89,19 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
         }
     }
     
+    fileprivate var _imagePicker:UIImagePickerController!
+    fileprivate var imagePicker:UIImagePickerController {
+        get {
+            guard _imagePicker == nil else {
+                return _imagePicker;
+            }
+            _imagePicker = UIImagePickerController.init();
+            _imagePicker.delegate = self;
+            
+            return _imagePicker;
+        }
+    }
+    
     fileprivate var _backGroundImage: UIImageView!
     fileprivate var backGroundImage: UIImageView {
         get {
@@ -96,7 +109,15 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
                 return _backGroundImage;
             }
             _backGroundImage = UIImageView.init();
-            _backGroundImage.image = UIImage.init(named: "userbackgroudImage");
+            if let image = UIImage.init(named: self.getBackImageFile()) {
+                _backGroundImage.image = image;
+            }
+            else {
+                _backGroundImage.image = UIImage.init(named: "userbackgroudImage");
+            }
+            _backGroundImage.isUserInteractionEnabled = true;
+            let singleTap = UITapGestureRecognizer.init(target: self, action: #selector(ContentPageViewController.headUserNameClick(ges:)));
+            _backGroundImage.addGestureRecognizer(singleTap);
             return _backGroundImage;
         }
     }
@@ -374,6 +395,61 @@ class PersonalCenterViewController: UIViewController ,UITableViewDelegate,UITabl
             vc.vcDelegate = self;
             self.present(vc, animated: true, completion: nil);
         }
+    }
+    
+    @objc func headUserNameClick(ges:UIGestureRecognizer) -> Void {
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+        self.imagePicker.allowsEditing = false;
+        self.navigationController?.present(self.imagePicker, animated: true, completion: nil);
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let chooseImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if self.saveImageToDocumentDirectory(chooseImage) {
+                self.backGroundImage.image = chooseImage;
+            }
+            else {
+                self.view.makeToast("设置背景图片失败!",duration:1.0,position:.center);
+            }
+        }
+        self.navigationController?.dismiss(animated: true, completion: nil);
+    }
+    
+    func saveImageToDocumentDirectory(_ chosenImage: UIImage) -> Bool {
+        let directoryPath =  NSHomeDirectory().appending("/Documents/")
+        if !FileManager.default.fileExists(atPath: directoryPath) {
+            do {
+                try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error)
+            }
+        }
+        let filename = "userbackimage.png";
+        let filepath = directoryPath.appending(filename)
+        let url = NSURL.fileURL(withPath: filepath)
+        do {
+            try UIImageJPEGRepresentation(chosenImage, 1.0)?.write(to: url, options: .atomic)
+            return true
+            
+        } catch {
+            print(error)
+            print("file cant not be save at path \(filepath), with error : \(error)");
+            return false
+        }
+    }
+    
+    func getBackImageFile() -> String {
+        let directoryPath =  NSHomeDirectory().appending("/Documents/")
+        if !FileManager.default.fileExists(atPath: directoryPath) {
+            do {
+                try FileManager.default.createDirectory(at: NSURL.fileURL(withPath: directoryPath), withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error)
+            }
+        }
+        let filename = "userbackimage.png";
+        let filepath = directoryPath.appending(filename)
+        return filepath
     }
     
     func clearUserData() -> Void {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Nodes name="黑色版本颜色配置">
+
+	<Default name="默认配置">
+		<Node name="BackColor" des="主背景色" R="255" G="255" B="255" />
+		<Node name="TxtColor" des="主要文字颜色" R="0" G="0" B="0"  />
+		<Node name="SubTxtColor" des="次要文字颜色" R="91" G="100" B="110"  />
+		<Node name="CtrlTxtColor" des="表示可点击的文字颜色" R="61" G="118" B="184"  />
+		<Node name="NoteTxtColor" des="注释文字颜色" R="142" G="142" B="142"  />
+	</Default>               
+	
+	
+	<TOPBAR name="顶部工具栏">
+		<Node name="BackColor" des="主背景色" R="37" G="141" B="245" />
+        <Node name="TxtColor" des="主要文字颜色" R="255" G="255" B="255"  />
+        <Node name="CtrlTxtColor" des="表示可点击的文字颜色" R="61" G="118" B="184"  />
+	</TOPBAR>
+    
+    <MenuView name="MenuView">
+        <Node name="BackColor" des="主背景色" R="37" G="141" B="245" />
+        <Node name="TxtColor" des="主要文字颜色" R="255" G="255" B="255" A="0.5" />
+        <Node name="SelectedTxtColor" des="选中文字颜色" R="255" G="255" B="255" A="1" />
+        <Node name="BottomLineColor" des="选中文字颜色" R="255" G="255" B="255"  />
+    </TOPBAR>
+    
+    <Login name="登录界面">
+        <Node name="BackColor" des="主背景色" R="255" G="255" B="255" />
+        <Node name="TxtColor" des="主要文字颜色" R="102" G="102" B="102"  />
+        <Node name="DivideLineColor" des="主要文字颜色" R="230" G="230" B="230"  />
+        <Node name="CtrlTxtColor" des="表示可点击的文字颜色" R="37" G="141" B="245"  />
+        <Node name="LoginBtnColor" des="主要文字颜色" R="37" G="142" B="245"  />
+    </Login>
+
+    <Interest name="兴趣节点">
+        <Node name="BackColor" des="主背景色" R="255" G="255" B="255" />
+        <Node name="HeadTxtColor" des="主要文字颜色" R="68" G="68" B="68"  />
+        <Node name="CtrlTxtColor" des="表示可点击的文字颜色" R="102" G="102" B="102"  />
+        <Node name="BorderColor" des="边框颜色" R="187" G="187" B="187"  />
+    </Interest>
+    
+    <PersonalCenter name="个人中心">
+        <Node name="BackColor" des="主背景色" R="255" G="255" B="255" />
+        <Node name="TxtColor" des="主要文字颜色" R="68" G="68" B="68"  />
+        <Node name="CtrlTxtColor" des="表示可点击的文字颜色" R="34" G="34" B="34"  />
+        <Node name="DivideColor" des="分隔颜色" R="242" G="242" B="242"  />
+    </PersonalCenter>
+</Nodes>
+
