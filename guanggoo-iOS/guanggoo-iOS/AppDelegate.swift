@@ -8,7 +8,6 @@
 
 import UIKit
 import DrawerController
-import LeanCloud
 import CYLTabBarController
 import IQKeyboardManagerSwift
 
@@ -55,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //初始化讯飞语音
         IFlySpeechUtility.createUtility("appid=5a4b2f2f");
         //初始化leanCloun
-        LeanCloud.initialize(applicationID: "7pPF4eyeCKI11qGEmbP67SgJ-gzGzoHsz", applicationKey: "iYv1dRM9UY3dt5vCpTXyzDGW")
+//        LeanCloud.initialize(applicationID: "7pPF4eyeCKI11qGEmbP67SgJ-gzGzoHsz", applicationKey: "iYv1dRM9UY3dt5vCpTXyzDGW")
         
         IQKeyboardManager.sharedManager().enable = true
 

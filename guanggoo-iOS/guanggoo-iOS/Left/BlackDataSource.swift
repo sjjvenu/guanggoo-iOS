@@ -8,7 +8,6 @@
 
 import UIKit
 import SQLite
-import LeanCloud
 
 class BlackDataSource: NSObject {
     
@@ -124,106 +123,106 @@ class BlackDataSource: NSObject {
     }
     
     func upload(view:UIView!) -> Void {
-        if let currentUser = LCUser.current {
-            // 上传当前数据
-            currentUser.set("black_list", value: Array(self.itemList))
-            
-            currentUser.save { result in
-                switch result {
-                case .success:
-                    view.makeToast("上传成功", duration: 1.0, position: .center)
-                    break;
-                case .failure(let error):
-                    view.makeToast("上传失败，请稍后再试", duration: 1.0, position: .center)
-                    print(error)
-                    break;
-                }
-            }
-        }
-        else {
-            view.makeToast("上传失败，请退出用户后重新登录再试!", duration: 1.0, position: .center)
-        }
+//        if let currentUser = LCUser.current {
+//            // 上传当前数据
+//            currentUser.set("black_list", value: Array(self.itemList))
+//
+//            currentUser.save { result in
+//                switch result {
+//                case .success:
+//                    view.makeToast("上传成功", duration: 1.0, position: .center)
+//                    break;
+//                case .failure(let error):
+//                    view.makeToast("上传失败，请稍后再试", duration: 1.0, position: .center)
+//                    print(error)
+//                    break;
+//                }
+//            }
+//        }
+//        else {
+//            view.makeToast("上传失败，请退出用户后重新登录再试!", duration: 1.0, position: .center)
+//        }
     }
     
     func fetchDataFromRemote() -> Bool {
         var returnValue = false;
-        if let currentUser = LCUser.current {
-            let value = currentUser.get("black_list")
-            if let array = value?.arrayValue {
-                var blackUserList = Set<String>();
-                for item in array {
-                    if let userName = item.lcValue.stringValue,userName.count > 0 {
-                        self.insertData(userName: userName);
-                        blackUserList.insert(userName);
-                    }
-                }
-                self.itemList.removeAll();
-                self.itemList = blackUserList;
-                returnValue = true;
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
-            }
-        }
+//        if let currentUser = LCUser.current {
+//            let value = currentUser.get("black_list")
+//            if let array = value?.arrayValue {
+//                var blackUserList = Set<String>();
+//                for item in array {
+//                    if let userName = item.lcValue.stringValue,userName.count > 0 {
+//                        self.insertData(userName: userName);
+//                        blackUserList.insert(userName);
+//                    }
+//                }
+//                self.itemList.removeAll();
+//                self.itemList = blackUserList;
+//                returnValue = true;
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
+//            }
+//        }
         return returnValue;
     }
     
     
     func login(userName:String,password:String) -> Void {
-        let randomUser = LCUser()
-        
-        randomUser.username = LCString(userName)
-        randomUser.password = LCString(password)
-        
-        let _ = randomUser.signUp()
-        
-        LCUser.logIn(username: userName, password: password) { result in
-            switch result {
-            case .success(let user):
-                _ = self.fetchDataFromRemote();
-                let sessionToken = user.sessionToken;
-                let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
-                do {
-                    try sessionToken?.value.write(to: fileURL, atomically: false, encoding: .ascii)
-                }
-                catch {
-                    print("write token to file failed")
-                }
-                break
-            case .failure(let error):
-                print(error)
-            }
-        }
+//        let randomUser = LCUser()
+//
+//        randomUser.username = LCString(userName)
+//        randomUser.password = LCString(password)
+//
+//        let _ = randomUser.signUp()
+//
+//        LCUser.logIn(username: userName, password: password) { result in
+//            switch result {
+//            case .success(let user):
+//                _ = self.fetchDataFromRemote();
+//                let sessionToken = user.sessionToken;
+//                let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//                let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+//                do {
+//                    try sessionToken?.value.write(to: fileURL, atomically: false, encoding: .ascii)
+//                }
+//                catch {
+//                    print("write token to file failed")
+//                }
+//                break
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
     }
     
     func loginWithToken() -> Void {
-        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
-        do {
-            let tokenText = try String(contentsOf: fileURL)
-            LCUser.logIn(sessionToken: tokenText){ result in
-                switch result {
-                case .success( _):
-                    break
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        catch {
-            print("write token to file failed")
-        }
+//        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+//        do {
+//            let tokenText = try String(contentsOf: fileURL)
+//            LCUser.logIn(sessionToken: tokenText){ result in
+//                switch result {
+//                case .success( _):
+//                    break
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+//        }
+//        catch {
+//            print("write token to file failed")
+//        }
     }
 
     func deleteTokenFile() -> Void {
-        if LCUser.current != nil {
-            LCUser.logOut();
-        }
-        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
-        do {
-            try FileManager.default.removeItem(at: fileURL)
-        } catch let error as NSError {
-            print("Error: \(error.domain)")
-        }
+//        if LCUser.current != nil {
+//            LCUser.logOut();
+//        }
+//        let documentDirectory = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//        let fileURL = documentDirectory.appendingPathComponent(TOKENFILE)
+//        do {
+//            try FileManager.default.removeItem(at: fileURL)
+//        } catch let error as NSError {
+//            print("Error: \(error.domain)")
+//        }
     }
 }

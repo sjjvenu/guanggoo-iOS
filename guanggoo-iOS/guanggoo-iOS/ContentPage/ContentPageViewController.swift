@@ -59,7 +59,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isHidden = true;
+            _tableView.mj_footer?.isHidden = true;
             
             return _tableView;
         }
@@ -186,7 +186,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     if (self.contentData?.headerModel?.isFavorite)! {
                         self.rightButton.setImage(UIImage.init(named: "ic_favorite")?.withRenderingMode(.alwaysOriginal), for: .normal);
                     }
-                    self.tableView.mj_footer.isHidden = false;
+                    self.tableView.mj_footer?.isHidden = false;
                     self.reloadAtSomeoneView();
                     MBProgressHUD.hide(for: self.view, animated: true);
                 }
@@ -374,10 +374,10 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     
     //MARK: - Event
     @objc func reloadItemData() -> Void {
-        self.tableView.mj_footer.isHidden = false;
+        self.tableView.mj_footer?.isHidden = false;
         self.contentData?.reloadData {
-            self.tableView.mj_header.endRefreshing();
-            self.tableView.mj_footer.resetNoMoreData();
+            self.tableView.mj_header?.endRefreshing();
+            self.tableView.mj_footer?.resetNoMoreData();
             self.tableView.reloadData();
             self.reloadAtSomeoneView();
         };
@@ -393,7 +393,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
             return;
         }
         self.contentData?.loadOlder {
-            self.tableView.mj_footer.endRefreshing();
+            self.tableView.mj_footer?.endRefreshing();
             self.tableView.reloadData();
             self.reloadAtSomeoneView();
         }
@@ -488,7 +488,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
     @objc func ReplyClick(sender: UIButton) {
         let vc = ReplyContentViewController.init(string: "", urlString: self.urlString,nameArray:Array(self.contentData!.nameList)) { [weak self](bSuccess) in
             if bSuccess {
-                self?.tableView.mj_header.beginRefreshing();
+                self?.tableView.mj_header?.beginRefreshing();
             }
         };
         self.navigationController?.pushViewController(vc, animated: true);
@@ -507,7 +507,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 })
                 let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self?.urlString)!,nameArray:nameArray){ [weak self](bSuccess) in
                     if bSuccess {
-                        self?.tableView.mj_header.beginRefreshing();
+                        self?.tableView.mj_header?.beginRefreshing();
                     }
                 };
                 self?.navigationController?.pushViewController(vc, animated: true);
@@ -533,7 +533,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
      禁用上拉加载更多，并显示一个字符串提醒
      */
     func endRefreshingWithStateString(_ string:String){
-        self.tableView.mj_footer.endRefreshingWithNoMoreData()
+        self.tableView.mj_footer?.endRefreshingWithNoMoreData()
     }
     
     func endRefreshingWithNoDataAtAll() {
@@ -578,7 +578,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                 if let name = msg["PARAM1"] as? String ,name.count > 0{
                     let vc = ReplyContentViewController.init(string: "@"+name+" ", urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
                         if bSuccess {
-                            self?.tableView.mj_header.beginRefreshing();
+                            self?.tableView.mj_header?.beginRefreshing();
                         }
                     };
                     self.navigationController?.pushViewController(vc, animated: true);
@@ -594,7 +594,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                         if let content = dic["Content"] as? String {
                             let vc = ReplyContentViewController.init(string: content, urlString: GUANGGUSITE + replyLink, nameArray: Array(self.contentData!.nameList), completion: { [weak self](bSuccess) in
                                 if bSuccess {
-                                    self?.tableView.mj_header.beginRefreshing();
+                                    self?.tableView.mj_header?.beginRefreshing();
                                 }
                             })
                             self.navigationController?.pushViewController(vc, animated: true);
@@ -608,7 +608,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                         if let content = dic["Content"] as? String ,let title = dic["Title"] as? String{
                             let vc = CreateTitleViewController.init(title: title, content: content, urlString: url, completion: { [weak self](bSuccess) in
                                 if bSuccess {
-                                    self?.tableView.mj_header.beginRefreshing();
+                                    self?.tableView.mj_header?.beginRefreshing();
                                 }
                             })
                             self.navigationController?.pushViewController(vc, animated: true);
@@ -625,7 +625,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     let content = "@Caixin919 ,在主题[" + titleLink + "](" + titleLink + ")的" + floor+"有违规内容"
                     let vc = ReplyContentViewController.init(string: content, urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
                         if bSuccess {
-                            self?.tableView.mj_header.beginRefreshing();
+                            self?.tableView.mj_header?.beginRefreshing();
                         }
                     };
                     self.navigationController?.pushViewController(vc, animated: true);
@@ -640,7 +640,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     let content = "@Caixin919 ,主题[" + titleLink + "](" + titleLink + ")有违规内容";
                     let vc = ReplyContentViewController.init(string: content, urlString:(self.urlString)!,nameArray:Array(self.contentData!.nameList)){ [weak self](bSuccess) in
                         if bSuccess {
-                            self?.tableView.mj_header.beginRefreshing();
+                            self?.tableView.mj_header?.beginRefreshing();
                         }
                     };
                     self.navigationController?.pushViewController(vc, animated: true);
@@ -653,7 +653,7 @@ class ContentPageViewController: UIViewController ,UITableViewDelegate,UITableVi
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: BLACKLISTTOREFRESH), object: nil);
                 }
                 else {
-                    self.tableView.mj_header.beginRefreshing();
+                    self.tableView.mj_header?.beginRefreshing();
                 }
             }
             else if msgtype == "ReloadHomePage" {

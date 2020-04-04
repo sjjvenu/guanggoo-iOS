@@ -34,7 +34,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isHidden = true;
+            _tableView.mj_footer?.isHidden = true;
             
             return _tableView;
         }
@@ -123,7 +123,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             DispatchQueue.global(qos: .background).async {
                 self.homePageData = HomePageDataSource.init(urlString: self.mURLString!);
                 DispatchQueue.main.async {
-                    self.tableView.mj_footer.isHidden = false;
+                    self.tableView.mj_footer?.isHidden = false;
                     self.tableView.reloadData();
                     if (self.homePageData?.pageCount)! >= (self.homePageData?.maxCount)! {
                         self.endRefreshingWithNoMoreData()
@@ -236,7 +236,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.mj_header.state == MJRefreshState.refreshing || tableView.mj_footer.state == MJRefreshState.refreshing {
+        if tableView.mj_header?.state == MJRefreshState.refreshing || tableView.mj_footer?.state == MJRefreshState.refreshing {
             self.view.makeToast("请等待刷新完成!", duration: 1.0, position: .center)
             return;
         }
@@ -328,7 +328,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
      禁用上拉加载更多，并显示一个字符串提醒
      */
     func endRefreshingWithStateString(_ string:String){
-        self.tableView.mj_footer.endRefreshingWithNoMoreData()
+        self.tableView.mj_footer?.endRefreshingWithNoMoreData()
     }
     
     func endRefreshingWithNoDataAtAll() {
@@ -358,7 +358,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                 }
                 let vc = CreateTitleViewController.init(title:"",content:"",urlString: GUANGGUSITE+link, completion: { [weak self](bSuccess) in
                     if bSuccess {
-                        self?.tableView.mj_header.beginRefreshing();
+                        self?.tableView.mj_header?.beginRefreshing();
                     }
                 })
                 self.navigationController?.pushViewController(vc, animated: true);
@@ -370,10 +370,10 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
     }
     
     @objc func reloadItemData() -> Void {
-        self.tableView.mj_footer.isHidden = false;
+        self.tableView.mj_footer?.isHidden = false;
         self.homePageData?.reloadData {
-            self.tableView.mj_header.endRefreshing();
-            self.tableView.mj_footer.resetNoMoreData();
+            self.tableView.mj_header?.endRefreshing();
+            self.tableView.mj_footer?.resetNoMoreData();
             self.tableView.reloadData();
             if GuangGuAccount.shareInstance.isLogin() && self.homePageData?.homePageString == GUANGGUSITE {
                 self.view.makeToast(GuangGuAccount.shareInstance.notificationText, duration: 1.0, position: .center);
@@ -392,13 +392,13 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
             return;
         }
         self.homePageData?.loadOlder {
-            self.tableView.mj_footer.endRefreshing();
+            self.tableView.mj_footer?.endRefreshing();
             self.tableView.reloadData();
         }
     }
     
     @objc func blackListFresh(notification: NSNotification) {
-        self.tableView.mj_header.beginRefreshing();
+        self.tableView.mj_header?.beginRefreshing();
     }
     
     func OnPushVC(msg: NSDictionary) {
@@ -427,7 +427,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                         }
                         self.homePageData?.homePageString = GUANGGUSITE + nodeString;
                         self.title = item.name;
-                        self.tableView.mj_header.beginRefreshing();
+                        self.tableView.mj_header?.beginRefreshing();
                         //self.homePageData.reloadData(completion: {self.tableView.reloadData()});
                     }
                     else
@@ -436,7 +436,7 @@ class CenterViewController: UIViewController ,UITableViewDelegate,UITableViewDat
                             if let weakSelf = self, loginSuccess {
                                 weakSelf.homePageData?.homePageString = GUANGGUSITE + nodeString;
                                 weakSelf.title = item.name;
-                                weakSelf.tableView.mj_header.beginRefreshing();
+                                weakSelf.tableView.mj_header?.beginRefreshing();
                                 //weakSelf.homePageData.reloadData(completion: {weakSelf.tableView.reloadData()});
                             }
                             else {

@@ -284,17 +284,17 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                         print(result)
                         
                         let hudProgress = MBProgressHUD.showAdded(to: self.superview!, animated: true);
-                        hudProgress.mode = MBProgressHUDMode.determinateHorizontalBar
-                        hudProgress.label.text = "正在上传";
+                        hudProgress?.mode = MBProgressHUDMode.determinateHorizontalBar
+                        hudProgress?.labelText = "正在上传";
                         upload.uploadProgress(closure: { (progress) in
-                            hudProgress.progress = Float(progress.completedUnitCount);
+                            hudProgress?.progress = Float(progress.completedUnitCount);
                         })
                         
                         upload.responseJSON { response in
                             //print response.result
                             if let json = response.result.value as? NSDictionary {
                                 if let data = json["data"] as? NSDictionary {
-                                    hudProgress.hide(animated: true);
+                                    hudProgress?.hide(true);
                                     if let url = data["url"] as? String {
                                         let markDownURL = "\n[![1.png](" + url + ")](" + url + ")";
                                         let msg = NSMutableDictionary.init();
@@ -306,7 +306,7 @@ class TextToolView: UIView ,UIImagePickerControllerDelegate,UINavigationControll
                                 }
                             }
                             print(response);
-                            hudProgress.hide(animated: true);
+                            hudProgress?.hide(true);
                             self.makeToast("上传图片失败!",duration:1.0,position:.center);
                         }
                         

@@ -165,7 +165,7 @@ class InterestViewController: UIViewController,UITableViewDataSource,UITableView
         DispatchQueue.global(qos: .background).async {
             self.nodesList = self.getNodeData();
             DispatchQueue.main.async {
-                self.tableView.mj_header.endRefreshing();
+                self.tableView.mj_header?.endRefreshing();
                 self.tableView.reloadData();
             }
         }

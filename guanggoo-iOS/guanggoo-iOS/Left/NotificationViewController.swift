@@ -34,7 +34,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
             
             _tableView.mj_header = MJRefreshNormalHeader.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.reloadItemData));
             _tableView.mj_footer = MJRefreshAutoNormalFooter.init(refreshingTarget: self, refreshingAction: #selector(CenterViewController.nextPage));
-            _tableView.mj_footer.isHidden = true;
+            _tableView.mj_footer?.isHidden = true;
             
             return _tableView;
         }
@@ -90,7 +90,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
             DispatchQueue.global(qos: .background).async {
                 self.contentData = NotificationDataSource.init(urlString: self.urlString,delegate: self.vcDelegate);
                 DispatchQueue.main.async {
-                    self.tableView.mj_footer.isHidden = false;
+                    self.tableView.mj_footer?.isHidden = false;
                     self.tableView.reloadData();
                     if (self.contentData?.pageCount)! >= (self.contentData?.maxCount)! {
                         self.endRefreshingWithNoMoreData()
@@ -156,7 +156,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.mj_header.state == MJRefreshState.refreshing || tableView.mj_footer.state == MJRefreshState.refreshing {
+        if tableView.mj_header?.state == MJRefreshState.refreshing || tableView.mj_footer?.state == MJRefreshState.refreshing {
             self.view.makeToast("请等待刷新完成!", duration: 1.0, position: .center)
             return;
         }
@@ -176,11 +176,11 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
     
     //MARK: - Event
     @objc func reloadItemData() -> Void {
-        self.tableView.mj_footer.isHidden = false;
+        self.tableView.mj_footer?.isHidden = false;
         self.contentData?.reloadData {
-            self.tableView.mj_header.endRefreshing();
+            self.tableView.mj_header?.endRefreshing();
             self.tableView.reloadData();
-            self.tableView.mj_footer.resetNoMoreData();
+            self.tableView.mj_footer?.resetNoMoreData();
         };
     }
     
@@ -194,7 +194,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
             return;
         }
         self.contentData?.loadOlder {
-            self.tableView.mj_footer.endRefreshing();
+            self.tableView.mj_footer?.endRefreshing();
             self.tableView.reloadData();
         }
     }
@@ -203,7 +203,7 @@ class NotificationViewController: UIViewController ,UITableViewDelegate,UITableV
      禁用上拉加载更多，并显示一个字符串提醒
      */
     func endRefreshingWithStateString(_ string:String){
-        self.tableView.mj_footer.endRefreshingWithNoMoreData()
+        self.tableView.mj_footer?.endRefreshingWithNoMoreData()
     }
     
     func endRefreshingWithNoDataAtAll() {
